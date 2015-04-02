@@ -5,7 +5,7 @@ import com.android.slyce.communication.ComManager;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.SharedPrefHelper;
 import com.android.slyce.utils.Utils;
-import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.android.slyce.report.mpmetrics.MixpanelAPI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,8 +85,8 @@ public final class Slyce{
             peopleAnalytics.put("userID", mixpanel.getDistinctId());
             peopleAnalytics.put("clientID", getClientID());
             peopleAnalytics.put("name", Utils.getDeviceModel());
-            peopleAnalytics.put("deviceType", Utils.getDeviceManufacturer());
-            peopleAnalytics.put("deviceName", Utils.getDeviceModel());
+            peopleAnalytics.put("deviceType", Utils.getDeviceManufacturer() + " " + Utils.getDeviceModel());
+            peopleAnalytics.put("deviceName", "...");
             peopleAnalytics.put("systemType", "Android");
             peopleAnalytics.put("systemVersion", Utils.getOSVersion());
             peopleAnalytics.put("hostingAppName", Utils.getHostAppName(context));

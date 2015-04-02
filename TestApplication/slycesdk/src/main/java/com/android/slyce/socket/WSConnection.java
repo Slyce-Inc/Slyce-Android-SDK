@@ -16,7 +16,7 @@ import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.callback.DataCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
-import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.android.slyce.report.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONException;

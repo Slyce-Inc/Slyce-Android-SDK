@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.davidsvilem.slycesdk">
+
+  
+    <application android:allowBackup="true"
+       >
+
+        <meta-data android:name="com.mixpanel.android.MPConfig.DisableAppOpenEvent"
+            android:value="false" />
+
+
+    </application>
+
+</manifest>

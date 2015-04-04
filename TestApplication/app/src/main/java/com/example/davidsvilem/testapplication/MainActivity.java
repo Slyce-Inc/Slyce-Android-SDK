@@ -3,10 +3,12 @@ package com.example.davidsvilem.testapplication;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,7 +23,7 @@ import android.widget.Toast;
 
 import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.Requests.GetProductsRequest;
+import com.android.slyce.requests.GetProductsRequest;
 
 import org.json.JSONArray;
 
@@ -47,6 +49,8 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
 
     private EditText clientIdEditText;
 
+    SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,17 +59,6 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
 //        String name = Devices.getDeviceName();
 //
 //        String name2 = Devices.getDeviceName(Build.DEVICE);
-
-        String serial = null;
-        try {
-            Class<?> c = Class.forName("android.os.SystemProperties");
-            Method get = c.getMethod("get", String.class);
-            serial = (String) get.invoke(c, "ro.serialno");
-            System.out.println(serial);
-        }
-        catch (Exception ignored) {
-
-        }
 
         initViews();
     }

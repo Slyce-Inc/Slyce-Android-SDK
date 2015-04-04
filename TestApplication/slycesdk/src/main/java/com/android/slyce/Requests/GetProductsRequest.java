@@ -1,4 +1,4 @@
-package com.android.slyce.Requests;
+package com.android.slyce.requests;
 
 import android.graphics.Bitmap;
 import android.util.Log;

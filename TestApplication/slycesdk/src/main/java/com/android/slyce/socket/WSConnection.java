@@ -263,8 +263,6 @@ public class WSConnection implements
 
                 case "progress":
 
-
-
                     JSONObject imageSentReport = new JSONObject();
                     imageSentReport.put("imageURL", imageURL);
                     mixpanel.track("Image.Sent", imageSentReport);
@@ -294,7 +292,6 @@ public class WSConnection implements
 
                     break;
 
-
                 case "results":
 
                     // Notify the app developer for the results
@@ -302,7 +299,9 @@ public class WSConnection implements
 
                     if(products == null){
 
-                        mixpanel.track("Search.Not.Found", null);
+                        JSONObject searchNotFound = new JSONObject();
+                        searchNotFound.put("detectionType", "3D");
+                        mixpanel.track("Search.Not.Found", searchNotFound);
 
                         mSynchronizer.onError("Products is null");
 

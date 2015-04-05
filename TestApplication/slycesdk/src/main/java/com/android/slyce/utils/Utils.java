@@ -1,5 +1,6 @@
 package com.android.slyce.utils;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -219,6 +221,11 @@ public class Utils {
 
         String accountName = "No Account";
 
+        if(!checkGetAccountsPermission(context)){
+            Log.w(TAG, "GET_ACCOUNTS permission not granted");
+            return accountName;
+        }
+
         AccountManager manager = AccountManager.get(context);
 
         Account[] accounts = manager.getAccounts();
@@ -256,7 +263,13 @@ public class Utils {
         }
 
         return deviceType;
+    }
 
+    private static boolean checkGetAccountsPermission(Context context){
+
+        String permission = Manifest.permission.GET_ACCOUNTS;
+        int res = context.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
     }
 //
 //    public static int upload(Bitmap bitmap, String uploadUrl){

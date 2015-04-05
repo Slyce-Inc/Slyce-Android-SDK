@@ -72,11 +72,10 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
     @Override
     public void onSlyceProgress(final long progress, final String message, String token) {
 
-        Toast.makeText(MainActivity.this,
-                "token=" + token +
-                " message= " + message +
-                " progress= " + progress,
-                Toast.LENGTH_LONG).show();
+        Toast.makeText(this,
+                "Progress: " + progress +
+                "\n" + "Message: " + message +
+                "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
     }
 
     @Override

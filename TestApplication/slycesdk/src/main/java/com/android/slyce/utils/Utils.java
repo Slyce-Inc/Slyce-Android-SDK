@@ -256,73 +256,74 @@ public class Utils {
         }
 
         return deviceType;
+
     }
-
-    public static int upload(Bitmap bitmap, String uploadUrl){
-
-        List<String> response = new ArrayList<String>();
-
-        int serverResponseCode = -1;
-        String serverResponseMessage;
-
-        URL url = null;
-        try {
-            url = new URL(uploadUrl);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        HttpsURLConnection connection = null;
-        try {
-            connection = (HttpsURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "image/jpeg");
-
-        try {
-            connection.setRequestMethod("PUT");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-
-        OutputStream outputStream = null;
-
-        try {
-            outputStream = connection.getOutputStream();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        DataOutputStream dos = new DataOutputStream(outputStream);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, dos);
-
-        try {
-
-            serverResponseCode = connection.getResponseCode();
-            serverResponseMessage = connection.getResponseMessage();
-
-            if (serverResponseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        connection.getInputStream()));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    response.add(line);
-                }
-                reader.close();
-                connection.disconnect();
-            } else {
-                throw new IOException("Server returned non-OK status: " + serverResponseCode + " : " + serverResponseMessage);
-            }
-
-            dos.close();
-            outputStream.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return serverResponseCode;
-    }
+//
+//    public static int upload(Bitmap bitmap, String uploadUrl){
+//
+//        List<String> response = new ArrayList<String>();
+//
+//        int serverResponseCode = -1;
+//        String serverResponseMessage;
+//
+//        URL url = null;
+//        try {
+//            url = new URL(uploadUrl);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//        HttpsURLConnection connection = null;
+//        try {
+//            connection = (HttpsURLConnection) url.openConnection();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        connection.setDoOutput(true);
+//        connection.setRequestProperty("Content-Type", "image/jpeg");
+//
+//        try {
+//            connection.setRequestMethod("PUT");
+//        } catch (ProtocolException e) {
+//            e.printStackTrace();
+//        }
+//
+//        OutputStream outputStream = null;
+//
+//        try {
+//            outputStream = connection.getOutputStream();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        DataOutputStream dos = new DataOutputStream(outputStream);
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, dos);
+//
+//        try {
+//
+//            serverResponseCode = connection.getResponseCode();
+//            serverResponseMessage = connection.getResponseMessage();
+//
+//            if (serverResponseCode == HttpURLConnection.HTTP_OK) {
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                        connection.getInputStream()));
+//                String line = null;
+//                while ((line = reader.readLine()) != null) {
+//                    response.add(line);
+//                }
+//                reader.close();
+//                connection.disconnect();
+//            } else {
+//                throw new IOException("Server returned non-OK status: " + serverResponseCode + " : " + serverResponseMessage);
+//            }
+//
+//            dos.close();
+//            outputStream.close();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return serverResponseCode;
+//    }
 }

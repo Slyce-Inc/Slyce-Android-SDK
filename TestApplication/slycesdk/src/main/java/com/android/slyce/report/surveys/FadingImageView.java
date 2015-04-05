@@ -15,8 +15,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.example.davidsvilem.slycesdk.R;
+import com.android.slycesdk.R;
 
 
 public class FadingImageView extends ImageView {

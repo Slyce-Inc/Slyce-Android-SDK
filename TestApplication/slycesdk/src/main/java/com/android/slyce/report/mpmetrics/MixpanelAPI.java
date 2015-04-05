@@ -21,8 +21,7 @@ import com.android.slyce.report.viewcrawler.TrackingDebug;
 import com.android.slyce.report.viewcrawler.ViewCrawler;
 import com.android.slyce.report.surveys.SurveyActivity;
 import com.android.slyce.report.util.ActivityImageUtils;
-import com.example.davidsvilem.slycesdk.R;
-
+import com.android.slycesdk.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

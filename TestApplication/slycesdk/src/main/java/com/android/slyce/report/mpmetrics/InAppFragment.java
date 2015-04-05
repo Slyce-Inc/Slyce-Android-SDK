@@ -25,8 +25,7 @@ import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.davidsvilem.slycesdk.R;
+import com.android.slycesdk.R;
 
 
 /**

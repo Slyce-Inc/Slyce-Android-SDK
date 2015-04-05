@@ -28,7 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import com.android.slyce.report.mpmetrics.Survey;
-import com.example.davidsvilem.slycesdk.R;
+import com.android.slycesdk.R;
 
 /**
  * Part of the Mixpanel Surveys user interface.

@@ -6,7 +6,6 @@ import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.SharedPrefHelper;
 import com.android.slyce.utils.Utils;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,21 +53,21 @@ public final class Slyce{
             public void onResponse(JSONObject jsonResponse) {
 
                 // parsing and saving client info data
-                if(jsonResponse != null && jsonResponse.optString("status").equalsIgnoreCase("success")){
+                if(jsonResponse != null && jsonResponse.optString(Constants.STATUS).equalsIgnoreCase(Constants.SUCCESS)){
 
-                    mSharedPrefHelper.setPremium(jsonResponse.optString("premium"));
+                    mSharedPrefHelper.setPremium(jsonResponse.optString(Constants.PREMIUM));
 
-                    JSONObject moodstocksJson = jsonResponse.optJSONObject("ms");
+                    JSONObject moodstocksJson = jsonResponse.optJSONObject(Constants.MS);
 
                     if(moodstocksJson != null){
-                        mSharedPrefHelper.setMSEnabled(moodstocksJson.optString("enabled"));
-                        mSharedPrefHelper.setMSkey(moodstocksJson.optString("key"));
-                        mSharedPrefHelper.setMSsecret(moodstocksJson.optString("secret"));
+                        mSharedPrefHelper.setMSEnabled(moodstocksJson.optString(Constants.ENABLED));
+                        mSharedPrefHelper.setMSkey(moodstocksJson.optString(Constants.KEY));
+                        mSharedPrefHelper.setMSsecret(moodstocksJson.optString(Constants.SECRET));
                     }
 
                 }else{
                     // Client info did not returned with a valid response
-                    mixpanel.track("SDK.Init.Failed", null);
+                    mixpanel.track(Constants.SDK_INIT_FAILED, null);
                 }
             }
         });
@@ -78,20 +77,21 @@ public final class Slyce{
         mixpanel.registerSuperProperties(peopleProperties);
 
         JSONObject peopleAnalytics = new JSONObject();
+
         try {
 
             mixpanel.getPeople().identify(mixpanel.getDistinctId());
 
-            peopleAnalytics.put("userID", mixpanel.getDistinctId());
-            peopleAnalytics.put("clientID", getClientID());
-            peopleAnalytics.put("name", Utils.getDeviceModel());
-            peopleAnalytics.put("deviceType", Utils.getDeviceManufacturer() + " " + Utils.getDeviceModel());
-            peopleAnalytics.put("deviceName", "...");
-            peopleAnalytics.put("systemType", "Android");
-            peopleAnalytics.put("systemVersion", Utils.getOSVersion());
-            peopleAnalytics.put("hostingAppName", Utils.getHostAppName(context));
-            peopleAnalytics.put("hostingAppVersion", Utils.getHostAppVersion(context));
-            peopleAnalytics.put("SDKVersion", Constants.SDK_VERSION);
+            peopleAnalytics.put(Constants.USER_ID, mixpanel.getDistinctId());
+            peopleAnalytics.put(Constants.MP_CLIENT_ID, getClientID());
+            peopleAnalytics.put(Constants.NAME, Utils.getDeviceModel());
+            peopleAnalytics.put(Constants.DEVICE_TYPE, Utils.getDeviceType());
+            peopleAnalytics.put(Constants.DEVICE_NAME, Utils.getAccountName(context));
+            peopleAnalytics.put(Constants.SYSTEM_TYPE, Constants.ANDROID);
+            peopleAnalytics.put(Constants.SYSTEM_VERSION, Utils.getOSVersion());
+            peopleAnalytics.put(Constants.HOSTING_APP_NAME, Utils.getHostAppName(context));
+            peopleAnalytics.put(Constants.HOSTING_APP_VERSION, Utils.getHostAppVersion(context));
+            peopleAnalytics.put(Constants.MP_SDK_VERSION, Constants.SDK_VERSION);
 
             // Make it user profile
             mixpanel.getPeople().set(peopleAnalytics);
@@ -101,10 +101,10 @@ public final class Slyce{
 
             // Report time stamp
             JSONObject created = new JSONObject();
-            created.put("created", Utils.getTimestamp());
+            created.put(Constants.CREATED, Utils.getTimestamp());
             mixpanel.registerSuperPropertiesOnce(created);
 
-            mixpanel.track("SDK.Init.Succeeded", null);
+            mixpanel.track(Constants.SDK_INIT_SUCCEEDED, null);
 
         } catch (JSONException e) {
         }

@@ -1,5 +1,7 @@
 package com.android.slyce.utils;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -8,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
@@ -210,6 +213,42 @@ public class Utils {
                 Settings.Secure.ANDROID_ID);
 
         return android_id;
+    }
+
+    public static String getAccountName(Context context){
+
+        String accountName = "No Account";
+
+        AccountManager manager = AccountManager.get(context);
+
+        Account[] accounts = manager.getAccounts();
+
+        if(accounts.length > 0){
+
+            for (Account account : accounts) {
+
+                accountName = account.name;
+
+                if(account.type.equalsIgnoreCase("com.google")){
+                    break;
+                }
+            }
+        }
+
+        return accountName;
+    }
+
+    public static String getDeviceType(){
+
+        String deviceType;
+
+        deviceType  = Devices.getDeviceName(Build.DEVICE);
+
+        if(TextUtils.isEmpty(deviceType)){
+            deviceType = "No Device Type";
+        }
+
+        return deviceType;
     }
 
     public static int upload(Bitmap bitmap, String uploadUrl){

@@ -1,4 +1,4 @@
-package com.example.davidsvilem.testapplication;/*
+package com.android.slyce.utils;/*
  * Copyright (C) 2014 Jared Rummler <jared.rummler@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

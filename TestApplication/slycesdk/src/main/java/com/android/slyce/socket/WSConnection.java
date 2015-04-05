@@ -121,7 +121,7 @@ public class WSConnection implements
 
     public void sendRequestImageUrl(String imageUrl){
 
-        String ticket = Ticket.createTicket("createTicket", "imageURL", imageUrl);
+        String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.IMAGE_URL, imageUrl);
 
         mWebSocket.send(ticket);
     }
@@ -130,7 +130,7 @@ public class WSConnection implements
 
         mBitmap = bitmap;
 
-        String ticket = Ticket.createTicket("createTicket", "ticketType", "productSearch");
+        String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.TICKET_TYPE, Constants.PRODUCT_SEARCH);
 
         mWebSocket.send(ticket);
     }
@@ -164,10 +164,10 @@ public class WSConnection implements
         StringBuilder url = new StringBuilder();
 
         url.append(Constants.WS_URL).
-                append("clientID=").
+                append(Constants.CLIENT_ID).append("=").
                 append(clientID).
                 append("&").
-                append("installID=").
+                append(Constants.INSTALL_ID).append("=").
                 append(installID);
 
         return url.toString();
@@ -177,8 +177,6 @@ public class WSConnection implements
     @Override
     public void onStringAvailable(String s) {
         Log.i(TAG, "onStringAvailable");
-
-        Log.i(TAG, s);
 
         handleResult(s);
     }
@@ -211,32 +209,32 @@ public class WSConnection implements
             JSONObject response = new JSONObject(result);
 
             // Get the event
-            String event = response.optString("event");
+            String event = response.optString(Constants.EVENT);
 
             // Get the token
-            JSONObject data = response.optJSONObject("data");
+            JSONObject data = response.optJSONObject(Constants.DATA);
 
             switch(event){
 
-                case "ticketCreated":
+                case Constants.TICKET_CREATED:
 
-                    token = data.optString("token");
+                    token = data.optString(Constants.TOKEN);
 
                     mTokenListener.onTokenReceived(token);
 
                     // Report Foundation ticket (super property)
                     JSONObject props = new JSONObject();
-                    props.put("foundationTicket", token);
+                    props.put(Constants.FOUNDATION_TICKET, token);
                     mixpanel.registerSuperProperties(props);
 
                     // Create ticket
-                    ticket = Ticket.createTicket("imageUploaded", "token", token);
+                    ticket = Ticket.createTicket(Constants.IMAGE_UPLOADED, Constants.TOKEN, token);
 
                     // Image destination URL
-                    String uploadUrl = data.optString("uploadURL");
+                    String uploadUrl = data.optString(Constants.UPLOAD_URL);
 
                     // Image Url for MixPanel report
-                    imageURL = data.optString("imageURL");
+                    imageURL = data.optString(Constants.IMAGE_URL);
 
                     if(mMethodType == MethodType.SEND_IMAGE){
 
@@ -261,47 +259,47 @@ public class WSConnection implements
 
                     break;
 
-                case "progress":
+                case Constants.PROGRESS:
 
                     JSONObject imageSentReport = new JSONObject();
-                    imageSentReport.put("imageURL", imageURL);
-                    mixpanel.track("Image.Sent", imageSentReport);
+                    imageSentReport.put(Constants.IMAGE_URL, imageURL);
+                    mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
-                    String message = data.optString("message");
+                    String message = data.optString(Constants.MESSAGE);
 
                     // Saving these filed to report to MixPanel on "result" event
-                    keywords = data.optString("keywords");
-                    category = data.optString("category");
-                    color = data.optString("color");
-                    gender = data.optString("gender");
-                    brand = data.optString("brand");
+                    keywords = data.optString(Constants.KEYWORDS);
+                    category = data.optString(Constants.CATEGORY);
+                    color = data.optString(Constants.COLOR);
+                    gender = data.optString(Constants.GENDER);
+                    brand = data.optString(Constants.BRAND);
 
                     // Report to MixPanel
                     JSONObject searchProfressReport = new JSONObject();
-                    searchProfressReport.put("progressMessageContent", message);
-                    mixpanel.track("Search.Progress", searchProfressReport);// TODO: ask Nathan if this should be the key
+                    searchProfressReport.put(Constants.PROGRESS_MESSAGE_CONTENT, message);
+                    mixpanel.track(Constants.SEARCH_PROGRESS, searchProfressReport);// TODO: ask Nathan if this should be the key
 
-                    long progress = data.optLong("progress");
+                    long progress = data.optLong(Constants.PROGRESS);
 
                     mSynchronizer.onSlyceProgress(progress, message, token);
 
-                    ticket = Ticket.createTicket("results", "token", token);
+                    ticket = Ticket.createTicket(Constants.RESULTS, Constants.TOKEN, token);
 
                     mWebSocket.send(ticket);
                     mWebSocket.send(new byte[10]);
 
                     break;
 
-                case "results":
+                case Constants.RESULTS:
 
                     // Notify the app developer for the results
-                    JSONArray products = data.optJSONArray("products");
+                    JSONArray products = data.optJSONArray(Constants.PRODUCTS);
 
                     if(products == null){
 
                         JSONObject searchNotFound = new JSONObject();
-                        searchNotFound.put("detectionType", "3D");
-                        mixpanel.track("Search.Not.Found", searchNotFound);
+                        searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
+                        mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
 
                         mSynchronizer.onError("Products is null");
 
@@ -309,34 +307,34 @@ public class WSConnection implements
 
                         // Report to MixPanel
                         JSONObject imageDetectReport = new JSONObject();
-                        imageDetectReport.put("imageURL", imageURL);
-                        imageDetectReport.put("detectionType", "3D"); // TODO: change it according to the type 3D, 2D, UPC, QR
+                        imageDetectReport.put(Constants.IMAGE_URL, imageURL);
+                        imageDetectReport.put(Constants.DETECTION_TYPE, Constants._3D); // TODO: change it according to the type 3D, 2D, UPC, QR
 
                         JSONObject contentReport = new JSONObject();
-                        contentReport.put("keywords", keywords);
-                        contentReport.put("category", category);
-                        contentReport.put("color", color);
-                        contentReport.put("gender", gender);
-                        contentReport.put("brand", brand);
+                        contentReport.put(Constants.KEYWORDS, keywords);
+                        contentReport.put(Constants.CATEGORY, category);
+                        contentReport.put(Constants.COLOR, color);
+                        contentReport.put(Constants.GENDER, gender);
+                        contentReport.put(Constants.BRAND, brand);
 
-                        imageDetectReport.put("Content",contentReport);
+                        imageDetectReport.put(Constants.CONTENT,contentReport);
 
-                        mixpanel.track("Image.Detected", imageDetectReport);
+                        mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
 
                         mSynchronizer.on3DRecognition(products);
                     }
 
                     break;
 
-                case "workflowEnded":
+                case Constants.WORK_FLOW_ENDED:
 
                     mWebSocket.close();
 
                     break;
 
-                case "ticketCreationFailed":
+                case Constants.TICKET_CREATION_FAILED:
 
-                    String error = data.optString("error");
+                    String error = data.optString(Constants.ERROR);
 
                     mSynchronizer.onError(error);
 

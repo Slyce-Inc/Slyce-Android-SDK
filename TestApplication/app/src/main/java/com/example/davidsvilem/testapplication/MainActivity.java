@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.preference.PreferenceManager;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -24,10 +24,9 @@ import android.widget.Toast;
 import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.GetProductsRequest;
+import com.android.slyce.utils.Devices;
 
 import org.json.JSONArray;
-
-import java.lang.reflect.Method;
 
 
 public class MainActivity extends ActionBarActivity implements OnSlyceRequestListener, View.OnClickListener {
@@ -56,11 +55,39 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        String name = Devices.getDeviceName();
-//
-//        String name2 = Devices.getDeviceName(Build.DEVICE);
+
+
+
+        Log.i("TAG","getDeviceName Start");
+        String name = Devices.getDeviceName();
+        Log.i("TAG","getDeviceName end");
+
+        Log.i("TAG","getDeviceName Start");
+        name = Devices.getDeviceName();
+        Log.i("TAG","getDeviceName end");
+
+        Log.i("TAG","getDeviceName start");
+        name = Devices.getDeviceName();
+        Log.i("TAG","getDeviceName end");
+
+        Log.i("TAG","getDeviceName build Start");
+        String name1 = Devices.getDeviceName(Build.DEVICE);
+        Log.i("TAG","getDeviceName build End");
+
+        Log.i("TAG","getDeviceName build Start");
+        String name2 = Devices.getDeviceName(Build.DEVICE);
+        Log.i("TAG","getDeviceName build End");
 
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.i("TAG","getDeviceName Start");
+        String name = Devices.getDeviceName();
+        Log.i("TAG","getDeviceName end");
     }
 
     private void initViews(){

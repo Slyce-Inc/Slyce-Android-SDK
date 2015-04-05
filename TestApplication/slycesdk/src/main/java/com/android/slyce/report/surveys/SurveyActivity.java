@@ -33,13 +33,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.davidsvilem.slycesdk.R;
 import com.android.slyce.report.mpmetrics.InAppNotification;
 import com.android.slyce.report.mpmetrics.MPConfig;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import com.android.slyce.report.mpmetrics.Survey;
 import com.android.slyce.report.mpmetrics.Survey.Question;
 import com.android.slyce.report.mpmetrics.UpdateDisplayState;
+import com.example.davidsvilem.slycesdk.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

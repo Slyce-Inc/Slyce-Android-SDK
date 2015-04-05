@@ -25,8 +25,8 @@ import com.android.slyce.requests.SlyceProductsRequest;
 
 import org.json.JSONArray;
 
-
-public class MainActivity extends ActionBarActivity implements OnSlyceRequestListener, View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener
+, OnSlyceRequestListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -74,8 +74,8 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
 
         Toast.makeText(this,
                 "Progress: " + progress +
-                "\n" + "Message: " + message +
-                "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
+                        "\n" + "Message: " + message +
+                        "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
             return;
         }
 
-        slyce = Slyce.getInstance(this, clientId);
+       slyce = Slyce.getInstance(this, clientId);
 
         switch(v.getId()){
 

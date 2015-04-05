@@ -16,18 +16,16 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.example.davidsvilem.slycesdk.R;
 import com.android.slyce.report.viewcrawler.UpdatesFromMixpanel;
 import com.android.slyce.report.viewcrawler.TrackingDebug;
 import com.android.slyce.report.viewcrawler.ViewCrawler;
 import com.android.slyce.report.surveys.SurveyActivity;
 import com.android.slyce.report.util.ActivityImageUtils;
+import com.example.davidsvilem.slycesdk.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;

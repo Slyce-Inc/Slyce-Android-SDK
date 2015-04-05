@@ -1,1 +1,1 @@
-include ':app' , ':slycesdk'
+include ':app', ':slycesdk'

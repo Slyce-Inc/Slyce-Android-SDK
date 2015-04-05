@@ -13,9 +13,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by davidsvilem on 3/31/15.
  */
-public final class GetProductsRequest extends SlyceRequest implements WSConnection.OnTokenListener{
+public final class SlyceProductsRequest extends SlyceRequest implements WSConnection.OnTokenListener{
 
-    private final String TAG = GetProductsRequest.class.getSimpleName();
+    private final String TAG = SlyceProductsRequest.class.getSimpleName();
 
     private AtomicBoolean oneShotexecution = new AtomicBoolean(false);
 
@@ -23,7 +23,7 @@ public final class GetProductsRequest extends SlyceRequest implements WSConnecti
 
     private String token;
 
-    public GetProductsRequest(Slyce slyce, OnSlyceRequestListener listener, String imageUrl) {
+    public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, String imageUrl) {
         super(slyce, listener);
 
         connection.setOnTokenListener(this);
@@ -32,7 +32,7 @@ public final class GetProductsRequest extends SlyceRequest implements WSConnecti
         connection.setImageUrl(imageUrl);
     }
 
-    public GetProductsRequest(Slyce slyce, OnSlyceRequestListener listener, Bitmap image) {
+    public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, Bitmap image) {
         super(slyce, listener);
 
         connection.setOnTokenListener(this);

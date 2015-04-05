@@ -3,12 +3,10 @@ package com.example.davidsvilem.testapplication;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -23,8 +21,7 @@ import android.widget.Toast;
 
 import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.requests.GetProductsRequest;
-import com.android.slyce.utils.Devices;
+import com.android.slyce.requests.SlyceProductsRequest;
 
 import org.json.JSONArray;
 
@@ -43,7 +40,8 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
 
     private Slyce slyce;
 
-    private GetProductsRequest mGetProductsRequest;
+    private SlyceProductsRequest slyceProductsRequestImageUrl;
+    private SlyceProductsRequest slyceProductsRequestImage;
 
     private EditText clientIdEditText;
 
@@ -132,8 +130,8 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
                     return;
                 }
 
-                mGetProductsRequest = new GetProductsRequest(slyce, this, selectedBitmap);
-                mGetProductsRequest.execute();
+                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+                slyceProductsRequestImage.execute();
 
                 break;
 
@@ -142,8 +140,8 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
                 String hearPhones = "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
 //                String macbook = "http://www.mini-laptops-and-notebooks.com/images/Apple_MacBook.jpg";
 
-                mGetProductsRequest = new GetProductsRequest(slyce, this, hearPhones);
-                mGetProductsRequest.execute();
+                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, this, hearPhones);
+                slyceProductsRequestImageUrl.execute();
 
                 break;
         }

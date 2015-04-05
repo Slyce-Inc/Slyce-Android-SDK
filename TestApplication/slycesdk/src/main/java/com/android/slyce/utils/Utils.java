@@ -3,12 +3,15 @@ package com.android.slyce.utils;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -271,7 +274,7 @@ public class Utils {
         int res = context.checkCallingOrSelfPermission(permission);
         return (res == PackageManager.PERMISSION_GRANTED);
     }
-//
+
 //    public static int upload(Bitmap bitmap, String uploadUrl){
 //
 //        List<String> response = new ArrayList<String>();

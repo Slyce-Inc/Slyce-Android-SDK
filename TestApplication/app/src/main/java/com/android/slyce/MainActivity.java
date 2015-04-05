@@ -1,4 +1,4 @@
-package com.example.davidsvilem.testapplication;
+package com.android.slyce;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,10 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
+import com.android.slyce.utils.Utils;
 
 import org.json.JSONArray;
 

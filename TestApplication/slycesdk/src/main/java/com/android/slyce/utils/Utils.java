@@ -230,6 +230,13 @@ public class Utils {
                 accountName = account.name;
 
                 if(account.type.equalsIgnoreCase("com.google")){
+                    // Extract user name from mail
+                    if(accountName.contains("@")){
+                        String[] arr = accountName.split("@");
+                        if(arr != null && arr.length > 0){
+                            accountName = arr[0];
+                        }
+                    }
                     break;
                 }
             }
@@ -242,7 +249,7 @@ public class Utils {
 
         String deviceType;
 
-        deviceType  = Devices.getDeviceName(Build.DEVICE);
+        deviceType = Devices.getDeviceName(Build.DEVICE);
 
         if(TextUtils.isEmpty(deviceType)){
             deviceType = "No Device Type";

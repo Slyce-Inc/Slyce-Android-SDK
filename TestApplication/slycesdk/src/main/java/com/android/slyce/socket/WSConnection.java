@@ -274,19 +274,33 @@ public class WSConnection implements
                     gender = data.optString(Constants.GENDER);
                     brand = data.optString(Constants.BRAND);
 
-                    // Report to MixPanel
-                    JSONObject searchProfressReport = new JSONObject();
-                    searchProfressReport.put(Constants.PROGRESS_MESSAGE_CONTENT, message);
-                    mixpanel.track(Constants.SEARCH_PROGRESS, searchProfressReport);// TODO: ask Nathan if this should be the key
-
                     long progress = data.optLong(Constants.PROGRESS);
 
-                    mSynchronizer.onSlyceProgress(progress, message, token);
+                    if(progress != -1){
 
-                    ticket = Ticket.createTicket(Constants.RESULTS, Constants.TOKEN, token);
+                        // Report to MixPanel
+                        JSONObject searchProfressReport = new JSONObject();
+                        searchProfressReport.put(Constants.PROGRESS_MESSAGE_CONTENT, message);
+                        mixpanel.track(Constants.SEARCH_PROGRESS, searchProfressReport);
 
-                    mWebSocket.send(ticket);
-                    mWebSocket.send(new byte[10]);
+                        mSynchronizer.onSlyceProgress(progress, message, token);
+
+                        // Keep sending tickets as long progress != -1
+                        ticket = Ticket.createTicket(Constants.RESULTS, Constants.TOKEN, token);
+
+                        mWebSocket.send(ticket);
+                        mWebSocket.send(new byte[10]);
+
+                    }else{
+
+                        // If progress = -1 received then no products found
+                        JSONObject searchNotFound = new JSONObject();
+                        searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
+                        mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
+
+                        // Send an empty products array
+                        mSynchronizer.on3DRecognition(new JSONArray());
+                    }
 
                     break;
 
@@ -301,14 +315,16 @@ public class WSConnection implements
                         searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
                         mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
 
-                        mSynchronizer.onError("Products is null");
+                        // Send an empty products array
+                        mSynchronizer.on3DRecognition(new JSONArray());
 
                     }else{
 
                         // Report to MixPanel
                         JSONObject imageDetectReport = new JSONObject();
                         imageDetectReport.put(Constants.IMAGE_URL, imageURL);
-                        imageDetectReport.put(Constants.DETECTION_TYPE, Constants._3D); // TODO: change it according to the type 3D, 2D, UPC, QR
+                        // TODO: change it according to the type 3D, 2D, UPC, QR
+                        imageDetectReport.put(Constants.DETECTION_TYPE, Constants._3D);
 
                         JSONObject contentReport = new JSONObject();
                         contentReport.put(Constants.KEYWORDS, keywords);

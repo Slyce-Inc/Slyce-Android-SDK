@@ -43,51 +43,16 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
 
     private Slyce slyce;
 
-    private GetProductsRequest mGetProductsRequest_1;
-    private GetProductsRequest mGetProductsRequest_2;
+    private GetProductsRequest mGetProductsRequest;
 
     private EditText clientIdEditText;
-
-    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
-        Log.i("TAG","getDeviceName Start");
-        String name = Devices.getDeviceName();
-        Log.i("TAG","getDeviceName end");
-
-        Log.i("TAG","getDeviceName Start");
-        name = Devices.getDeviceName();
-        Log.i("TAG","getDeviceName end");
-
-        Log.i("TAG","getDeviceName start");
-        name = Devices.getDeviceName();
-        Log.i("TAG","getDeviceName end");
-
-        Log.i("TAG","getDeviceName build Start");
-        String name1 = Devices.getDeviceName(Build.DEVICE);
-        Log.i("TAG","getDeviceName build End");
-
-        Log.i("TAG","getDeviceName build Start");
-        String name2 = Devices.getDeviceName(Build.DEVICE);
-        Log.i("TAG","getDeviceName build End");
-
         initViews();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.i("TAG","getDeviceName Start");
-        String name = Devices.getDeviceName();
-        Log.i("TAG","getDeviceName end");
     }
 
     private void initViews(){
@@ -167,8 +132,8 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
                     return;
                 }
 
-                mGetProductsRequest_1 = new GetProductsRequest(slyce, this, selectedBitmap);
-                mGetProductsRequest_1.execute();
+                mGetProductsRequest = new GetProductsRequest(slyce, this, selectedBitmap);
+                mGetProductsRequest.execute();
 
                 break;
 
@@ -177,20 +142,12 @@ public class MainActivity extends ActionBarActivity implements OnSlyceRequestLis
                 String hearPhones = "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
 //                String macbook = "http://www.mini-laptops-and-notebooks.com/images/Apple_MacBook.jpg";
 
-                mGetProductsRequest_1 = new GetProductsRequest(slyce, this, hearPhones);
-                mGetProductsRequest_1.execute();
-
-//                mGetProductsRequest_2 = new GetProductsRequest(slyce, this, hearPhones);
-//                mGetProductsRequest_2.execute();
+                mGetProductsRequest = new GetProductsRequest(slyce, this, hearPhones);
+                mGetProductsRequest.execute();
 
                 break;
         }
     }
-
-
-
-
-
 
 
 

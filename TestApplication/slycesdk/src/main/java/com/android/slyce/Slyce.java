@@ -84,7 +84,7 @@ public final class Slyce{
 
             peopleAnalytics.put(Constants.USER_ID, mixpanel.getDistinctId());
             peopleAnalytics.put(Constants.MP_CLIENT_ID, getClientID());
-            peopleAnalytics.put(Constants.NAME, Utils.getDeviceModel());
+            peopleAnalytics.put(Constants.NAME, Utils.getAccountName(context));
             peopleAnalytics.put(Constants.DEVICE_TYPE, Utils.getDeviceType());
             peopleAnalytics.put(Constants.DEVICE_NAME, Utils.getAccountName(context));
             peopleAnalytics.put(Constants.SYSTEM_TYPE, Constants.ANDROID);

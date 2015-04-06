@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.report.mpmetrics.MPConfig;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.crashlytics.android.Crashlytics;
 import org.json.JSONArray;
@@ -55,7 +56,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     /* Examples client id's */
     // jcpenney852
-    // homedepot623 
+    // homedepot623
     // jcpenney852
 
     /* Examples url's */

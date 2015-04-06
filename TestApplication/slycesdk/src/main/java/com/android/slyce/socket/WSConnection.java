@@ -7,6 +7,7 @@ import android.util.Log;
 import com.android.slyce.handler.Synchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.report.mpmetrics.MPConfig;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.models.Ticket;
 import com.android.slyce.utils.Utils;
@@ -373,8 +374,6 @@ public class WSConnection implements
                         imageDetectReport.put(Constants.TOTAL_DETECTION_TIME, time);
 
                         mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
-
-                        mixpanel.flush();
 
                         mSynchronizer.on3DRecognition(products);
                     }

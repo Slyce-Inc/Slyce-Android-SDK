@@ -112,8 +112,6 @@ public final class Slyce{
 
             mixpanel.track(Constants.SDK_INIT_SUCCEEDED, null);
 
-            scheduleFlush();
-
         } catch (JSONException e) {
 
         }
@@ -148,15 +146,5 @@ public final class Slyce{
 
     public Context getContext(){
         return mContext;
-    }
-
-    private void scheduleFlush(){
-
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                mixpanel.flush();
-            }
-        }, 250, 750);//put here time 1000 milliseconds=1 second
     }
 }

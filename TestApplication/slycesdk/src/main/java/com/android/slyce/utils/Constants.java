@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class Constants {
 
     /* SDK version*/
-    public static final String SDK_VERSION = "1.0";
+    public static final String SDK_VERSION = "1.2";
 
     /* Base URL */
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";

@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -17,21 +19,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
-import com.android.slyce.utils.Utils;
-
+import com.crashlytics.android.Crashlytics;
 import org.json.JSONArray;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener
-, OnSlyceRequestListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnSlyceRequestListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
-    private Button pickImage;
     private Button uploadImage;
     private Button uploadImageUrl;
+    private Button initSlyceObject;
+
+    private EditText clientIdEditText;
+    private EditText imageUrlEditText;
 
     private Bitmap selectedBitmap;
 
@@ -42,11 +49,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private SlyceProductsRequest slyceProductsRequestImageUrl;
     private SlyceProductsRequest slyceProductsRequestImage;
 
-    private EditText clientIdEditText;
+    private ProgressBar progressBar;
+
+    /* jcpenney852 homedepot623 jcpenney852*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Crashlytics.start(this);
         setContentView(R.layout.activity_main);
 
         initViews();
@@ -54,17 +64,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void initViews(){
 
-        pickImage = (Button) findViewById(R.id.pick_image);
         uploadImage = (Button) findViewById(R.id.upload_image);
         uploadImageUrl = (Button) findViewById(R.id.upload_image_url);
+        initSlyceObject = (Button) findViewById(R.id.init_sdk);
         clientIdEditText = (EditText) findViewById(R.id.client_id);
+        imageUrlEditText = (EditText) findViewById(R.id.image_url);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
 
-        // jcpenney852 homedepot623
-        clientIdEditText.setText("homedepot623");
-
-        pickImage.setOnClickListener(this);
         uploadImage.setOnClickListener(this);
         uploadImageUrl.setOnClickListener(this);
+        initSlyceObject.setOnClickListener(this);
     }
 
     // OnSlyceRequestListener callbacks
@@ -79,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void on2DRecognition() {
-
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -88,30 +97,40 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         Toast.makeText(MainActivity.this, "Found " +  products.length() + " products", Toast.LENGTH_LONG).show();
 
         Log.i(TAG, "Products: " + products.toString());
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onError(final String message) {
 
         Toast.makeText(MainActivity.this, "onError: " + message, Toast.LENGTH_LONG).show();
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
     // OnSlyceRequestListener callbacks
 
     @Override
     public void onClick(View v) {
 
-        String clientId = clientIdEditText.getText().toString();
-
-        if(TextUtils.isEmpty(clientId)){
-            showDialogError("Please insert Client ID");
-            return;
-        }
-
-       slyce = Slyce.getInstance(this, clientId);
-
         switch(v.getId()){
 
-            case R.id.pick_image:
+            case R.id.init_sdk:
+
+                String clientId = clientIdEditText.getText().toString();
+
+                if(TextUtils.isEmpty(clientId)){
+                    showDialogError("Please insert Client ID");
+                    return;
+                }
+
+                // Assigning it to null for re initiation (Do Not do this in real app)
+                slyce = null;
+                slyce = Slyce.getInstance(this, clientId);
+
+                break;
+
+            case R.id.upload_image:
 
                 Intent intent = new Intent();
                 intent.setType("image/*");
@@ -119,34 +138,37 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
 
-                break;
-
-            case R.id.upload_image:
-
-                if(selectedBitmap == null){
-                    showDialogError("Please pick image first");
-                    return;
-                }
-
-                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
-                slyceProductsRequestImage.execute();
+                progressBar.setVisibility(View.VISIBLE);
 
                 break;
 
             case R.id.upload_image_url:
 
-                String hearPhones = "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
+//                String hearPhones = "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
 //                String macbook = "http://www.mini-laptops-and-notebooks.com/images/Apple_MacBook.jpg";
 
-                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, this, hearPhones);
+                String imageUrl = imageUrlEditText.getText().toString();
+
+                imageUrl = "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
+
+                if(TextUtils.isEmpty(imageUrl)){
+                    showDialogError("Please insert Image Url");
+                    return;
+                }
+
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
+                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, this, imageUrl);
                 slyceProductsRequestImageUrl.execute();
+
+                progressBar.setVisibility(View.VISIBLE);
 
                 break;
         }
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,34 +193,64 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode == RESULT_OK) {
+
             if (requestCode == SELECT_PICTURE) {
 
-                Uri selectedImage = data.getData();
+                Uri selectedImageUri = data.getData();
+                if (Build.VERSION.SDK_INT < 19) {
+                    String selectedImagePath = getPath(selectedImageUri);
+                    selectedBitmap = BitmapFactory.decodeFile(selectedImagePath);
 
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;//returning null for below statement
-                selectedBitmap = BitmapFactory.decodeFile( getPath(selectedImage), options);
+                } else {
+
+                    ParcelFileDescriptor parcelFileDescriptor;
+                    try {
+                        parcelFileDescriptor = getContentResolver().openFileDescriptor(selectedImageUri, "r");
+                        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                        selectedBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                        parcelFileDescriptor.close();
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
+                    }
+                }
+
+                if(selectedBitmap == null){
+                    showDialogError("Please pick image first");
+                    return;
+                }
+
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
+                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+                slyceProductsRequestImage.execute();
             }
         }
     }
 
+    /**
+     * helper to retrieve the path of an image URI
+     */
     public String getPath(Uri uri) {
-
         if( uri == null ) {
             return null;
         }
-
-        // this will only work for images selected from gallery
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        String[] projection = { MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if( cursor != null ){
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
         }
-
         return uri.getPath();
     }
 

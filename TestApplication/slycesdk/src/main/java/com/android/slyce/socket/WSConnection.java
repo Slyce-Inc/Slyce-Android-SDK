@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by davidsvilem on 3/22/15.
  */
@@ -39,8 +41,15 @@ public class WSConnection implements
     private Synchronizer mSynchronizer;
 
     private String mImageUrl;
-
     private String mRequestUrl;
+    private String imageURL;
+    private String token;
+    private String keywords;
+    private String category;
+    private String color;
+    private String gender;
+    private String brand;
+    private String pattern;
 
     private MethodType mMethodType;
 
@@ -48,15 +57,8 @@ public class WSConnection implements
 
     private MixpanelAPI mixpanel;
 
-    private String imageURL;
-
-    private String token;
-
-    private String keywords;
-    private String category;
-    private String color;
-    private String gender;
-    private String brand;
+    private long startDetectionTime = 0;
+    private long endDetectionTime = 0;
 
     public WSConnection(Context context, String clientID, OnSlyceRequestListener listener){
 
@@ -124,6 +126,8 @@ public class WSConnection implements
         String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.IMAGE_URL, imageUrl);
 
         mWebSocket.send(ticket);
+
+        startDetectionTime = System.currentTimeMillis();
     }
 
     public void sendRequestImage(Bitmap bitmap){
@@ -133,6 +137,8 @@ public class WSConnection implements
         String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.TICKET_TYPE, Constants.PRODUCT_SEARCH);
 
         mWebSocket.send(ticket);
+
+        startDetectionTime = System.currentTimeMillis();
     }
 
     public void setBitmap(Bitmap bitmap){
@@ -224,7 +230,7 @@ public class WSConnection implements
 
                     // Report Foundation ticket (super property)
                     JSONObject props = new JSONObject();
-                    props.put(Constants.FOUNDATION_TICKET, token);
+                    props.put(Constants.FOUNDATION_TOKEN, token);
                     mixpanel.registerSuperProperties(props);
 
                     // Create ticket
@@ -261,26 +267,36 @@ public class WSConnection implements
 
                 case Constants.PROGRESS:
 
+                    // Report to MP
                     JSONObject imageSentReport = new JSONObject();
                     imageSentReport.put(Constants.IMAGE_URL, imageURL);
                     mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
+                    // Get message
                     String message = data.optString(Constants.MESSAGE);
 
-                    // Saving these filed to report to MixPanel on "result" event
-                    keywords = data.optString(Constants.KEYWORDS);
-                    category = data.optString(Constants.CATEGORY);
-                    color = data.optString(Constants.COLOR);
-                    gender = data.optString(Constants.GENDER);
-                    brand = data.optString(Constants.BRAND);
+                    // Get details
+                    JSONObject details = data.optJSONObject(Constants.DETAILS);
 
+                    if(details != null){
+                        // Saving details fields to report to MP at "result" event
+                        keywords = details.optString(Constants.SEARCH_KEYWORDS);
+                        category = details.optString(Constants.CATEGORY_LABEL);
+                        color = details.optString(Constants.COLOR_NAME);
+                        gender = details.optString(Constants.GENDER_NAME);
+                        brand = details.optString(Constants.BRAND_NAME);
+                        pattern = details.optString(Constants.PATTERN_NAME);
+                    }
+
+                    // Get progress
                     long progress = data.optLong(Constants.PROGRESS);
 
                     if(progress != -1){
 
-                        // Report to MixPanel
+                        // Report to MP
                         JSONObject searchProfressReport = new JSONObject();
                         searchProfressReport.put(Constants.PROGRESS_MESSAGE_CONTENT, message);
+                        searchProfressReport.put(Constants.PROGRESS_VALUE, progress);
                         mixpanel.track(Constants.SEARCH_PROGRESS, searchProfressReport);
 
                         mSynchronizer.onSlyceProgress(progress, message, token);
@@ -293,9 +309,14 @@ public class WSConnection implements
 
                     }else{
 
+                        // Calculate detection time
+                        long totalDetectionTime = System.currentTimeMillis() - startDetectionTime;
+                        long time = TimeUnit.MILLISECONDS.toSeconds(totalDetectionTime);
+
                         // If progress = -1 received then no products found
                         JSONObject searchNotFound = new JSONObject();
                         searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
+                        searchNotFound.put(Constants.TOTAL_DETECTION_TIME, time);
                         mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
 
                         // Send an empty products array
@@ -308,6 +329,10 @@ public class WSConnection implements
 
                     // Notify the app developer for the results
                     JSONArray products = data.optJSONArray(Constants.PRODUCTS);
+
+                    // Calculate detection time
+                    long totalDetectionTime = System.currentTimeMillis() - startDetectionTime;
+                    long time = TimeUnit.MILLISECONDS.toSeconds(totalDetectionTime);
 
                     if(products == null){
 
@@ -326,16 +351,30 @@ public class WSConnection implements
                         // TODO: change it according to the type 3D, 2D, UPC, QR
                         imageDetectReport.put(Constants.DETECTION_TYPE, Constants._3D);
 
-                        JSONObject contentReport = new JSONObject();
-                        contentReport.put(Constants.KEYWORDS, keywords);
-                        contentReport.put(Constants.CATEGORY, category);
-                        contentReport.put(Constants.COLOR, color);
-                        contentReport.put(Constants.GENDER, gender);
-                        contentReport.put(Constants.BRAND, brand);
+                        if(!TextUtils.isEmpty(keywords)){
+                            imageDetectReport.put(Constants.KEYWORDS, keywords);
+                        }
+                        if(!TextUtils.isEmpty(category)){
+                            imageDetectReport.put(Constants.CATEGORY, category);
+                        }
+                        if(!TextUtils.isEmpty(color)){
+                            imageDetectReport.put(Constants.COLOR, color);
+                        }
+                        if(!TextUtils.isEmpty(gender)){
+                            imageDetectReport.put(Constants.GENDER, gender);
+                        }
+                        if(!TextUtils.isEmpty(brand)){
+                            imageDetectReport.put(Constants.BRAND, brand);
+                        }
+                        if(!TextUtils.isEmpty(pattern)){
+                            imageDetectReport.put(Constants.PATTERN, pattern);
+                        }
 
-                        imageDetectReport.put(Constants.CONTENT,contentReport);
+                        imageDetectReport.put(Constants.TOTAL_DETECTION_TIME, time);
 
                         mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
+
+                        mixpanel.flush();
 
                         mSynchronizer.on3DRecognition(products);
                     }

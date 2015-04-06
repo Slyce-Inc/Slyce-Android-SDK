@@ -12,24 +12,24 @@
         android:layout_height="wrap_content"
         android:hint="Client ID"/>
 
-    <TextView
+    <EditText
+        android:id="@+id/image_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="In order for new Client Id to take effect please kill the app"
-        android:textSize="16dp"/>
+        android:hint="Image Url"/>
+
+    <Button
+        android:id="@+id/init_sdk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Init Slyce Object"
+        />
 
     <Button
         android:id="@+id/upload_image_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="upload image url"
-        />
-
-    <Button
-        android:id="@+id/pick_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="pick image"
         />
 
     <Button
@@ -42,8 +42,9 @@
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/progress"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"/>
 
 
 </LinearLayout>

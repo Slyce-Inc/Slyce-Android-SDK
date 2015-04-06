@@ -11,18 +11,27 @@ public class Constants {
     public static final String SDK_VERSION = "1.0";
 
     /* Base URL */
+//    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";
     public static final String WS_URL = "ws://foundation.slyceapp.com/api/v1/stream?";
 
     /* MixPanel */
     public static final String MIXPANEL_TOKEN = "712a9f5c14895edaa8b27dc59ec2af9f";
-    public static final String FOUNDATION_TICKET = "foundationTicket";
+    public static final String FOUNDATION_TOKEN = "foundationToken";
     public static final String IMAGE_SENT = "Image.Sent";
+    public static final String SEARCH_KEYWORDS = "searchKeywords";
+    public static final String CATEGORY_LABEL = "categoryLabel";
+    public static final String COLOR_NAME = "colorName";
+    public static final String GENDER_NAME = "genderName";
+    public static final String PATTERN_NAME = "patternName";
+    public static final String BRAND_NAME = "brandName";
     public static final String KEYWORDS = "keywords";
     public static final String CATEGORY = "category";
     public static final String COLOR = "color";
     public static final String GENDER = "gender";
     public static final String BRAND = "brand";
+    public static final String PATTERN = "pattern";
     public static final String PROGRESS_MESSAGE_CONTENT = "progressMessageContent";
+    public static final String PROGRESS_VALUE = "progressValue";
     public static final String SEARCH_PROGRESS = "Search.Progress";
     public static final String DETECTION_TYPE = "detectionType";
     public static final String _3D = "3D";
@@ -43,6 +52,7 @@ public class Constants {
     public static final String CREATED ="created";
     public static final String SDK_INIT_SUCCEEDED = "SDK.Init.Succeeded";
     public static final String SDK_INIT_FAILED = "SDK.Init.Failed";
+    public static final String TOTAL_DETECTION_TIME = "totalDetectionTime";
 
     /* Client info */
     public static final String STATUS = "status";
@@ -66,6 +76,7 @@ public class Constants {
     public static final String EVENT = "event";
     public static final String DATA = "data";
     public static final String MESSAGE = "message";
+    public static final String DETAILS = "details";
     public static final String RESULTS = "results";
     public static final String PROGRESS = "progress";
     public static final String TOKEN = "token";

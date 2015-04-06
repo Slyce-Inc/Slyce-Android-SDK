@@ -23,8 +23,12 @@ public final class SlyceProductsRequest extends SlyceRequest implements WSConnec
 
     private String token;
 
+    private Slyce slyce;
+
     public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, String imageUrl) {
         super(slyce, listener);
+
+        this.slyce = slyce;
 
         connection.setOnTokenListener(this);
 
@@ -35,6 +39,8 @@ public final class SlyceProductsRequest extends SlyceRequest implements WSConnec
     public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, Bitmap image) {
         super(slyce, listener);
 
+        this.slyce = slyce;
+
         connection.setOnTokenListener(this);
 
         type = WSConnection.MethodType.SEND_IMAGE;
@@ -43,13 +49,17 @@ public final class SlyceProductsRequest extends SlyceRequest implements WSConnec
 
     public void execute(){
         if(!oneShotexecution.compareAndSet(false, true)){
-
             Log.e(TAG, "execute can be called only once, please create another instance of GetProductsRequest");
             return;
         }
 
         if(connection == null){
             Log.e(TAG, "Please call GetProductsRequest(...) C'tor before execute()");
+            return;
+        }
+
+        if(!slyce.isOpen()){
+            Log.e(TAG, "Slyce SDK is not initialized");
             return;
         }
 

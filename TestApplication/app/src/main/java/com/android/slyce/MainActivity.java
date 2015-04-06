@@ -16,12 +16,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.slyce.listeners.OnSlyceOpenListener;
@@ -34,18 +37,20 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnSlyceRequestListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnSlyceRequestListener, TextView.OnEditorActionListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
+    private Button enterUrl;
     private Button uploadImage;
-    private Button uploadImageUrl;
-    private Button initSlyceObject;
+
+    private TextView acceptTextView;
+    private TextView premium;
+    private TextView enabled2D;
 
     private EditText clientIdEditText;
-    private EditText imageUrlEditText;
 
-    private Bitmap selectedBitmap;
+//    private Bitmap selectedBitmap;
 
     private static final int SELECT_PICTURE = 1;
 
@@ -55,6 +60,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private SlyceProductsRequest slyceProductsRequestImage;
 
     private ProgressBar progressBar;
+
+    private String imageUrl;
 
     private boolean isSlyceSDKOpened = false;
 
@@ -79,15 +86,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private void initViews(){
 
         uploadImage = (Button) findViewById(R.id.upload_image);
-        uploadImageUrl = (Button) findViewById(R.id.upload_image_url);
-        initSlyceObject = (Button) findViewById(R.id.init_sdk);
+        enterUrl = (Button) findViewById(R.id.enter_url);
         clientIdEditText = (EditText) findViewById(R.id.client_id);
-        imageUrlEditText = (EditText) findViewById(R.id.image_url);
+        acceptTextView = (TextView) findViewById(R.id.accept_client_id);
         progressBar = (ProgressBar) findViewById(R.id.progress);
+        enabled2D = (TextView) findViewById(R.id.enabled_2d);
+        premium = (TextView) findViewById(R.id.premium);
 
         uploadImage.setOnClickListener(this);
-        uploadImageUrl.setOnClickListener(this);
-        initSlyceObject.setOnClickListener(this);
+        enterUrl.setOnClickListener(this);
+        acceptTextView.setOnClickListener(this);
+
+        clientIdEditText.setOnEditorActionListener(this);
     }
 
     // OnSlyceRequestListener callbacks
@@ -137,7 +147,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         switch(v.getId()){
 
-            case R.id.init_sdk:
+            case R.id.accept_client_id:
 
                 String clientId = clientIdEditText.getText().toString();
 
@@ -150,7 +160,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Assigning it to null for re initiation (Do Not do this in real app)
-                slyce = null;
+                if(slyce  != null){
+                    slyce.release();
+                }
 
                 // Reset boolean
                 isSlyceSDKOpened = false;
@@ -161,12 +173,17 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     @Override
                     public void onOpenSuccess() {
 
+                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_LONG).show();
+
                         // Hide progress
                         progressBar.setVisibility(View.INVISIBLE);
 
                         // Set boolean
                         isSlyceSDKOpened = true;
-                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_LONG).show();
+
+                        // Set Premium and 2D Enabled properties
+                        premium.setText(getString(R.string.premium, String.valueOf(slyce.isPremiumUser()).toUpperCase()));
+                        enabled2D.setText(getString(R.string.enabled_2d, String.valueOf(slyce.is2DSearchEnabled()).toUpperCase()));
                     }
 
                     @Override
@@ -193,24 +210,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 break;
 
-            case R.id.upload_image_url:
+            case R.id.enter_url:
 
-                String imageUrl = imageUrlEditText.getText().toString();
-
-                if(TextUtils.isEmpty(imageUrl)){
-                    showDialogError("Please insert Image Url");
-                    return;
-                }
-
-                if(slyce == null){
-                    showDialogError("Please init Slyce object");
-                    return;
-                }
-
-                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, this, imageUrl);
-                slyceProductsRequestImageUrl.execute();
-
-                progressBar.setVisibility(View.VISIBLE);
+                showDialog();
 
                 break;
         }
@@ -244,6 +246,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             if (requestCode == SELECT_PICTURE) {
 
+                Bitmap selectedBitmap = null;
+
                 Uri selectedImageUri = data.getData();
                 if (Build.VERSION.SDK_INT < 19) {
                     String selectedImagePath = getPath(selectedImageUri);
@@ -276,7 +280,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     return;
                 }
 
-                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+                SlyceProductsRequest slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
                 slyceProductsRequestImage.execute();
             }
         }
@@ -310,5 +314,57 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         });
 
         builder.show();
+    }
+
+    private void showDialog(){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        final EditText edittext = new EditText(this);
+        edittext.setLines(1);
+        alert.setMessage("Enter Image URL");
+        alert.setTitle("Upload Image URL");
+
+        alert.setView(edittext);
+
+        alert.setPositiveButton("Go", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                imageUrl = edittext.getText().toString();
+
+                if(TextUtils.isEmpty(imageUrl)){
+                    showDialogError("Please insert Image Url");
+                    return;
+                }
+
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
+                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl);
+                slyceProductsRequestImageUrl.execute();
+
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {}
+        });
+
+        alert.show();
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+
+            acceptTextView.performClick();
+
+            return true;
+        }
+        return false;
     }
 }

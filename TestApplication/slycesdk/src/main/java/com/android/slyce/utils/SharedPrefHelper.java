@@ -33,6 +33,10 @@ public class SharedPrefHelper {
 
     }
 
+    public void clear(){
+        mSharedPreferences.edit().clear().commit();
+    }
+
     public boolean isPremium(){
         return mSharedPreferences.getBoolean(SLYCE_PREMIUM_MODE, false);
     }

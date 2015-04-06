@@ -148,6 +148,8 @@ public final class Slyce{
                         mSharedPrefHelper.setMSEnabled(moodstocksJson.optString(Constants.ENABLED));
                         mSharedPrefHelper.setMSkey(moodstocksJson.optString(Constants.KEY));
                         mSharedPrefHelper.setMSsecret(moodstocksJson.optString(Constants.SECRET));
+                    }else{
+                        //mSharedPrefHelper.setMSEnabled(Boolean.FALSE.toString());
                     }
 
                     // Set boolean
@@ -199,5 +201,9 @@ public final class Slyce{
 
     public boolean isOpen(){
         return isOpened.get();
+    }
+
+    public void release(){
+        mInstance = null;
     }
 }

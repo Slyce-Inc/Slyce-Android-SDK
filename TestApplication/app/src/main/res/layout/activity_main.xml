@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -7,76 +7,92 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/client_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Client ID:"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:textColor="@android:color/black"/>
-
 
         <EditText
             android:id="@+id/client_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Client ID"
+            android:lines="1"
+            android:maxLines="1"
+            android:ems="8"
+            android:inputType="text"
+            android:imeOptions="actionGo"
             />
+        <TextView
+            android:id="@+id/accept_client_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept"
+            android:textSize="16dp"
+            android:textColor="@android:color/black"/>
 
         </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="vertical"
+        android:layout_below="@id/client_layout"
+        android:layout_centerHorizontal="true"
+        android:gravity="center">
 
         <TextView
+            android:id="@+id/premium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Image URL:"
-            android:textSize="18dp"
             android:textColor="@android:color/black"/>
 
-        <EditText
-            android:id="@+id/image_url"
+        <TextView
+            android:id="@+id/enabled_2d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Image Url"/>
-    </LinearLayout>
+            android:textColor="@android:color/black"/>
 
-    <Button
-        android:id="@+id/init_sdk"
+        <Button
+            android:id="@+id/enter_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Image URL"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/upload_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send from Image Gallery"
+            android:textAllCaps="false"
+            />
+
+        </LinearLayout>
+
+
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Init Slyce Object"
-        android:textAllCaps="false"
-        />
+        android:src="@drawable/slyce_logo"
+        android:layout_alignParentBottom="true"/>
 
-    <Button
-        android:id="@+id/upload_image_url"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Image Url"
-        android:textAllCaps="false"
-        />
-
-    <Button
-        android:id="@+id/upload_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Image"
-        android:textAllCaps="false"
-        />
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progress"
-        android:layout_gravity="center_horizontal"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:layout_centerInParent="true"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -14,6 +14,11 @@ public class Constants {
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";
     public static final String WS_URL = "ws://foundation.slyceapp.com/api/v1/stream?";
 
+    /* Error messages */
+    public static final String SLYCE_INIT_ERROR = "Slyce initiation error: ";
+    public static final String CONTEXT_ERROR    = "Context can not be null";
+    public static final String CLIENT_ID_ERROR  = "Client ID can not be null or empty";
+
     /* MixPanel */
     public static final String MIXPANEL_TOKEN = "712a9f5c14895edaa8b27dc59ec2af9f";
     public static final String FOUNDATION_TOKEN = "foundationToken";

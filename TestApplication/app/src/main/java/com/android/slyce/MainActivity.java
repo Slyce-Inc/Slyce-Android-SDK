@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -51,7 +53,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private ProgressBar progressBar;
 
-    /* jcpenney852 homedepot623 jcpenney852*/
+    /* Examples client id's */
+    // jcpenney852
+    // homedepot623 
+    // jcpenney852
+
+    /* Examples url's */
+    // "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
+    // "http://www.mini-laptops-and-notebooks.com/images/Apple_MacBook.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +135,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 // Assigning it to null for re initiation (Do Not do this in real app)
                 slyce = null;
+
                 slyce = Slyce.getInstance(this, clientId);
 
                 break;
@@ -144,12 +154,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             case R.id.upload_image_url:
 
-//                String hearPhones = "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
-//                String macbook = "http://www.mini-laptops-and-notebooks.com/images/Apple_MacBook.jpg";
-
                 String imageUrl = imageUrlEditText.getText().toString();
-
-                imageUrl = "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
 
                 if(TextUtils.isEmpty(imageUrl)){
                     showDialogError("Please insert Image Url");

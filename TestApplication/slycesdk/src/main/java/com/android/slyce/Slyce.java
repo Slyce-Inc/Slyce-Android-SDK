@@ -1,6 +1,9 @@
 package com.android.slyce;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.SharedPrefHelper;
@@ -16,13 +19,13 @@ import java.util.TimerTask;
  */
 public final class Slyce{
 
-    private final String TAG = Slyce.class.getSimpleName();
+    private static final String TAG = Slyce.class.getSimpleName();
 
     private static Slyce mInstance;
 
     private SharedPrefHelper mSharedPrefHelper;
 
-    private Context mContext;
+    private final Context mContext;
 
     private final MixpanelAPI mixpanel;
 
@@ -31,7 +34,9 @@ public final class Slyce{
         if(mInstance == null){
             synchronized (Slyce.class){
                 if(mInstance == null){
-                    mInstance = new Slyce(context, clientID);
+                    if(validateParams(context, clientID)){
+                        mInstance = new Slyce(context.getApplicationContext(), clientID);
+                    }
                 }
             }
         }
@@ -112,6 +117,21 @@ public final class Slyce{
         } catch (JSONException e) {
 
         }
+    }
+
+    private static boolean validateParams(Context context, String clientID){
+
+        if(context == null){
+            Log.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CONTEXT_ERROR);
+            return false;
+        }
+
+        if(TextUtils.isEmpty(clientID)){
+            Log.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CLIENT_ID_ERROR);
+            return false;
+        }
+
+        return true;
     }
 
     public boolean isPremiumUser() {

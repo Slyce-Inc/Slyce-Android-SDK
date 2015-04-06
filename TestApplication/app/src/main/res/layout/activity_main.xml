@@ -23,20 +23,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Init Slyce Object"
+        android:textAllCaps="false"
         />
 
     <Button
         android:id="@+id/upload_image_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="upload image url"
+        android:text="Upload Image Url"
+        android:textAllCaps="false"
         />
 
     <Button
         android:id="@+id/upload_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="upload image"
+        android:text="Upload Image"
+        android:textAllCaps="false"
         />
 
     <ProgressBar

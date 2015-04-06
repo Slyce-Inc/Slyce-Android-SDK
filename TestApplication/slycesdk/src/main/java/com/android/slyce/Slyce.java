@@ -1,8 +1,6 @@
 package com.android.slyce;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.SharedPrefHelper;
@@ -10,7 +8,6 @@ import com.android.slyce.utils.Utils;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -73,19 +70,16 @@ public final class Slyce{
                     }
 
                 }else{
+
                     // Client info did not returned with a valid response
                     mixpanel.track(Constants.SDK_INIT_FAILED, null);
                 }
             }
         });
 
-        JSONObject peopleProperties = new JSONObject();
-
-        mixpanel.registerSuperProperties(peopleProperties);
-
-        JSONObject peopleAnalytics = new JSONObject();
-
         try {
+
+            JSONObject peopleAnalytics = new JSONObject();
 
             mixpanel.getPeople().identify(mixpanel.getDistinctId());
 
@@ -106,7 +100,7 @@ public final class Slyce{
             // Make it super property
             mixpanel.registerSuperProperties(peopleAnalytics);
 
-            // Report time stamp
+            // Report time stamp (one shot event)
             JSONObject created = new JSONObject();
             created.put(Constants.CREATED, Utils.getTimestamp());
             mixpanel.registerSuperPropertiesOnce(created);
@@ -116,6 +110,7 @@ public final class Slyce{
             scheduleFlush();
 
         } catch (JSONException e) {
+
         }
     }
 

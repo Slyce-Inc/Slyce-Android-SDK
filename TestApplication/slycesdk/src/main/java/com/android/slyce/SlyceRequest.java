@@ -20,6 +20,7 @@ public class SlyceRequest {
             Log.e(TAG,"Slyce object is null");
             return;
         }
+
         connection = new WSConnection(slyce.getContext() , slyce.getClientID(), listener);
     }
 }

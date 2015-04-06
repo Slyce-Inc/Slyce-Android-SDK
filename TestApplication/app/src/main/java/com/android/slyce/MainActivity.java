@@ -23,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.report.mpmetrics.MPConfig;
 import com.android.slyce.requests.SlyceProductsRequest;
@@ -53,6 +55,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private SlyceProductsRequest slyceProductsRequestImage;
 
     private ProgressBar progressBar;
+
+    private boolean isSlyceSDKOpened = false;
 
     /* Examples client id's */
     // jcpenney852
@@ -111,6 +115,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         progressBar.setVisibility(View.INVISIBLE);
     }
 
+
     @Override
     public void onError(final String message) {
 
@@ -118,6 +123,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         progressBar.setVisibility(View.INVISIBLE);
     }
+
+    @Override
+    public void onStageLevelFinish(StageMessage message) {
+
+        Toast.makeText(MainActivity.this, "Stage Message: " + message, Toast.LENGTH_LONG).show();
+    }
+
     // OnSlyceRequestListener callbacks
 
     @Override
@@ -134,10 +146,38 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     return;
                 }
 
+                // Show progress bar
+                progressBar.setVisibility(View.VISIBLE);
+
                 // Assigning it to null for re initiation (Do Not do this in real app)
                 slyce = null;
 
+                // Reset boolean
+                isSlyceSDKOpened = false;
+
                 slyce = Slyce.getInstance(this, clientId);
+                slyce.open(new OnSlyceOpenListener() {
+
+                    @Override
+                    public void onOpenSuccess() {
+
+                        // Hide progress
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        // Set boolean
+                        isSlyceSDKOpened = true;
+                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onOpenFail(String message) {
+
+                        // Hide progress
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        Toast.makeText(MainActivity.this, "Slyce SDK open failed: " + message, Toast.LENGTH_LONG).show();
+                    }
+                });
 
                 break;
 

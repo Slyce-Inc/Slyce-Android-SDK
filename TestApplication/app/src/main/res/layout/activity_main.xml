@@ -6,17 +6,47 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/client_id"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Client ID"/>
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/image_url"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Client ID:"
+            android:textSize="18dp"
+            android:textColor="@android:color/black"/>
+
+
+        <EditText
+            android:id="@+id/client_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Client ID"
+            />
+
+        </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Image Url"/>
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Image URL:"
+            android:textSize="18dp"
+            android:textColor="@android:color/black"/>
+
+        <EditText
+            android:id="@+id/image_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Image Url"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/init_sdk"
@@ -48,6 +78,5 @@
         android:id="@+id/progress"
         android:layout_gravity="center_horizontal"
         android:visibility="invisible"/>
-
 
 </LinearLayout>

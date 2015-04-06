@@ -38,6 +38,10 @@ public class Synchronizer extends Handler {
         obtainMessage(4, message).sendToTarget();
     }
 
+    public void onStageLevelFinish(OnSlyceRequestListener.StageMessage message){
+        obtainMessage(5, message).sendToTarget();
+    }
+
     @Override
     public void handleMessage(Message msg) {
 
@@ -65,6 +69,12 @@ public class Synchronizer extends Handler {
             case 4:
 
                 mRequestListener.onError((String) msg.obj);
+
+                break;
+
+            case 5:
+
+                mRequestListener.onStageLevelFinish((OnSlyceRequestListener.StageMessage) msg.obj);
 
                 break;
 

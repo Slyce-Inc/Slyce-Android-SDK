@@ -7,7 +7,6 @@ import android.util.Log;
 import com.android.slyce.handler.Synchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.report.mpmetrics.MPConfig;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.models.Ticket;
 import com.android.slyce.utils.Utils;
@@ -18,7 +17,6 @@ import com.koushikdutta.async.callback.DataCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,7 +57,6 @@ public class WSConnection implements
     private MixpanelAPI mixpanel;
 
     private long startDetectionTime = 0;
-    private long endDetectionTime = 0;
 
     public WSConnection(Context context, String clientID, OnSlyceRequestListener listener){
 
@@ -252,8 +249,15 @@ public class WSConnection implements
 
                                 if(responseCode == 200){
 
+                                    // Notify hosting application that bitmap was uploaded
+                                    mSynchronizer.onStageLevelFinish(OnSlyceRequestListener.StageMessage.BitmapUploaded);
+
                                     mWebSocket.send(ticket);
                                     mWebSocket.send(new byte[10]);
+
+                                }else{
+                                    // Image was not uploaded
+                                    mSynchronizer.onError("Error on uploading bitmap");
                                 }
                             }
                         });

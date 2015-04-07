@@ -1,7 +1,5 @@
 buildscript {
-    repositories {
-        maven { url 'http://download.crashlytics.com/maven' }
-    }
+
 
 }
 apply plugin: 'com.android.application'
@@ -15,7 +13,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.2"
+        versionName "1.3"
     }
     buildTypes {
         release {

@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -42,6 +43,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private TextView acceptTextView;
     private TextView premium;
     private TextView enabled2D;
+    private TextView results;
 
     private EditText clientIdEditText;
 
@@ -75,6 +77,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         progressBar = (ProgressBar) findViewById(R.id.progress);
         enabled2D = (TextView) findViewById(R.id.enabled_2d);
         premium = (TextView) findViewById(R.id.premium);
+        results = (TextView) findViewById(R.id.results);
+
+        results.setTextIsSelectable(true);
 
         uploadImage.setOnClickListener(this);
         enterUrl.setOnClickListener(this);
@@ -105,9 +110,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         Log.i(TAG, "Products: " + products.toString());
 
+        if(products.length() > 0){
+            results.setText(products.toString());
+        }
+
         progressBar.setVisibility(View.INVISIBLE);
     }
-
 
     @Override
     public void onError(final String message) {
@@ -122,7 +130,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         Toast.makeText(MainActivity.this, "Stage Message: " + message, Toast.LENGTH_LONG).show();
     }
-
     // OnSlyceRequestListener callbacks
 
     @Override
@@ -138,6 +145,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     showDialogError("Please insert Client ID");
                     return;
                 }
+
+                hideKeyboard();
 
                 // Show progress bar
                 progressBar.setVisibility(View.VISIBLE);
@@ -189,8 +198,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
 
-                progressBar.setVisibility(View.VISIBLE);
-
                 break;
 
             case R.id.enter_url:
@@ -199,28 +206,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 break;
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -233,6 +218,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 Uri selectedImageUri = data.getData();
                 if (Build.VERSION.SDK_INT < 19) {
+
                     String selectedImagePath = getPath(selectedImageUri);
                     selectedBitmap = BitmapFactory.decodeFile(selectedImagePath);
 
@@ -248,7 +234,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
-
                         e.printStackTrace();
                     }
                 }
@@ -262,6 +247,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     showDialogError("Please init Slyce object");
                     return;
                 }
+
+                progressBar.setVisibility(View.VISIBLE);
 
                 SlyceProductsRequest slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
                 slyceProductsRequestImage.execute();
@@ -344,10 +331,25 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if (actionId == EditorInfo.IME_ACTION_GO) {
 
+            hideKeyboard();
+
             acceptTextView.performClick();
 
             return true;
         }
         return false;
+    }
+
+    private void hideKeyboard(){
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+    }
+
+    private void displayProducts(JSONArray products){
+
+
+
     }
 }

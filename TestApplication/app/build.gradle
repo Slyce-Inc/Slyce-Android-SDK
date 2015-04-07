@@ -3,17 +3,8 @@ buildscript {
         maven { url 'http://download.crashlytics.com/maven' }
     }
 
-    dependencies {
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
-    }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'crashlytics'
-
-repositories {
-    maven { url 'http://download.crashlytics.com/maven' }
-}
-
 
 android {
     compileSdkVersion 22
@@ -37,8 +28,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
-    compile project(':slycesdk')
-    compile 'com.crashlytics.android:crashlytics:1.+'
-//    compile "com.mixpanel.android:mixpanel-android:4.5.3"
-
+    compile(name:'slyce', ext:'aar')
 }

@@ -9,9 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,12 +24,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.report.mpmetrics.MPConfig;
 import com.android.slyce.requests.SlyceProductsRequest;
-import com.crashlytics.android.Crashlytics;
 import org.json.JSONArray;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -50,14 +45,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private EditText clientIdEditText;
 
-//    private Bitmap selectedBitmap;
-
     private static final int SELECT_PICTURE = 1;
 
     private Slyce slyce;
 
     private SlyceProductsRequest slyceProductsRequestImageUrl;
-    private SlyceProductsRequest slyceProductsRequestImage;
 
     private ProgressBar progressBar;
 
@@ -68,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
+
         setContentView(R.layout.activity_main);
 
         initViews();

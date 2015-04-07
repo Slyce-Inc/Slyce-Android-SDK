@@ -3,14 +3,12 @@ package com.android.slyce;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
-
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.SharedPrefHelper;
+import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import org.json.JSONException;
@@ -100,12 +98,12 @@ public final class Slyce{
     public void open(final OnSlyceOpenListener listener){
 
         if(listener == null){
-            Log.e(TAG, "OnSlyceOpenListener can not be null");
+            SlyceLog.e(TAG, "OnSlyceOpenListener can not be null");
             return;
         }
 
         if(mContext == null){
-            Log.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CONTEXT_ERROR);
+            SlyceLog.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CONTEXT_ERROR);
 
             // Send a message to host application
             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -119,7 +117,7 @@ public final class Slyce{
         }
 
         if(TextUtils.isEmpty(mClientID)){
-            Log.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CLIENT_ID_ERROR);
+            SlyceLog.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CLIENT_ID_ERROR);
 
             // Send a message to host application
             new Handler(Looper.getMainLooper()).post(new Runnable() {

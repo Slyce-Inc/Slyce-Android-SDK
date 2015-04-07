@@ -1,6 +1,5 @@
 package com.android.slyce.communication;
 
-import android.util.Log;
 import com.android.slyce.communication.utils.BasicNetwork;
 import com.android.slyce.communication.utils.HttpHeaderParser;
 import com.android.slyce.communication.utils.HttpStack;
@@ -11,6 +10,7 @@ import com.android.slyce.communication.utils.NetworkResponse;
 import com.android.slyce.communication.utils.Request;
 import com.android.slyce.communication.utils.Response;
 import com.android.slyce.communication.utils.VolleyError;
+import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -149,9 +149,9 @@ public class ComManager {
         } catch (VolleyError volleyError) {
             volleyError.printStackTrace();
         } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "UnsupportedEncodingException");
+            SlyceLog.e(TAG, "UnsupportedEncodingException");
         } catch (JSONException e) {
-            Log.e(TAG, "JSONException");
+            SlyceLog.e(TAG, "JSONException");
         }
 
         return object;

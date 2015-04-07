@@ -3,8 +3,6 @@ package com.android.slyce.handler;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-
-import com.android.slyce.SlyceRequest;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceProgress;
 import org.json.JSONArray;

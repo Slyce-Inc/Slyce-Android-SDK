@@ -13,10 +13,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +25,8 @@ import android.widget.Toast;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
+import com.android.slyce.utils.SlyceLog;
+
 import org.json.JSONArray;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -108,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         Toast.makeText(MainActivity.this, "Found " +  products.length() + " products", Toast.LENGTH_LONG).show();
 
-        Log.i(TAG, "Products: " + products.toString());
+        SlyceLog.i(TAG, "Products: " + products.toString());
 
         if(products.length() > 0){
             results.setText(products.toString());

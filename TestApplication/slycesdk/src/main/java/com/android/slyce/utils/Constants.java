@@ -1,14 +1,14 @@
 package com.android.slyce.utils;
 
-import org.json.JSONObject;
-
 /**
  * Created by davidsvilem on 3/23/15.
  */
 public class Constants {
 
     /* SDK version*/
-    public static final String SDK_VERSION = "1.2";
+    public static final String SDK_VERSION = "1.3";
+
+    public static final boolean ShouldLog = false;
 
     /* Base URL */
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";

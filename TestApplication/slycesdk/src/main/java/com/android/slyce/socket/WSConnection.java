@@ -3,12 +3,12 @@ package com.android.slyce.socket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.Log;
 import com.android.slyce.handler.Synchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.models.Ticket;
+import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
@@ -180,7 +180,7 @@ public class WSConnection implements
     // StringCallback
     @Override
     public void onStringAvailable(String s) {
-        Log.i(TAG, "onStringAvailable");
+        SlyceLog.i(TAG, "onStringAvailable");
 
         handleResult(s);
     }
@@ -188,13 +188,13 @@ public class WSConnection implements
     // DataCallback
     @Override
     public void onDataAvailable(DataEmitter emitter, ByteBufferList bb) {
-        Log.i(TAG, "onDataAvailable");
+        SlyceLog.i(TAG, "onDataAvailable");
     }
 
     // CompletedCallback
     @Override
     public void onCompleted(Exception ex) {
-        Log.i(TAG, "onCompleted");
+        SlyceLog.i(TAG, "onCompleted");
         if(ex != null){
             StringBuilder error = new StringBuilder();
             error.append("Message: ").append(ex.getMessage()).append(" Cause: ").append(ex.getCause());

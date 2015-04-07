@@ -1,13 +1,11 @@
 package com.android.slyce.requests;
 
 import android.graphics.Bitmap;
-import android.util.Log;
-
 import com.android.slyce.Slyce;
 import com.android.slyce.SlyceRequest;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.socket.WSConnection;
-
+import com.android.slyce.utils.SlyceLog;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -49,17 +47,17 @@ public final class SlyceProductsRequest extends SlyceRequest implements WSConnec
 
     public void execute(){
         if(!oneShotexecution.compareAndSet(false, true)){
-            Log.e(TAG, "execute can be called only once, please create another instance of GetProductsRequest");
+            SlyceLog.e(TAG, "execute can be called only once, please create another instance of GetProductsRequest");
             return;
         }
 
         if(connection == null){
-            Log.e(TAG, "Please call GetProductsRequest(...) C'tor before execute()");
+            SlyceLog.e(TAG, "Please call GetProductsRequest(...) C'tor before execute()");
             return;
         }
 
         if(!slyce.isOpen()){
-            Log.e(TAG, "Slyce SDK is not initialized");
+            SlyceLog.e(TAG, "Slyce SDK is not initialized");
             return;
         }
 

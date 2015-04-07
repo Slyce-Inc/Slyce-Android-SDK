@@ -3,45 +3,22 @@ package com.android.slyce.utils;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
-
-import com.koushikdutta.async.Util;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -60,7 +37,7 @@ public class Utils {
             result = new String(bytes, "UTF-8");
 
         } catch (UnsupportedEncodingException e) {
-            Log.i(TAG, "decodeBase64: UnsupportedEncodingException");
+            SlyceLog.i(TAG, "decodeBase64: UnsupportedEncodingException");
         }
         return result;
     }
@@ -91,7 +68,7 @@ public class Utils {
         int maxBufferSize = 1 * 1024 * 1024;
 
         if (bitmap == null) {
-            Log.e("uploadFile", "Bitmap Does not exist");
+            SlyceLog.e("uploadFile", "Bitmap Does not exist");
             return 0;
         }
 
@@ -138,11 +115,11 @@ public class Utils {
             serverResponseCode = conn.getResponseCode();
             String serverResponseMessage = conn.getResponseMessage();
 
-            Log.i(TAG, "uploadFile HTTP Response is : "
+            SlyceLog.i(TAG, "uploadFile HTTP Response is : "
                     + serverResponseMessage + ": " + serverResponseCode);
 
             if (serverResponseCode == 200) {
-                Log.i(TAG, "uploadFile File Upload Complete.");
+                SlyceLog.i(TAG, "uploadFile File Upload Complete.");
             }
 
             // close the streams //
@@ -151,9 +128,9 @@ public class Utils {
             dos.close();
 
         } catch (MalformedURLException ex) {
-            Log.e(TAG, "Upload file to server error: " + ex.getMessage());
+            SlyceLog.e(TAG, "Upload file to server error: " + ex.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, "Upload file to server Exception : " + e.getMessage());
+            SlyceLog.e(TAG, "Upload file to server Exception : " + e.getMessage());
         }
 
         return serverResponseCode;
@@ -225,7 +202,7 @@ public class Utils {
         String accountName = "No Account";
 
         if(!checkGetAccountsPermission(context)){
-            Log.w(TAG, "GET_ACCOUNTS permission not granted");
+            SlyceLog.w(TAG, "GET_ACCOUNTS permission not granted");
             return accountName;
         }
 

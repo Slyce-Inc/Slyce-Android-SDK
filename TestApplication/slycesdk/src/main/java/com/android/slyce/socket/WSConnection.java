@@ -240,6 +240,10 @@ public class WSConnection implements
                     // Image Url for MixPanel report
                     imageURL = data.optString(Constants.IMAGE_URL);
 
+                    // Json For MP
+                    final JSONObject imageSentReport = new JSONObject();
+                    imageSentReport.put(Constants.IMAGE_URL, imageURL);
+
                     if(mMethodType == MethodType.SEND_IMAGE){
 
                         uploadBitmapToServer(uploadUrl, mBitmap, new OnImageUploadListener() {
@@ -248,6 +252,9 @@ public class WSConnection implements
                             public void onImageUploaded(int responseCode) {
 
                                 if(responseCode == 200){
+
+                                    // Report to MP
+                                    mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
                                     // Notify hosting application that bitmap was uploaded
                                     mSynchronizer.onStageLevelFinish(OnSlyceRequestListener.StageMessage.BitmapUploaded);
@@ -264,6 +271,9 @@ public class WSConnection implements
 
                     }else{
 
+                        // Report to MP
+                        mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
+
                         mWebSocket.send(ticket);
                         mWebSocket.send(new byte[10]);
                     }
@@ -271,11 +281,6 @@ public class WSConnection implements
                     break;
 
                 case Constants.PROGRESS:
-
-                    // Report to MP
-                    JSONObject imageSentReport = new JSONObject();
-                    imageSentReport.put(Constants.IMAGE_URL, imageURL);
-                    mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
                     // Get message
                     String message = data.optString(Constants.MESSAGE);

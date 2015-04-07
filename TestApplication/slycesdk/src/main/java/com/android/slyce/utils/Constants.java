@@ -8,7 +8,7 @@ public class Constants {
     /* SDK version*/
     public static final String SDK_VERSION = "1.3";
 
-    public static final boolean ShouldLog = false;
+    public static final boolean ShouldLog = true;
 
     /* Base URL */
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";

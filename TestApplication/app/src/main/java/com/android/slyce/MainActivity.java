@@ -341,15 +341,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private void hideKeyboard(){
-
         InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
-    }
-
-    private void displayProducts(JSONArray products){
-
-
-
     }
 }

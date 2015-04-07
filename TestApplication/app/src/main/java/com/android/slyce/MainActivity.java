@@ -65,15 +65,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private boolean isSlyceSDKOpened = false;
 
-    /* Examples client id's */
-    // jcpenney852
-    // homedepot623
-    // jcpenney852
-
-    /* Examples url's */
-    // "http://static.trustedreviews.com/94/00002891c/3862/studio-1.jpg";
-    // "http://www.mini-laptops-and-notebooks.com/images/Apple_MacBook.jpg";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -12,7 +12,7 @@ public class Constants {
 
     /* Base URL */
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";
-    public static final String WS_URL = "ws://foundation.slyceapp.com/api/v1/stream?";
+    public static final String WS_URL = "wss://foundation.slyceapp.com/api/v1/stream?";
 
     /* Error messages */
     public static final String SLYCE_INIT_ERROR = "Slyce initiation error: ";

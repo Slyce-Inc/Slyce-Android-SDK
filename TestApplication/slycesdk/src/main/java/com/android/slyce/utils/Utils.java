@@ -19,6 +19,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
+
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -186,8 +189,17 @@ public class Utils {
     }
 
     public static String getTimestamp(){
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        return timestamp.toString();
+
+        String time;
+
+//        long millis = System.currentTimeMillis();
+//        Timestamp timestamp = new Timestamp(millis);
+//        time = timestamp.toString();
+
+        SimpleDateFormat noMilliSecondsFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        time = noMilliSecondsFormatter.format(System.currentTimeMillis());
+
+        return time;
     }
 
     public static String getAndroidID(Context context){

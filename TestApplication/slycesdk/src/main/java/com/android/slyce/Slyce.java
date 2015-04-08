@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+
+import com.android.slyce.async.Util;
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.utils.Constants;
@@ -14,6 +16,8 @@ import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**

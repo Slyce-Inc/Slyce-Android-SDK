@@ -4,8 +4,6 @@
 
     // Required by Slyce SDK
     <uses-permission android:name="android.permission.INTERNET" />
-    // Optional by Slyce
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     // Required by the TestApplication
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

@@ -6,7 +6,7 @@ package com.android.slyce.utils;
 public class Constants {
 
     /* SDK version*/
-    public static final String SDK_VERSION = "1.3";
+    public static final String SDK_VERSION = "1.4";
 
     public static final boolean ShouldLog = true;
 

@@ -197,41 +197,6 @@ public class Utils {
         return android_id;
     }
 
-    public static String getAccountName(Context context){
-
-        String accountName = "No Account";
-
-        if(!checkGetAccountsPermission(context)){
-            SlyceLog.w(TAG, "GET_ACCOUNTS permission not granted");
-            return accountName;
-        }
-
-        AccountManager manager = AccountManager.get(context);
-
-        Account[] accounts = manager.getAccounts();
-
-        if(accounts.length > 0){
-
-            for (Account account : accounts) {
-
-                accountName = account.name;
-
-                if(account.type.equalsIgnoreCase("com.google")){
-                    // Extract user name from mail
-                    if(accountName.contains("@")){
-                        String[] arr = accountName.split("@");
-                        if(arr != null && arr.length > 0){
-                            accountName = arr[0];
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
-        return accountName;
-    }
-
     public static String getDeviceType(){
 
         String deviceType;
@@ -243,13 +208,6 @@ public class Utils {
         }
 
         return deviceType;
-    }
-
-    private static boolean checkGetAccountsPermission(Context context){
-
-        String permission = Manifest.permission.GET_ACCOUNTS;
-        int res = context.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
     }
 
 //    public static int upload(Bitmap bitmap, String uploadUrl){

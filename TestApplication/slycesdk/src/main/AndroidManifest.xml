@@ -5,7 +5,7 @@
     <application android:allowBackup="true">
         <meta-data
             android:name="com.mixpanel.android.MPConfig.FlushInterval"
-            android:value="1000" />
+            android:value="500" />
     </application>
 
 </manifest>

@@ -190,14 +190,8 @@ public class Utils {
 
     public static String getTimestamp(){
 
-        String time;
-
-//        long millis = System.currentTimeMillis();
-//        Timestamp timestamp = new Timestamp(millis);
-//        time = timestamp.toString();
-
         SimpleDateFormat noMilliSecondsFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        time = noMilliSecondsFormatter.format(System.currentTimeMillis());
+        String time = noMilliSecondsFormatter.format(System.currentTimeMillis());
 
         return time;
     }

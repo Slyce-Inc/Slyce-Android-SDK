@@ -68,6 +68,13 @@ public final class Slyce{
         // Save the client id
         mSharedPrefHelper.setClientID(clientID);
 
+        // Check if should report "created" field
+        String created = mSharedPrefHelper.getCreated();
+        if(TextUtils.isEmpty(created)){
+            created = Utils.getTimestamp();
+            mSharedPrefHelper.setCreated(created);
+        }
+
         try {
 
             JSONObject peopleAnalytics = new JSONObject();
@@ -82,6 +89,7 @@ public final class Slyce{
             peopleAnalytics.put(Constants.HOSTING_APP_NAME, Utils.getHostAppName(context));
             peopleAnalytics.put(Constants.HOSTING_APP_VERSION, Utils.getHostAppVersion(context));
             peopleAnalytics.put(Constants.MP_SDK_VERSION, Constants.SDK_VERSION);
+            peopleAnalytics.put(Constants.CREATED, created);
 
             // Make it user profile
             mixpanel.getPeople().set(peopleAnalytics);
@@ -90,9 +98,9 @@ public final class Slyce{
             mixpanel.registerSuperProperties(peopleAnalytics);
 
             // Report time stamp (one shot event)
-            JSONObject created = new JSONObject();
-            created.put(Constants.CREATED, Utils.getTimestamp());
-            mixpanel.registerSuperPropertiesOnce(created);
+            JSONObject createdJson = new JSONObject();
+            createdJson.put(Constants.CREATED, Utils.getTimestamp());
+            mixpanel.registerSuperPropertiesOnce(createdJson);
 
         } catch (JSONException e) {}
     }

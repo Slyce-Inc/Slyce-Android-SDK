@@ -20,7 +20,8 @@ public class SharedPrefHelper {
     private String SLYCE_MOODSTOCKS_MODE = "slyce_moodstocks_mode";
     private String SLYCE_MOODSTOCKS_SECRET = "slyce_moodstocks_secret";
     private String SLYCE_MOODSTOCKS_KEY = "slyce_moodstocks_key";
-    private String SLYCE_CLIENT_ID = "SLYCE_CLIENT_ID";
+    private String SLYCE_CLIENT_ID = "slyce_client_id";
+    private String SLYCE_PEOPLE_ANALYTICS_CREATED = "slyce_people_analytics_created";
 
     public static SharedPrefHelper getInstance(Context context) {
 
@@ -102,5 +103,15 @@ public class SharedPrefHelper {
 
     public String getClientID(){
         return mSharedPreferences.getString(SLYCE_CLIENT_ID, null);
+    }
+
+    public String getCreated(){
+        return mSharedPreferences.getString(SLYCE_PEOPLE_ANALYTICS_CREATED, null);
+    }
+
+    public void setCreated(String value){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(SLYCE_PEOPLE_ANALYTICS_CREATED, value);
+        editor.commit();
     }
 }

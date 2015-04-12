@@ -1,8 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.slycesdk">
 
-
-
     <application android:allowBackup="true">
         // Allow us to set MixPanel flush interval reports to 500 milliseconds
         <meta-data

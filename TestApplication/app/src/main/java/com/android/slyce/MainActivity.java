@@ -159,6 +159,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 isSlyceSDKOpened = false;
 
                 slyce = Slyce.getInstance(this, clientId);
+
                 slyce.open(new OnSlyceOpenListener() {
 
                     @Override

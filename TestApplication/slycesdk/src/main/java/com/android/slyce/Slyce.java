@@ -115,7 +115,7 @@ public final class Slyce{
         if(mContext == null){
             SlyceLog.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CONTEXT_ERROR);
 
-            // Send a message to host application
+            // Send an error message to host application
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
@@ -129,7 +129,7 @@ public final class Slyce{
         if(TextUtils.isEmpty(mClientID)){
             SlyceLog.e(TAG, Constants.SLYCE_INIT_ERROR + Constants.CLIENT_ID_ERROR);
 
-            // Send a message to host application
+            // Send an error message to host application
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {

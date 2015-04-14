@@ -78,6 +78,13 @@
             android:textAllCaps="false"
             />
 
+        <Button
+            android:id="@+id/cancel_requests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Requests"
+            android:textAllCaps="false"/>
+
         </LinearLayout>
 
     <ImageView

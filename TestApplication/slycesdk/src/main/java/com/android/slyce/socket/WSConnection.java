@@ -89,7 +89,6 @@ public class WSConnection implements
                 }else{
 
                     mWebSocket = webSocket;
-
                     setCallbacks();
 
                     setMethodType(methodType);
@@ -425,6 +424,10 @@ public class WSConnection implements
                 }
             }
         }).start();
+    }
+
+    public void close(){
+        mWebSocket.close();
     }
 
     public enum MethodType{

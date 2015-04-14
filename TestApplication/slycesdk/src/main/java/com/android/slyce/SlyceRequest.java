@@ -23,4 +23,8 @@ public class SlyceRequest {
 
         connection = new WSConnection(slyce.getContext() , slyce.getClientID(), listener);
     }
+
+    protected void cancel(){
+        connection.close();
+    }
 }

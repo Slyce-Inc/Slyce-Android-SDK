@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private Button enterUrl;
     private Button uploadImage;
+    private Button cancelRequests;
 
     private TextView acceptTextView;
     private TextView premium;
@@ -51,6 +52,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Slyce slyce;
 
     private SlyceProductsRequest slyceProductsRequestImageUrl;
+    private SlyceProductsRequest slyceProductsRequestImage;
 
     private ProgressBar progressBar;
 
@@ -71,6 +73,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         uploadImage = (Button) findViewById(R.id.upload_image);
         enterUrl = (Button) findViewById(R.id.enter_url);
+        cancelRequests = (Button) findViewById(R.id.cancel_requests);
         clientIdEditText = (EditText) findViewById(R.id.client_id);
         acceptTextView = (TextView) findViewById(R.id.accept_client_id);
         progressBar = (ProgressBar) findViewById(R.id.progress);
@@ -83,6 +86,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         uploadImage.setOnClickListener(this);
         enterUrl.setOnClickListener(this);
         acceptTextView.setOnClickListener(this);
+        cancelRequests.setOnClickListener(this);
 
         clientIdEditText.setOnEditorActionListener(this);
     }
@@ -204,6 +208,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 showDialog();
 
                 break;
+
+            case R.id.cancel_requests:
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if(slyceProductsRequestImage != null){
+                    slyceProductsRequestImage.cancel();
+                }
+
+                if(slyceProductsRequestImageUrl != null){
+                    slyceProductsRequestImageUrl.cancel();
+                }
+
+                break;
         }
     }
 
@@ -249,7 +267,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                SlyceProductsRequest slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
                 slyceProductsRequestImage.execute();
             }
         }
@@ -319,7 +337,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         });
 
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {}
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
         });
 
         alert.show();

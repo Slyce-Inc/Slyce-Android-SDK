@@ -77,7 +77,7 @@ public class Utils {
 
         // Bitmap to input stream
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /* ignored for PNG */, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80 , bos);
         byte[] bitmapData = bos.toByteArray();
         ByteArrayInputStream bs = new ByteArrayInputStream(bitmapData);
 

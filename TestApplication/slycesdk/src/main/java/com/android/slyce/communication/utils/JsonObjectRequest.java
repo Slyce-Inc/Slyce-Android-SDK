@@ -17,9 +17,13 @@
 package com.android.slyce.communication.utils;
 
 
+import com.android.slyce.report.java_websocket.util.Base64;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A request for retrieving a {@link org.json.JSONObject} response body at a given URL, allowing for an
@@ -66,5 +70,15 @@ public class JsonObjectRequest extends JsonRequest<JSONObject> {
         } catch (JSONException je) {
             return Response.error(new ParseError(je));
         }
-    }    
+    }
+
+//    @Override
+//    public Map<String, String> getHeaders() throws AuthFailureError {
+//
+//        HashMap<String, String> params = new HashMap<String, String>();
+//        String creds = String.format("%s:%s","USERNAME","PASSWORD");
+//        String auth = "Basic " +  Base64.encodeBytes(creds.getBytes());
+//        params.put("Authorization", auth);
+//        return params;
+//    }
 }

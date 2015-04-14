@@ -90,6 +90,8 @@
     <orderEntry type="library" exported="" name="support-v4-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="moodstocks" level="project" />
+    <orderEntry type="library" exported="" name="moodstocks-native" level="project" />
   </component>
 </module>
 

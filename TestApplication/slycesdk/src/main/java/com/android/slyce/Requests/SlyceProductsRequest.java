@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by davidsvilem on 3/31/15.
  */
-public final class SlyceProductsRequest extends SlyceRequest implements WSConnection.OnTokenListener{
+public final class SlyceProductsRequest extends SlyceRequest {
 
     private final String TAG = SlyceProductsRequest.class.getSimpleName();
 
@@ -19,30 +19,18 @@ public final class SlyceProductsRequest extends SlyceRequest implements WSConnec
 
     private WSConnection.MethodType type;
 
-    private String token;
-
-    private Slyce slyce;
-
     public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, String imageUrl) {
         super(slyce, listener);
 
-        this.slyce = slyce;
-
-        connection.setOnTokenListener(this);
-
         type = WSConnection.MethodType.SEND_IMAGE_URL;
-        connection.setImageUrl(imageUrl);
+        wsConnection.setImageUrl(imageUrl);
     }
 
     public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, Bitmap image) {
         super(slyce, listener);
 
-        this.slyce = slyce;
-
-        connection.setOnTokenListener(this);
-
         type = WSConnection.MethodType.SEND_IMAGE;
-        connection.setBitmap(image);
+        wsConnection.setBitmap(image);
     }
 
     public void execute(){
@@ -51,7 +39,7 @@ public final class SlyceProductsRequest extends SlyceRequest implements WSConnec
             return;
         }
 
-        if(connection == null){
+        if(wsConnection == null){
             SlyceLog.e(TAG, "Please call GetProductsRequest(...) C'tor before execute()");
             return;
         }
@@ -61,15 +49,6 @@ public final class SlyceProductsRequest extends SlyceRequest implements WSConnec
             return;
         }
 
-        connection.connect(type);
-    }
-
-    public String getToken(){
-        return token;
-    }
-
-    @Override
-    public void onTokenReceived(String token) {
-        this.token = token;
+        wsConnection.connect(type);
     }
 }

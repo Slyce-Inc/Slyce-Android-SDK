@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -22,15 +23,30 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.slyce.communication.ComManager;
+import com.android.slyce.communication.utils.AuthFailureError;
+import com.android.slyce.communication.utils.JsonObjectRequest;
+import com.android.slyce.communication.utils.Response;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.report.java_websocket.util.Base64;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.SlyceLog;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnSlyceRequestListener, TextView.OnEditorActionListener {
 
@@ -51,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Slyce slyce;
 
     private SlyceProductsRequest slyceProductsRequestImageUrl;
+    private SlyceProductsRequest slyceProductsRequestImage;
 
     private ProgressBar progressBar;
 
@@ -65,6 +82,54 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initViews();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String hostUrl = "http://api.moodstocks.com/v2/echo/?foo=bar&bacon=chunky";
+//                    String hostUrl  = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/echo/?foo=bar";
+                    String name = "3jygvjimebpivrohfxyf";
+                    String password = "s9cWbmzuRGjRDYeb";
+
+                    String authString = name + ":" + password;
+                    System.out.println("auth string: " + authString);
+                    byte[] authEncBytes = Base64.encodeBytesToBytes(authString.getBytes());
+                    String authStringEnc = new String(authEncBytes);
+                    System.out.println("Base64 encoded auth string: " + authStringEnc);
+
+                    URL url = new URL(hostUrl);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setRequestProperty("content-type", "text/plain; charset=utf-8");
+                    urlConnection.setRequestProperty("Authorization", "Digest " + authStringEnc);
+
+                    int i = urlConnection.getResponseCode();
+
+                    InputStreamReader isr = new InputStreamReader(urlConnection.getInputStream());
+
+                    int numCharsRead;
+                    char[] charArray = new char[1024];
+                    StringBuffer sb = new StringBuffer();
+                    while ((numCharsRead = isr.read(charArray)) > 0) {
+                        sb.append(charArray, 0, numCharsRead);
+                    }
+                    String response = sb.toString();
+
+                    System.out.println(response);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }).start();
+
+//        ComManager.getInstance().getMoodstocksAuth("3jygvjimebpivrohfxyf", "s9cWbmzuRGjRDYeb");
     }
 
     private void initViews(){
@@ -90,6 +155,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     // OnSlyceRequestListener callbacks
     @Override
     public void onSlyceProgress(final long progress, final String message, String token) {
+
+        String requestToken = slyceProductsRequestImageUrl.getToken();
 
         Toast.makeText(this,
                 "Progress: " + progress +
@@ -250,7 +317,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                SlyceProductsRequest slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
                 slyceProductsRequestImage.execute();
             }
         }
@@ -320,7 +387,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         });
 
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {}
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
         });
 
         alert.show();
@@ -344,4 +412,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
+
+
 }

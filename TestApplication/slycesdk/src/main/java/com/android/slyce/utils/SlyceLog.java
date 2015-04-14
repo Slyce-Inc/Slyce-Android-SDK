@@ -24,4 +24,10 @@ public class SlyceLog {
             Log.w(tag, message);
         }
     }
+
+    public static void d(String tag, String message){
+        if(Constants.ShouldLog){
+            Log.d(tag, message);
+        }
+    }
 }

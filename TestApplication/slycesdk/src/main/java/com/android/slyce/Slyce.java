@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.android.slyce.async.Util;
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.utils.Constants;
@@ -13,17 +13,17 @@ import com.android.slyce.utils.SharedPrefHelper;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
+import com.moodstocks.android.MoodstocksError;
+import com.moodstocks.android.Scanner;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by davidsvilem on 3/25/15.
  */
-public final class Slyce{
+public final class Slyce implements Scanner.SyncListener{
 
     private static final String TAG = Slyce.class.getSimpleName();
 
@@ -38,6 +38,10 @@ public final class Slyce{
     private String mClientID;
 
     private AtomicBoolean isOpened = new AtomicBoolean(false);
+
+    /* Moodstocks */
+    private Scanner scanner;
+    private boolean compatible;
 
     public static Slyce getInstance(Context context, String clientID) {
 
@@ -153,11 +157,40 @@ public final class Slyce{
                     JSONObject moodstocksJson = jsonResponse.optJSONObject(Constants.MS);
 
                     if(moodstocksJson != null){
-                        mSharedPrefHelper.setMSEnabled(moodstocksJson.optString(Constants.ENABLED));
-                        mSharedPrefHelper.setMSkey(moodstocksJson.optString(Constants.KEY));
-                        mSharedPrefHelper.setMSsecret(moodstocksJson.optString(Constants.SECRET));
-                    }else{
-                        //mSharedPrefHelper.setMSEnabled(Boolean.FALSE.toString());
+
+                        final String isEnabled = moodstocksJson.optString(Constants.ENABLED);
+                        final String key = moodstocksJson.optString(Constants.KEY);
+                        final String secret = moodstocksJson.optString(Constants.SECRET);
+
+                        mSharedPrefHelper.setMSEnabled(isEnabled);
+                        mSharedPrefHelper.setMSkey(key);
+                        mSharedPrefHelper.setMSsecret(secret);
+
+                        // If 2D is enabled initiate MoodStocks
+                        if(Boolean.valueOf(isEnabled)){
+
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    // Init MoodStocks
+                                    compatible = Scanner.isCompatible();
+                                    if(compatible){
+                                        try {
+                                            scanner = Scanner.get();
+                                            String path = Scanner.pathFromFilesDir(mContext, "scanner.db");
+                                            scanner.open(path, key, secret);
+                                            scanner.setSyncListener(Slyce.this);
+                                            scanner.sync();
+                                        } catch (MoodstocksError e) {
+                                            SlyceLog.e(TAG, e.getMessage());
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+
                     }
 
                     // Set boolean
@@ -211,7 +244,52 @@ public final class Slyce{
         return isOpened.get();
     }
 
+    public void close(){
+
+        if (compatible) {
+            try {
+                scanner.close();
+                scanner.destroy();
+                scanner = null;
+            } catch (MoodstocksError e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * Do Not call this method
+     */
     public void release(){
         mInstance = null;
+    }
+
+    /*
+     * MoodStocks listener
+     */
+    @Override
+    public void onSyncStart() {
+        SlyceLog.d("Moodstocks SDK", "Sync will start.");
+    }
+
+    @Override
+    public void onSyncComplete() {
+        try {
+            SlyceLog.d("Moodstocks SDK", "Sync succeeded (" + scanner.count() + " images)");
+        } catch (MoodstocksError e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onSyncFailed(MoodstocksError e) {
+        SlyceLog.d("Moodstocks SDK", "Sync error #" + e.getErrorCode() + ": " + e.getMessage());
+    }
+
+    @Override
+    public void onSyncProgress(int total, int current) {
+        int percent = (int) ((float) current / (float) total * 100);
+        SlyceLog.d("Moodstocks SDK", "Sync progressing: " + percent + "%");
     }
 }

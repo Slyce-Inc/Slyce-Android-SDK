@@ -58,6 +58,8 @@ public class WSConnection implements
 
     private long startDetectionTime = 0;
 
+    private boolean isCancelled = false;
+
     public WSConnection(Context context, String clientID, OnSlyceRequestListener listener){
 
         mixpanel = MixpanelAPI.getInstance(context, Constants.MIXPANEL_TOKEN);
@@ -89,9 +91,15 @@ public class WSConnection implements
                 }else{
 
                     mWebSocket = webSocket;
+
                     setCallbacks();
 
                     setMethodType(methodType);
+
+                    // Check if the request has been cancelled before connection has been established
+                    if(isCancelled){
+                        mWebSocket.close();
+                    }
 
                     // Ready to perform a request
                     callMethod(methodType);
@@ -427,7 +435,11 @@ public class WSConnection implements
     }
 
     public void close(){
-        mWebSocket.close();
+        if(mWebSocket != null){
+            mWebSocket.close();
+        }else{
+            isCancelled = true;
+        }
     }
 
     public enum MethodType{

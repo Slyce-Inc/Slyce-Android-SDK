@@ -92,13 +92,16 @@ public class WSConnection implements
 
                     mWebSocket = webSocket;
 
+                    // Set listeners
                     setCallbacks();
 
+                    // Set request type
                     setMethodType(methodType);
 
                     // Check if the request has been cancelled before connection has been established
                     if(isCancelled){
                         mWebSocket.close();
+                        return;
                     }
 
                     // Ready to perform a request

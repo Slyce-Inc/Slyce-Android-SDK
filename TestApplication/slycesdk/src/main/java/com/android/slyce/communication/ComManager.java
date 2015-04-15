@@ -122,36 +122,31 @@ public class ComManager {
 
     public void getMoodstocksAuth(final String apiKey, final String apiSecret){
 
-//        "http://username:password@api.moodstocks.com/v2/echo/?foo=bar"
-
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-//                StringBuilder url = new StringBuilder();
-//                url.append("http://").append(apiKey).append(":").append(apiSecret).append("@api.moodstocks.com/v2/echo/?foo=bar");
-
-//                String url = "http://api.moodstocks.com/v2/echo/";
                 String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/echo/?foo=bar";
 
-//                AuthRequest request = new AuthRequest(
-//                        Request.Method.GET,
-//                        url,
-//                        null ,
-//                        new Response.Listener<JSONObject>() {
-//                            @Override
-//                            public void onResponse(JSONObject response) {
-//
-//                            }
-//                        },
-//                        new Response.ErrorListener() {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//
-//                            }
-//                        });
-//
-//                JSONObject result = performRequest(request);
+                AuthRequest request = new AuthRequest(
+                        Request.Method.GET,
+                        url,
+                        null ,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+
+                JSONObject result = performRequest(request);
+
             }
 
         }).start();
@@ -208,35 +203,29 @@ public class ComManager {
         public void onResponse(JSONObject jsonResponse);
     }
 
-//    public class AuthRequest extends JsonObjectRequest {
-//
-//        public AuthRequest(int method, String url, JSONObject jsonRequest,
-//                           Response.Listener<JSONObject> listener,
-//                           Response.ErrorListener errorListener) {
-//            super(method, url, jsonRequest, listener, errorListener);
-//        }
-//
-//        public AuthRequest(String url, JSONObject jsonRequest,
-//                           Response.Listener<JSONObject> listener,
-//                           Response.ErrorListener errorListener) {
-//            super(url, jsonRequest, listener, errorListener);
-//        }
-//
-//        @Override
-//        public Map<String, String> getHeaders() throws AuthFailureError {
-//            return createBasicAuthHeader("user", "password");
-//        }
-//
-//        Map<String, String> createBasicAuthHeader(String username, String password) {
-//            Map<String, String> headerMap = new HashMap<String, String>();
-//
-//            String credentials = "3jygvjimebpivrohfxyf" + ":" + "s9cWbmzuRGjRDYeb";
-//            String encodedCredentials = com.android.slyce.utils.Base64.encodeToString(credentials.getBytes(), 0);
-////            String encodedCredentials = Base64.encodeBytes(credentials.getBytes());
-//            headerMap.put("Authorization", "Digest " + encodedCredentials);
-//
-//            return headerMap;
-//        }
-//    }
+    public class AuthRequest extends JsonObjectRequest {
 
+        public AuthRequest(int method, String url, JSONObject jsonRequest,
+                           Response.Listener<JSONObject> listener,
+                           Response.ErrorListener errorListener) {
+            super(method, url, jsonRequest, listener, errorListener);
+        }
+
+        public AuthRequest(String url, JSONObject jsonRequest,
+                           Response.Listener<JSONObject> listener,
+                           Response.ErrorListener errorListener) {
+            super(url, jsonRequest, listener, errorListener);
+        }
+
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            return createBasicAuthHeader("user", "password");
+        }
+
+        Map<String, String> createBasicAuthHeader(String username, String password) {
+            Map<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Digest username=\"3jygvjimebpivrohfxyf\", realm=\"Moodstocks API\", nonce=\"MTQyOTAwNjE4NSA2YzQzMWFjZjJhZDg0OTVlZDY3OGE2Nzk3YzMyNmYzZQ==\", uri=\"/v2/echo/?foo=bar\", response=\"2f3458baa7ce27d7111b03bc3283e0c7\", opaque=\"b1a8d1044b0de768f7905b15aa7f95de\", qop=auth, nc=00000001, cnonce=\"8dd6c0acf8d5d1ca\"");
+            return headerMap;
+        }
+    }
 }

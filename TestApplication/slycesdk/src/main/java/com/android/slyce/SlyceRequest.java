@@ -40,4 +40,8 @@ public class SlyceRequest implements WSConnection.OnTokenListener{
     public void onTokenReceived(String token) {
         this.token = token;
     }
+
+    protected void cancel(){
+        wsConnection.close();
+    }
 }

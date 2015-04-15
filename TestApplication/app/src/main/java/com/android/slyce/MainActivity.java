@@ -41,8 +41,10 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -54,6 +56,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private Button enterUrl;
     private Button uploadImage;
+    private Button cancelRequests;
 
     private TextView acceptTextView;
     private TextView premium;
@@ -83,59 +86,56 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         initViews();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String hostUrl = "http://api.moodstocks.com/v2/echo/?foo=bar&bacon=chunky";
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                try {
+//
+////                    String hostUrl = "http://api.moodstocks.com/v2/echo/?foo=bar&bacon=chunky";
 //                    String hostUrl  = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/echo/?foo=bar";
-                    String name = "3jygvjimebpivrohfxyf";
-                    String password = "s9cWbmzuRGjRDYeb";
+//                    String name = "3jygvjimebpivrohfxyf";
+//                    String password = "s9cWbmzuRGjRDYeb";
+//
+//                    String authString = name + ":" + password;
+//                    byte[] authEncBytes = Base64.encodeBytesToBytes(authString.getBytes());
+//                    String authStringEnc = new String(authEncBytes);
+//
+//                    URL myURL = new URL(hostUrl);
+//                    HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();
+//                    String userCredentials = "3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb";
+//                    myURLConnection.setRequestProperty ("Authorization", "Digest username=\"3jygvjimebpivrohfxyf\", realm=\"Moodstocks API\", nonce=\"MTQyOTAwNjE4NSA2YzQzMWFjZjJhZDg0OTVlZDY3OGE2Nzk3YzMyNmYzZQ==\", uri=\"/v2/echo/?foo=bar\", response=\"2f3458baa7ce27d7111b03bc3283e0c7\", opaque=\"b1a8d1044b0de768f7905b15aa7f95de\", qop=auth, nc=00000001, cnonce=\"8dd6c0acf8d5d1ca\"");
+//                    myURLConnection.setRequestMethod("GET");
+//
+//                    int i = myURLConnection.getResponseCode();
+//
+//                    InputStreamReader isr = new InputStreamReader(myURLConnection.getInputStream());
+//
+//                    int numCharsRead;
+//                    char[] charArray = new char[1024];
+//                    StringBuffer sb = new StringBuffer();
+//                    while ((numCharsRead = isr.read(charArray)) > 0) {
+//                        sb.append(charArray, 0, numCharsRead);
+//                    }
+//                    String response = sb.toString();
+//
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        }).start();
 
-                    String authString = name + ":" + password;
-                    System.out.println("auth string: " + authString);
-                    byte[] authEncBytes = Base64.encodeBytesToBytes(authString.getBytes());
-                    String authStringEnc = new String(authEncBytes);
-                    System.out.println("Base64 encoded auth string: " + authStringEnc);
-
-                    URL url = new URL(hostUrl);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setRequestProperty("content-type", "text/plain; charset=utf-8");
-                    urlConnection.setRequestProperty("Authorization", "Digest " + authStringEnc);
-
-                    int i = urlConnection.getResponseCode();
-
-                    InputStreamReader isr = new InputStreamReader(urlConnection.getInputStream());
-
-                    int numCharsRead;
-                    char[] charArray = new char[1024];
-                    StringBuffer sb = new StringBuffer();
-                    while ((numCharsRead = isr.read(charArray)) > 0) {
-                        sb.append(charArray, 0, numCharsRead);
-                    }
-                    String response = sb.toString();
-
-                    System.out.println(response);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }).start();
-
-//        ComManager.getInstance().getMoodstocksAuth("3jygvjimebpivrohfxyf", "s9cWbmzuRGjRDYeb");
+        ComManager.getInstance().getMoodstocksAuth("3jygvjimebpivrohfxyf", "s9cWbmzuRGjRDYeb");
     }
 
     private void initViews(){
 
         uploadImage = (Button) findViewById(R.id.upload_image);
         enterUrl = (Button) findViewById(R.id.enter_url);
+        cancelRequests = (Button) findViewById(R.id.cancel_requests);
         clientIdEditText = (EditText) findViewById(R.id.client_id);
         acceptTextView = (TextView) findViewById(R.id.accept_client_id);
         progressBar = (ProgressBar) findViewById(R.id.progress);
@@ -148,6 +148,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         uploadImage.setOnClickListener(this);
         enterUrl.setOnClickListener(this);
         acceptTextView.setOnClickListener(this);
+        cancelRequests.setOnClickListener(this);
 
         clientIdEditText.setOnEditorActionListener(this);
     }
@@ -270,6 +271,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.enter_url:
 
                 showDialog();
+
+                break;
+
+            case R.id.cancel_requests:
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if(slyceProductsRequestImage != null){
+                    slyceProductsRequestImage.cancel();
+                }
+
+                if(slyceProductsRequestImageUrl != null){
+                    slyceProductsRequestImageUrl.cancel();
+                }
 
                 break;
         }

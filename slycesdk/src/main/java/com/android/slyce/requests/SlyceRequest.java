@@ -1,7 +1,8 @@
-package com.android.slyce;
+package com.android.slyce.requests;
 
 import android.util.Log;
 
+import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.socket.WSConnection;
 
@@ -24,7 +25,7 @@ public class SlyceRequest {
         connection = new WSConnection(slyce.getContext() , slyce.getClientID(), listener);
     }
 
-    protected void cancel(){
+    public void cancel(){
         connection.close();
     }
 }

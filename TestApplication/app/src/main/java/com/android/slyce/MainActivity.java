@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -128,7 +129,23 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 //
 //        }).start();
 
-        ComManager.getInstance().getMoodstocksAuth("3jygvjimebpivrohfxyf", "s9cWbmzuRGjRDYeb");
+//        ComManager.getInstance().getMSSImageURL("","", new ComManager.OnResponseListener() {
+//            @Override
+//            public void onResponse(JSONObject jsonResponse) {
+//                Log.i("","");
+//            }
+//        });
+
+        ComManager.getInstance().getMSAuth(
+                "3jygvjimebpivrohfxyf",
+                "s9cWbmzuRGjRDYeb",
+                new ComManager.OnResponseListener() {
+
+                    @Override
+                    public void onResponse(JSONObject jsonResponse) {
+                        Log.i("","");
+                    }
+        });
     }
 
     private void initViews(){

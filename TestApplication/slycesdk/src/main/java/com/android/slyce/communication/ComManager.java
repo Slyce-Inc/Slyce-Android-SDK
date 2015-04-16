@@ -14,6 +14,7 @@ import com.android.slyce.communication.utils.Request;
 import com.android.slyce.communication.utils.Response;
 import com.android.slyce.communication.utils.VolleyError;
 import com.android.slyce.report.java_websocket.util.Base64;
+import com.android.slyce.requests.AuthRequest;
 import com.android.slyce.socket.WSConnection;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
@@ -107,26 +108,27 @@ public class ComManager {
                 // Create request
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
 
-
-
                 // Perform request
                 JSONObject response = performRequest(request);
 
                 // Parse response
                 String status = response.optString("status");
                 JSONArray sku = response.optJSONArray("sku");
+
             }
 
         }).start();
     }
 
-    public void getMoodstocksAuth(final String apiKey, final String apiSecret){
+    public void getMSAuth(final String apiKey, final String apiSecret, final OnResponseListener listener){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/echo/?foo=bar";
+
+//                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
 
                 AuthRequest request = new AuthRequest(
                         Request.Method.GET,
@@ -135,17 +137,39 @@ public class ComManager {
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-
                             }
                         });
 
-                JSONObject result = performRequest(request);
+                request.setShouldCache(false);
+
+                JSONObject response = performRequest(request);
+
+                listener.onResponse(response);
+
+            }
+
+        }).start();
+    }
+
+    public void getMSSImageURL(final String apiKey, final String apiSecret, String imageUrl, final OnResponseListener listener){
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
+
+                JsonObjectRequest request = createRequest(url);
+
+                JSONObject response = performRequest(request);
+
+                listener.onResponse(response);
 
             }
 
@@ -190,6 +214,7 @@ public class ComManager {
 
         } catch (VolleyError volleyError) {
             volleyError.printStackTrace();
+            String digest = volleyError.networkResponse.headers.get("WWW-Authenticate").toString();
         } catch (UnsupportedEncodingException e) {
             SlyceLog.e(TAG, "UnsupportedEncodingException");
         } catch (JSONException e) {
@@ -201,31 +226,5 @@ public class ComManager {
 
     public interface OnResponseListener{
         public void onResponse(JSONObject jsonResponse);
-    }
-
-    public class AuthRequest extends JsonObjectRequest {
-
-        public AuthRequest(int method, String url, JSONObject jsonRequest,
-                           Response.Listener<JSONObject> listener,
-                           Response.ErrorListener errorListener) {
-            super(method, url, jsonRequest, listener, errorListener);
-        }
-
-        public AuthRequest(String url, JSONObject jsonRequest,
-                           Response.Listener<JSONObject> listener,
-                           Response.ErrorListener errorListener) {
-            super(url, jsonRequest, listener, errorListener);
-        }
-
-        @Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            return createBasicAuthHeader("user", "password");
-        }
-
-        Map<String, String> createBasicAuthHeader(String username, String password) {
-            Map<String, String> headerMap = new HashMap<String, String>();
-            headerMap.put("Authorization", "Digest username=\"3jygvjimebpivrohfxyf\", realm=\"Moodstocks API\", nonce=\"MTQyOTAwNjE4NSA2YzQzMWFjZjJhZDg0OTVlZDY3OGE2Nzk3YzMyNmYzZQ==\", uri=\"/v2/echo/?foo=bar\", response=\"2f3458baa7ce27d7111b03bc3283e0c7\", opaque=\"b1a8d1044b0de768f7905b15aa7f95de\", qop=auth, nc=00000001, cnonce=\"8dd6c0acf8d5d1ca\"");
-            return headerMap;
-        }
     }
 }

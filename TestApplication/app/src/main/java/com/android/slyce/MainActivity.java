@@ -23,6 +23,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.slyce.async.LineEmitter;
+import com.android.slyce.async.http.AsyncHttpClient;
+import com.android.slyce.async.http.AsyncHttpPost;
+import com.android.slyce.async.http.AsyncHttpResponse;
+import com.android.slyce.async.http.body.MultipartFormDataBody;
+import com.android.slyce.async.http.callback.HttpConnectCallback;
+import com.android.slyce.async.http.socketio.transport.SocketIOTransport;
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
@@ -30,6 +38,8 @@ import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -69,66 +79,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initViews();
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                try {
-//
-////                    String hostUrl = "http://api.moodstocks.com/v2/echo/?foo=bar&bacon=chunky";
-//                    String hostUrl  = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/echo/?foo=bar";
-//                    String name = "3jygvjimebpivrohfxyf";
-//                    String password = "s9cWbmzuRGjRDYeb";
-//
-//                    String authString = name + ":" + password;
-//                    byte[] authEncBytes = Base64.encodeBytesToBytes(authString.getBytes());
-//                    String authStringEnc = new String(authEncBytes);
-//
-//                    URL myURL = new URL(hostUrl);
-//                    HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();
-//                    String userCredentials = "3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb";
-//                    myURLConnection.setRequestProperty ("Authorization", "Digest username=\"3jygvjimebpivrohfxyf\", realm=\"Moodstocks API\", nonce=\"MTQyOTAwNjE4NSA2YzQzMWFjZjJhZDg0OTVlZDY3OGE2Nzk3YzMyNmYzZQ==\", uri=\"/v2/echo/?foo=bar\", response=\"2f3458baa7ce27d7111b03bc3283e0c7\", opaque=\"b1a8d1044b0de768f7905b15aa7f95de\", qop=auth, nc=00000001, cnonce=\"8dd6c0acf8d5d1ca\"");
-//                    myURLConnection.setRequestMethod("GET");
-//
-//                    int i = myURLConnection.getResponseCode();
-//
-//                    InputStreamReader isr = new InputStreamReader(myURLConnection.getInputStream());
-//
-//                    int numCharsRead;
-//                    char[] charArray = new char[1024];
-//                    StringBuffer sb = new StringBuffer();
-//                    while ((numCharsRead = isr.read(charArray)) > 0) {
-//                        sb.append(charArray, 0, numCharsRead);
-//                    }
-//                    String response = sb.toString();
-//
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        }).start();
-
-//        ComManager.getInstance().getMSSImageURL("","", new ComManager.OnResponseListener() {
-//            @Override
-//            public void onResponse(JSONObject jsonResponse) {
-//                Log.i("","");
-//            }
-//        });
-
-        ComManager.getInstance().getMSAuth(
-                "3jygvjimebpivrohfxyf",
-                "s9cWbmzuRGjRDYeb",
-                new ComManager.OnResponseListener() {
-
-                    @Override
-                    public void onResponse(JSONObject jsonResponse) {
-                        Log.i("","");
-                    }
-        });
     }
 
     private void initViews(){
@@ -332,8 +282,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
-                slyceProductsRequestImage.execute();
+//                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+//                slyceProductsRequestImage.execute();
+
+                ComManager.getInstance().searchMSImageFile(selectedBitmap);
+
             }
         }
     }

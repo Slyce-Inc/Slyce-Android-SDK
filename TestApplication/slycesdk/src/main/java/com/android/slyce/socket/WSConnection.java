@@ -429,7 +429,7 @@ public class WSConnection implements
 
                     Bitmap scaledBitmap = Utils.scaleDown(bitmap, 450);
 
-                    int responseCode = Utils.uploadBitmap(scaledBitmap, uploadUrl);
+                    int responseCode = Utils.uploadBitmapToSlyce(scaledBitmap, uploadUrl);
 
                     listener.onImageUploaded(responseCode);
                 }

@@ -1,5 +1,7 @@
 package com.android.slyce.communication;
 
+import android.graphics.Bitmap;
+
 import com.android.slyce.async.Util;
 import com.android.slyce.communication.utils.AuthFailureError;
 import com.android.slyce.communication.utils.BasicNetwork;
@@ -128,7 +130,40 @@ public class ComManager {
 
                 String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/echo/?foo=bar";
 
-//                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
+                AuthRequest request = new AuthRequest(
+                        Request.Method.GET,
+                        url,
+                        null ,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        });
+
+                request.setShouldCache(false);
+
+                JSONObject response = performRequest(request);
+
+                listener.onResponse(response);
+
+            }
+
+        }).start();
+    }
+
+    public void seachMSImageURL(final String apiKey, final String apiSecret, String imageUrl, final OnResponseListener listener){
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
 
                 AuthRequest request = new AuthRequest(
                         Request.Method.GET,
@@ -156,23 +191,20 @@ public class ComManager {
         }).start();
     }
 
-    public void getMSSImageURL(final String apiKey, final String apiSecret, String imageUrl, final OnResponseListener listener){
+    public void searchMSImageFile(final Bitmap bitmap, final OnResponseListener listener){
 
         new Thread(new Runnable() {
-
             @Override
             public void run() {
 
-                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
+                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search";
 
-                JsonObjectRequest request = createRequest(url);
+                Bitmap scaledBitmap = Utils.scaleDown(bitmap, 450);
 
-                JSONObject response = performRequest(request);
+                JSONObject response = Utils.uploadBitmapToMS(url, scaledBitmap);
 
                 listener.onResponse(response);
-
             }
-
         }).start();
     }
 
@@ -214,7 +246,6 @@ public class ComManager {
 
         } catch (VolleyError volleyError) {
             volleyError.printStackTrace();
-            String digest = volleyError.networkResponse.headers.get("WWW-Authenticate").toString();
         } catch (UnsupportedEncodingException e) {
             SlyceLog.e(TAG, "UnsupportedEncodingException");
         } catch (JSONException e) {

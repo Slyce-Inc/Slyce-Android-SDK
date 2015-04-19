@@ -1,8 +1,5 @@
 package com.android.slyce.utils;
 
-import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -12,16 +9,22 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
+
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.concurrent.TimeUnit;
-
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -59,7 +62,7 @@ public class Utils {
         return newBitmap;
     }
 
-    public static int uploadBitmap(Bitmap bitmap, String requestUrl) {
+    public static int uploadBitmapToSlyce(Bitmap bitmap, String requestUrl) {
 
         int serverResponseCode = 0;
 
@@ -77,7 +80,7 @@ public class Utils {
 
         // Bitmap to input stream
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80 , bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
         byte[] bitmapData = bos.toByteArray();
         ByteArrayInputStream bs = new ByteArrayInputStream(bitmapData);
 
@@ -130,8 +133,8 @@ public class Utils {
             dos.flush();
             dos.close();
 
-        } catch (MalformedURLException ex) {
-            SlyceLog.e(TAG, "Upload file to server error: " + ex.getMessage());
+        } catch (MalformedURLException e) {
+            SlyceLog.e(TAG, "Upload file to server error: " + e.getMessage());
         } catch (Exception e) {
             SlyceLog.e(TAG, "Upload file to server Exception : " + e.getMessage());
         }
@@ -139,23 +142,150 @@ public class Utils {
         return serverResponseCode;
     }
 
-    public static String getDeviceID(Context context){
+    public static JSONObject uploadBitmapToMS(String serverUrl, Bitmap bitmap) {
+
+        JSONObject response = null;
+
+        int serverResponseCode;
+
+        HttpURLConnection conn;
+        DataOutputStream dos;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+
+        try {
+
+            // open a URL connection to the Servlet
+            URL url = new URL(serverUrl);
+
+            // Open a HTTP  connection to  the URL
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // Allow Inputs
+            conn.setDoOutput(true); // Allow Outputs
+            conn.setUseCaches(false); // Don't use a Cached Copy
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+            String digest = "Digest username=\"3jygvjimebpivrohfxyf\", realm=\"Moodstocks API\", nonce=\"MTQyOTQzNDY2OCBlMWFlZTg1Y2Y4NjM2ODgxYWEzOTQxODExYjc0NmI2NA==\", uri=\"/v2/search\", response=\"36b171db79e93cd5ffa2fdbee85481a0\", opaque=\"b1a8d1044b0de768f7905b15aa7f95de\", qop=auth, nc=00000001, cnonce=\"8712f44508f59394\"";
+            conn.setRequestProperty("Authorization", digest);
+
+            dos = new DataOutputStream(conn.getOutputStream());
+
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"image_file\"; filename=\"ms_image.jpg\"\n" + lineEnd);
+            dos.writeBytes(lineEnd);
+
+            // Bitmap to input stream
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+            byte[] bitmapdata = bos.toByteArray();
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bitmapdata);
+
+            // create a buffer of maximum size
+            bytesAvailable = byteArrayInputStream.available();
+
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+
+            // read file and write it into form...
+            bytesRead = byteArrayInputStream.read(buffer, 0, bufferSize);
+
+            while (bytesRead > 0) {
+                dos.write(buffer, 0, bufferSize);
+                bytesAvailable = byteArrayInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = byteArrayInputStream.read(buffer, 0, bufferSize);
+            }
+
+            // send multipart form data necesssary after file data...
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+            // Responses from the server (code and message)
+            serverResponseCode = conn.getResponseCode();
+            String serverResponseMessage = conn.getResponseMessage();
+
+            Log.i("uploadFile", "HTTP Response is : "
+                    + serverResponseMessage + ": " + serverResponseCode);
+
+            if (serverResponseCode == 200) {
+
+                SlyceLog.i(TAG, "uploadFile File Upload Complete.");
+
+                String result = readInputStreamToString(conn);
+
+                response = new JSONObject(result);
+            }
+
+            //close the streams //
+            byteArrayInputStream.close();
+            dos.flush();
+            dos.close();
+
+        } catch (MalformedURLException e) {
+            SlyceLog.e(TAG, "Upload file to server error: " + e.getMessage());
+        } catch (Exception e) {
+            SlyceLog.e(TAG, "Upload file to server Exception : " + e.getMessage());
+        }
+
+        return response;
+
+    } // End else block
+
+
+    private static String readInputStreamToString(HttpURLConnection connection) {
+        String result = null;
+        StringBuffer sb = new StringBuffer();
+        BufferedInputStream bis = null;
+
+        try {
+
+            bis = new BufferedInputStream(connection.getInputStream());
+            BufferedReader br = new BufferedReader(new InputStreamReader(bis));
+            String inputLine = "";
+            while ((inputLine = br.readLine()) != null) {
+                sb.append(inputLine);
+            }
+            result = sb.toString();
+        } catch (Exception e) {
+            SlyceLog.i(TAG, "Error reading InputStream");
+            result = null;
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    SlyceLog.i(TAG, "Error closing InputStream");
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static String getDeviceID(Context context) {
         return Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public static String getOSVersion(){
+    public static String getOSVersion() {
         return Build.VERSION.RELEASE;
     }
 
-    public static String getDeviceManufacturer(){
+    public static String getDeviceManufacturer() {
         return Build.MANUFACTURER;
     }
 
-    public static String getDeviceModel(){
+    public static String getDeviceModel() {
         return Build.MODEL;
     }
 
-    public static String getHostAppName(Context context){
+    public static String getHostAppName(Context context) {
         PackageManager packageManager = context.getPackageManager();
         ApplicationInfo applicationInfo = null;
         try {
@@ -167,13 +297,13 @@ public class Utils {
         }
 
         String title = applicationInfo != null ?
-                (String)packageManager.getApplicationLabel(applicationInfo) :
+                (String) packageManager.getApplicationLabel(applicationInfo) :
                 "App Name Not Found";
 
         return title;
     }
 
-    public static String getHostAppVersion(Context context){
+    public static String getHostAppVersion(Context context) {
 
         PackageManager packageManager = context.getPackageManager();
         PackageInfo packageInfo = null;
@@ -185,10 +315,10 @@ public class Utils {
 
         }
 
-        return  packageInfo.versionName;
+        return packageInfo.versionName;
     }
 
-    public static String getTimestamp(){
+    public static String getTimestamp() {
 
         SimpleDateFormat noMilliSecondsFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = noMilliSecondsFormatter.format(System.currentTimeMillis());
@@ -196,91 +326,25 @@ public class Utils {
         return time;
     }
 
-    public static String getAndroidID(Context context){
+    public static String getAndroidID(Context context) {
         String android_id = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
         return android_id;
     }
 
-    public static String getDeviceType(){
+    public static String getDeviceType() {
 
         String deviceType;
 
         deviceType = Devices.getDeviceName(Build.DEVICE);
 
-        if(TextUtils.isEmpty(deviceType)){
+        if (TextUtils.isEmpty(deviceType)) {
             deviceType = "No Device Type";
         }
 
         return deviceType;
     }
-
-//    public static int upload(Bitmap bitmap, String uploadUrl){
-//
-//        List<String> response = new ArrayList<String>();
-//
-//        int serverResponseCode = -1;
-//        String serverResponseMessage;
-//
-//        URL url = null;
-//        try {
-//            url = new URL(uploadUrl);
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//        HttpsURLConnection connection = null;
-//        try {
-//            connection = (HttpsURLConnection) url.openConnection();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        connection.setDoOutput(true);
-//        connection.setRequestProperty("Content-Type", "image/jpeg");
-//
-//        try {
-//            connection.setRequestMethod("PUT");
-//        } catch (ProtocolException e) {
-//            e.printStackTrace();
-//        }
-//
-//        OutputStream outputStream = null;
-//
-//        try {
-//            outputStream = connection.getOutputStream();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        DataOutputStream dos = new DataOutputStream(outputStream);
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, dos);
-//
-//        try {
-//
-//            serverResponseCode = connection.getResponseCode();
-//            serverResponseMessage = connection.getResponseMessage();
-//
-//            if (serverResponseCode == HttpURLConnection.HTTP_OK) {
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(
-//                        connection.getInputStream()));
-//                String line = null;
-//                while ((line = reader.readLine()) != null) {
-//                    response.add(line);
-//                }
-//                reader.close();
-//                connection.disconnect();
-//            } else {
-//                throw new IOException("Server returned non-OK status: " + serverResponseCode + " : " + serverResponseMessage);
-//            }
-//
-//            dos.close();
-//            outputStream.close();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return serverResponseCode;
-//    }
 }
+
+

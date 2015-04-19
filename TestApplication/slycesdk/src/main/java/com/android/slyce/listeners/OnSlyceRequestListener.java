@@ -1,9 +1,5 @@
 package com.android.slyce.listeners;
 
-import android.graphics.Bitmap;
-
-import com.android.slyce.SlyceRequest;
-
 import org.json.JSONArray;
 
 /**

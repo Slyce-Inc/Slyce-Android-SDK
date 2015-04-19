@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -24,32 +23,16 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.slyce.communication.ComManager;
-import com.android.slyce.communication.utils.AuthFailureError;
-import com.android.slyce.communication.utils.JsonObjectRequest;
-import com.android.slyce.communication.utils.Response;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.report.java_websocket.util.Base64;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.SlyceLog;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnSlyceRequestListener, TextView.OnEditorActionListener {
 
@@ -174,7 +157,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onSlyceProgress(final long progress, final String message, String token) {
 
-        String requestToken = slyceProductsRequestImageUrl.getToken();
+//        String requestToken = slyceProductsRequestImageUrl.getToken();
 
         Toast.makeText(this,
                 "Progress: " + progress +

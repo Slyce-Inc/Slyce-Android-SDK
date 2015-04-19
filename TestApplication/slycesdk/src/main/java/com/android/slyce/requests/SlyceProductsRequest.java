@@ -2,7 +2,6 @@ package com.android.slyce.requests;
 
 import android.graphics.Bitmap;
 import com.android.slyce.Slyce;
-import com.android.slyce.SlyceRequest;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.socket.WSConnection;
 import com.android.slyce.utils.SlyceLog;

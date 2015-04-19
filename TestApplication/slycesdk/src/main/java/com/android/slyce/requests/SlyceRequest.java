@@ -1,7 +1,6 @@
-package com.android.slyce;
+package com.android.slyce.requests;
 
-import android.util.Log;
-
+import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.socket.WSConnection;
 
@@ -41,7 +40,7 @@ public class SlyceRequest implements WSConnection.OnTokenListener{
         this.token = token;
     }
 
-    protected void cancel(){
+    public void cancel(){
         wsConnection.close();
     }
 }

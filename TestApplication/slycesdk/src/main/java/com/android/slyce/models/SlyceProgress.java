@@ -1,6 +1,5 @@
 package com.android.slyce.models;
 
-import com.android.slyce.SlyceRequest;
 
 /**
  * Created by davidsvilem on 3/26/15.

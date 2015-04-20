@@ -30,6 +30,10 @@ public class Synchronizer extends Handler {
         obtainMessage(2, moodStocksProgress).sendToTarget();
     }
 
+    public void on2DExtendedRecognition(JSONArray products){
+        obtainMessage(6, products).sendToTarget();
+    }
+
     public void on3DRecognition(JSONArray products){
         obtainMessage(3, products).sendToTarget();
     }
@@ -76,6 +80,12 @@ public class Synchronizer extends Handler {
             case 5:
 
                 mRequestListener.onStageLevelFinish((OnSlyceRequestListener.StageMessage) msg.obj);
+
+                break;
+
+            case 6:
+
+                mRequestListener.on2DExtendedRecognition((JSONArray) msg.obj);
 
                 break;
 

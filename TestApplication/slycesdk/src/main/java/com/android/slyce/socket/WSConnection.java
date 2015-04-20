@@ -43,6 +43,7 @@ public class WSConnection implements
 
     private Synchronizer mSynchronizer;
 
+    private String mClientId;
     private String mImageUrl;
     private String mRequestUrl;
     private String imageURL;
@@ -76,6 +77,8 @@ public class WSConnection implements
         mRequestUrl = createRequestUrl(clientID, Utils.getAndroidID(context));
 
         mIs2D = is2D;
+
+        mClientId = clientID;
     }
 
     public void setOnTokenListener(OnTokenListener listener){
@@ -155,7 +158,7 @@ public class WSConnection implements
 
                             @Override
                             public void onResponse(String irId) {
-                                mSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+                                handleModdstocksResponse(irId);
                             }
                 });
 
@@ -167,12 +170,33 @@ public class WSConnection implements
                         new ComManager.OnMoodStocksSearchListener() {
                             @Override
                             public void onResponse(String irId) {
-                                mSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+                                handleModdstocksResponse(irId);
                             }
                 });
 
                 break;
         }
+    }
+
+    private void handleModdstocksResponse(String irId){
+
+        // Return if irId got back empty or null
+        if(TextUtils.isEmpty(irId)){
+            return;
+        }
+
+        // Notify the host application for basic result
+        mSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+
+        // Get extended products results
+        ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
+            @Override
+            public void onExtendedInfo(JSONArray products) {
+
+                // Notify the host application for extended result
+                mSynchronizer.on2DExtendedRecognition(products);
+            }
+        });
     }
 
     public void sendRequestImageUrl(String imageUrl){

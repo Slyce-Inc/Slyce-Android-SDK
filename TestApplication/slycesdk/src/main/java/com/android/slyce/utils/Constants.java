@@ -15,7 +15,8 @@ public class Constants {
     public static final String WS_URL = "wss://foundation.slyceapp.com/api/v1/stream?";
 
     /* MoodStocks */
-    public static final String MS_URL = "@api.moodstocks.com/v2/search";
+    public static final String MS_SEARCH_API = "@api.moodstocks.com/v2/search";
+    public static final String MS_ECHO_API = "@api.moodstocks.com/v2/echo?success=true";
     public static final String MS_IMAGE_URL = "image_url";
     public static final String MS_FOUND = "found";
     public static final String MS_ID = "id";

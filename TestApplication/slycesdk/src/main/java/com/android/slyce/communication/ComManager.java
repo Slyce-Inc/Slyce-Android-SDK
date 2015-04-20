@@ -97,7 +97,7 @@ public class ComManager {
         }).start();
     }
 
-    public void getIRIDInfo(final String clientID, final String irid){
+    public void getIRIDInfo(final String clientID, final String irid, final OnExtendedInfoListener listener){
 
         new Thread(new Runnable() {
 
@@ -120,22 +120,34 @@ public class ComManager {
                 String status = response.optString("status");
                 JSONArray sku = response.optJSONArray("sku");
 
+                if(sku == null){
+                    sku = new JSONArray();
+                }
+
+                listener.onExtendedInfo(sku);
+
             }
 
         }).start();
     }
 
-    public void getMSAuth(final String apiKey, final String apiSecret, final OnResponseListener listener){
+    public void getMSAuth(final Context context,  final OnResponseListener listener){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/echo/?foo=bar";
+                // Get MoodStocks Api Key, Api Secret
+                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
+                String key = sharedPrefHelper.getMSkey();
+                String secret = sharedPrefHelper.getMSsecret();
+
+                StringBuilder url = new StringBuilder();
+                url.append("http://").append(key).append(":").append(secret).append(Constants.MS_ECHO_API);
 
                 AuthRequest request = new AuthRequest(
                         Request.Method.GET,
-                        url,
+                        url.toString(),
                         null ,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -176,13 +188,11 @@ public class ComManager {
                         append(key).
                         append(":").
                         append(secret).
-                        append(Constants.MS_URL).
+                        append(Constants.MS_SEARCH_API).
                         append("?").
                         append(Constants.MS_IMAGE_URL).
                         append("=").
                         append(imageUrl);
-
-//                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
 
                 AuthRequest request = new AuthRequest(
                         Request.Method.GET,
@@ -230,9 +240,7 @@ public class ComManager {
                         append(key).
                         append(":").
                         append(secret).
-                        append(Constants.MS_URL);
-
-//                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search";
+                        append(Constants.MS_SEARCH_API);
 
                 Bitmap scaledBitmap = Utils.scaleDown(bitmap);
 
@@ -302,5 +310,9 @@ public class ComManager {
 
     public interface OnMoodStocksSearchListener{
         void onResponse(String irid);
+    }
+
+    public interface OnExtendedInfoListener{
+        void onExtendedInfo(JSONArray products);
     }
 }

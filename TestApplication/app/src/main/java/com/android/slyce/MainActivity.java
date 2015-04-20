@@ -94,7 +94,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onSlyceProgress(final long progress, final String message, String token) {
 
-//        String requestToken = slyceProductsRequestImageUrl.getToken();
+        String requestToken = slyceProductsRequestImageUrl.getToken();
 
         Toast.makeText(this,
                 "Slyce Progress: " + progress +

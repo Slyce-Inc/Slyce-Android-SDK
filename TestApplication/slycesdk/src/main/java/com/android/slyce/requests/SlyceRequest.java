@@ -31,7 +31,7 @@ public class SlyceRequest implements WSConnection.OnTokenListener{
         wsConnection.setOnTokenListener(this);
     }
 
-    protected String getToken(){
+    public String getToken(){
         return token;
     }
 

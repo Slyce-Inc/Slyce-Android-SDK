@@ -14,6 +14,16 @@ public class Constants {
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";
     public static final String WS_URL = "wss://foundation.slyceapp.com/api/v1/stream?";
 
+    /* Pounce */
+    public static final String POUNCE_BASE_URL = "http://api.pounce.mobi/v2/";
+    public static final String POUNCE_USERS_SDK_API = "users/sdk?";
+    public static final String POUNCE_IRID_API = "ir?";
+    public static final String POUNCE_CID = "cid";
+    public static final String POUNCE_ID = "id";
+    public static final String POUNCE_STATUS = "status";
+    public static final String POUNCE_SKU = "sku";
+
+
     /* MoodStocks */
     public static final String MS_SEARCH_API = "@api.moodstocks.com/v2/search";
     public static final String MS_ECHO_API = "@api.moodstocks.com/v2/echo?success=true";

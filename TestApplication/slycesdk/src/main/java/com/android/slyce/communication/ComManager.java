@@ -42,11 +42,6 @@ public class ComManager {
     private HttpStack stack;
     private Network network;
 
-    private String BASE_URL = "http://api.pounce.mobi/v2/";
-
-    private String API_USERS_SDK = "users/sdk?";
-    private String API_IRID = "ir?";
-
     private NetworkResponse networkResponse;
 
     private ComManager(){
@@ -71,8 +66,8 @@ public class ComManager {
 
                 // Create URL
                 StringBuilder requestURLBuilder = new StringBuilder();
-                requestURLBuilder.append(BASE_URL).append(API_USERS_SDK).
-                        append("cid").append("=").append(clientID);
+                requestURLBuilder.append(Constants.POUNCE_BASE_URL).append(Constants.POUNCE_IRID_API).
+                        append(Constants.POUNCE_CID).append("=").append(clientID);
 
                 // Create request
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
@@ -105,10 +100,10 @@ public class ComManager {
             public void run() {
 
                 StringBuilder requestURLBuilder = new StringBuilder();
-                requestURLBuilder.append(BASE_URL).append(API_IRID).
-                        append("cid").append("=").append(clientID).
+                requestURLBuilder.append(Constants.POUNCE_BASE_URL).append(Constants.POUNCE_IRID_API).
+                        append(Constants.POUNCE_CID).append("=").append(clientID).
                         append("&").
-                        append("id").append("=").append(irid);
+                        append(Constants.POUNCE_ID).append("=").append(irid);
 
                 // Create request
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
@@ -117,14 +112,22 @@ public class ComManager {
                 JSONObject response = performRequest(request);
 
                 // Parse response
-                String status = response.optString("status");
-                JSONArray sku = response.optJSONArray("sku");
+                String status = response.optString(Constants.POUNCE_STATUS);
+                JSONArray sku = response.optJSONArray(Constants.POUNCE_SKU);
 
                 if(sku == null){
                     sku = new JSONArray();
                 }
 
                 listener.onExtendedInfo(sku);
+
+                // Json response example
+//                {
+//                    status: "success",
+//                            sku: [
+//                    "'0471016'"
+//                    ]
+//                }
 
             }
 

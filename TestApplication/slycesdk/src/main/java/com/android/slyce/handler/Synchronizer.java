@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.models.MoodStocksProgress;
 import com.android.slyce.models.SlyceProgress;
 import org.json.JSONArray;
 
@@ -24,8 +25,9 @@ public class Synchronizer extends Handler {
         obtainMessage(1, slyceProgress).sendToTarget();
     }
 
-    public void on2DRecognition(){
-        obtainMessage(2).sendToTarget();
+    public void on2DRecognition(String irId, String productInfo){
+        MoodStocksProgress moodStocksProgress = new MoodStocksProgress(irId, productInfo);
+        obtainMessage(2, moodStocksProgress).sendToTarget();
     }
 
     public void on3DRecognition(JSONArray products){
@@ -54,7 +56,8 @@ public class Synchronizer extends Handler {
 
             case 2:
 
-                mRequestListener.on2DRecognition();
+                MoodStocksProgress moodStocksProgress = (MoodStocksProgress) msg.obj;
+                mRequestListener.on2DRecognition(moodStocksProgress.irId, moodStocksProgress.productInfo);
 
                 break;
 

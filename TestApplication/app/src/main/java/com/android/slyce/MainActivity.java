@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,23 +22,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.slyce.async.LineEmitter;
-import com.android.slyce.async.http.AsyncHttpClient;
-import com.android.slyce.async.http.AsyncHttpPost;
-import com.android.slyce.async.http.AsyncHttpResponse;
-import com.android.slyce.async.http.body.MultipartFormDataBody;
-import com.android.slyce.async.http.callback.HttpConnectCallback;
-import com.android.slyce.async.http.socketio.transport.SocketIOTransport;
-import com.android.slyce.communication.ComManager;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -110,13 +97,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 //        String requestToken = slyceProductsRequestImageUrl.getToken();
 
         Toast.makeText(this,
-                "Progress: " + progress +
+                "Slyce Progress: " + progress +
                         "\n" + "Message: " + message +
                         "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void on2DRecognition() {
+    public void on2DRecognition(String irId, String productInfo) {
+
+        Toast.makeText(this,
+                "MoodStocks Progress: " + irId +
+                        "\n" + "Message: " + productInfo, Toast.LENGTH_LONG).show();
+
         progressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -282,10 +274,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 progressBar.setVisibility(View.VISIBLE);
 
-//                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
-//                slyceProductsRequestImage.execute();
-
-                ComManager.getInstance().searchMSImageFile(selectedBitmap);
+                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+                slyceProductsRequestImage.execute();
 
             }
         }
@@ -329,6 +319,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         edittext.setLines(1);
         alert.setMessage("Enter Image URL");
         alert.setTitle("Upload Image URL");
+
+        // TODO://remove this image url before production
+        edittext.setText("http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg");
 
         alert.setView(edittext);
 

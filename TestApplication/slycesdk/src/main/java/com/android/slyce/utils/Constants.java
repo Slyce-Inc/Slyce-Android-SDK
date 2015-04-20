@@ -14,6 +14,15 @@ public class Constants {
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";
     public static final String WS_URL = "wss://foundation.slyceapp.com/api/v1/stream?";
 
+    /* MoodStocks */
+    public static final String MS_URL = "@api.moodstocks.com/v2/search";
+    public static final String MS_IMAGE_URL = "image_url";
+    public static final String MS_FOUND = "found";
+    public static final String MS_ID = "id";
+
+    /* Image resize value (MoodStocks/Slyce)*/
+    public static final int IMAGE_RESIZE = 450;
+
     /* Error messages */
     public static final String SLYCE_INIT_ERROR = "Slyce initiation error: ";
     public static final String CONTEXT_ERROR    = "Context can not be null";

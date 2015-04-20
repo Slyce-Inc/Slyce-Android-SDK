@@ -1,5 +1,6 @@
 package com.android.slyce.communication;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.android.slyce.async.Util;
@@ -18,6 +19,8 @@ import com.android.slyce.communication.utils.VolleyError;
 import com.android.slyce.report.java_websocket.util.Base64;
 import com.android.slyce.requests.AuthRequest;
 import com.android.slyce.socket.WSConnection;
+import com.android.slyce.utils.Constants;
+import com.android.slyce.utils.SharedPrefHelper;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import org.json.JSONArray;
@@ -156,18 +159,34 @@ public class ComManager {
         }).start();
     }
 
-    public void seachMSImageURL(final String apiKey, final String apiSecret, String imageUrl, final OnResponseListener listener){
+    public void seachMSImageURL(final Context context, final String imageUrl, final OnMoodStocksSearchListener listener){
 
         new Thread(new Runnable() {
 
             @Override
             public void run() {
 
-                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
+                // Get MoodStocks Api Key, Api Secret
+                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
+                String key = sharedPrefHelper.getMSkey();
+                String secret = sharedPrefHelper.getMSsecret();
+
+                StringBuilder url = new StringBuilder();
+                url.append("http://").
+                        append(key).
+                        append(":").
+                        append(secret).
+                        append(Constants.MS_URL).
+                        append("?").
+                        append(Constants.MS_IMAGE_URL).
+                        append("=").
+                        append(imageUrl);
+
+//                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search?image_url=http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg";
 
                 AuthRequest request = new AuthRequest(
                         Request.Method.GET,
-                        url,
+                        url.toString(),
                         null ,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -184,26 +203,48 @@ public class ComManager {
 
                 JSONObject response = performRequest(request);
 
-                listener.onResponse(response);
+                String irId = "";
 
+                if(response != null && response.optBoolean(Constants.MS_FOUND)){
+                    irId = response.optString(Constants.MS_ID);
+                }
+                listener.onResponse(irId);
             }
 
         }).start();
     }
 
-    public void searchMSImageFile(final Bitmap bitmap, final OnResponseListener listener){
+    public void searchMSImageFile(final Context context, final Bitmap bitmap, final OnMoodStocksSearchListener listener){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search";
+                // Get MoodStocks Api Key, Api Secret
+                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
+                String key = sharedPrefHelper.getMSkey();
+                String secret = sharedPrefHelper.getMSsecret();
 
-                Bitmap scaledBitmap = Utils.scaleDown(bitmap, 450);
+                StringBuilder url = new StringBuilder();
+                url.append("http://").
+                        append(key).
+                        append(":").
+                        append(secret).
+                        append(Constants.MS_URL);
 
-                JSONObject response = Utils.uploadBitmapToMS(url, scaledBitmap);
+//                String url = "http://3jygvjimebpivrohfxyf:s9cWbmzuRGjRDYeb@api.moodstocks.com/v2/search";
 
-                listener.onResponse(response);
+                Bitmap scaledBitmap = Utils.scaleDown(bitmap);
+
+                JSONObject response = Utils.uploadBitmapToMS(url.toString(), scaledBitmap);
+
+                String irId = "";
+
+                if(response != null && response.optBoolean(Constants.MS_FOUND)){
+                    irId = response.optString(Constants.MS_ID);
+                }
+                listener.onResponse(irId);
+
             }
         }).start();
     }
@@ -256,6 +297,10 @@ public class ComManager {
     }
 
     public interface OnResponseListener{
-        public void onResponse(JSONObject jsonResponse);
+        void onResponse(JSONObject jsonResponse);
+    }
+
+    public interface OnMoodStocksSearchListener{
+        void onResponse(String irid);
     }
 }

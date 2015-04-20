@@ -3,6 +3,8 @@ package com.android.slyce.socket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+
+import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.Synchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
@@ -33,6 +35,8 @@ public class WSConnection implements
 
     private final String TAG = WSConnection.class.getSimpleName();
 
+    private Context mContext;
+
     private WebSocket mWebSocket;
 
     private Bitmap mBitmap;
@@ -59,14 +63,19 @@ public class WSConnection implements
     private long startDetectionTime = 0;
 
     private boolean isCancelled = false;
+    private boolean mIs2D;
 
-    public WSConnection(Context context, String clientID, OnSlyceRequestListener listener){
+    public WSConnection(Context context, String clientID, boolean is2D, OnSlyceRequestListener listener){
+
+        mContext = context.getApplicationContext();
 
         mixpanel = MixpanelAPI.getInstance(context, Constants.MIXPANEL_TOKEN);
 
         mSynchronizer = new Synchronizer(listener);
 
         mRequestUrl = createRequestUrl(clientID, Utils.getAndroidID(context));
+
+        mIs2D = is2D;
     }
 
     public void setOnTokenListener(OnTokenListener listener){
@@ -75,6 +84,7 @@ public class WSConnection implements
 
     public void connect(final MethodType methodType){
 
+        // Slyce
         AsyncHttpClient client = AsyncHttpClient.getDefaultInstance();
 
         client.websocket(mRequestUrl, null, new AsyncHttpClient.WebSocketConnectCallback() {
@@ -105,13 +115,18 @@ public class WSConnection implements
                     }
 
                     // Ready to perform a request
-                    callMethod(methodType);
+                    callSlyceMethod(methodType);
                 }
             }
         });
+
+        // MoodStocks
+        if(mIs2D){
+            callMoodstocksMethod(methodType);
+        }
     }
 
-    private void callMethod(MethodType type){
+    private void callSlyceMethod(MethodType type){
 
         switch (type){
 
@@ -124,6 +139,37 @@ public class WSConnection implements
             case SEND_IMAGE_URL:
 
                 sendRequestImageUrl(mImageUrl);
+
+                break;
+        }
+    }
+
+    private void callMoodstocksMethod(MethodType type){
+
+        switch (type){
+
+            case SEND_IMAGE:
+
+                ComManager.getInstance().searchMSImageFile(mContext, mBitmap,
+                        new ComManager.OnMoodStocksSearchListener() {
+
+                            @Override
+                            public void onResponse(String irId) {
+                                mSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+                            }
+                });
+
+                break;
+
+            case SEND_IMAGE_URL:
+
+                ComManager.getInstance().seachMSImageURL(mContext, mImageUrl,
+                        new ComManager.OnMoodStocksSearchListener() {
+                            @Override
+                            public void onResponse(String irId) {
+                                mSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+                            }
+                });
 
                 break;
         }
@@ -427,7 +473,7 @@ public class WSConnection implements
 
                 if(!TextUtils.isEmpty(uploadUrl)){
 
-                    Bitmap scaledBitmap = Utils.scaleDown(bitmap, 450);
+                    Bitmap scaledBitmap = Utils.scaleDown(bitmap);
 
                     int responseCode = Utils.uploadBitmapToSlyce(scaledBitmap, uploadUrl);
 

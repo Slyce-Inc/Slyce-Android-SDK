@@ -8,7 +8,7 @@ import org.json.JSONArray;
 public interface OnSlyceRequestListener {
 
     public void onSlyceProgress(long progress, String message, String id);
-    public void on2DRecognition();
+    public void on2DRecognition(String irid, String productInfo);
     public void on3DRecognition(JSONArray products);
     public void onStageLevelFinish(StageMessage message);
     public void onError(String message);

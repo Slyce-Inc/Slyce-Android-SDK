@@ -26,7 +26,7 @@ public class SlyceRequest implements WSConnection.OnTokenListener{
 
         this.slyce = slyce;
 
-        wsConnection = new WSConnection(slyce.getContext() , slyce.getClientID(), listener);
+        wsConnection = new WSConnection(slyce.getContext() , slyce.getClientID(), slyce.is2DSearchEnabled(),listener);
 
         wsConnection.setOnTokenListener(this);
     }

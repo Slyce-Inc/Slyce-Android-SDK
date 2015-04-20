@@ -48,7 +48,9 @@ public class Utils {
         return result;
     }
 
-    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize) {
+    public static Bitmap scaleDown(Bitmap realImage) {
+
+        int maxImageSize = Constants.IMAGE_RESIZE;
 
         float ratio = Math.min(
                 (float) maxImageSize / realImage.getWidth(),
@@ -82,7 +84,7 @@ public class Utils {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
         byte[] bitmapData = bos.toByteArray();
-        ByteArrayInputStream bs = new ByteArrayInputStream(bitmapData);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bitmapData);
 
         try { // open a URL connection to the Servlet
 
@@ -102,19 +104,19 @@ public class Utils {
 
             dos = new DataOutputStream(conn.getOutputStream());
 
-            bytesAvailable = bs.available(); // create a buffer of maximum size
+            bytesAvailable = byteArrayInputStream.available(); // create a buffer of maximum size
 
             bufferSize = Math.min(bytesAvailable, maxBufferSize);
             buffer = new byte[bufferSize];
 
             // read file and write it into form...
-            bytesRead = bs.read(buffer, 0, bufferSize);
+            bytesRead = byteArrayInputStream.read(buffer, 0, bufferSize);
 
             while (bytesRead > 0) {
                 dos.write(buffer, 0, bufferSize);
-                bytesAvailable = bs.available();
+                bytesAvailable = byteArrayInputStream.available();
                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = bs.read(buffer, 0, bufferSize);
+                bytesRead = byteArrayInputStream.read(buffer, 0, bufferSize);
             }
 
             // Responses from the server (code and message)
@@ -129,7 +131,7 @@ public class Utils {
             }
 
             // close the streams //
-            bs.close();
+            byteArrayInputStream.close();
             dos.flush();
             dos.close();
 

@@ -18,6 +18,9 @@ import com.moodstocks.android.Scanner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -189,6 +192,9 @@ public final class Slyce implements Scanner.SyncListener{
                                 }
                             });
                         }
+                    }else{
+
+                        mSharedPrefHelper.setMSEnabled(String.valueOf(Boolean.FALSE));
                     }
 
                     // Set boolean

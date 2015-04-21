@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Button enterUrl;
     private Button uploadImage;
     private Button cancelRequests;
+    private Button cameraActivity;
 
     private TextView acceptTextView;
     private TextView premium;
@@ -79,6 +80,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         enabled2D = (TextView) findViewById(R.id.enabled_2d);
         premium = (TextView) findViewById(R.id.premium);
         results = (TextView) findViewById(R.id.results);
+        cameraActivity = (Button) findViewById(R.id.camera_activity);
 
         results.setTextIsSelectable(true);
 
@@ -86,6 +88,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         enterUrl.setOnClickListener(this);
         acceptTextView.setOnClickListener(this);
         cancelRequests.setOnClickListener(this);
+        cameraActivity.setOnClickListener(this);
 
         clientIdEditText.setOnEditorActionListener(this);
     }
@@ -235,6 +238,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 if(slyceProductsRequestImageUrl != null){
                     slyceProductsRequestImageUrl.cancel();
                 }
+
+                break;
+
+            case R.id.camera_activity:
+
+                startActivity(new Intent(this, CameraActivity.class));
 
                 break;
         }

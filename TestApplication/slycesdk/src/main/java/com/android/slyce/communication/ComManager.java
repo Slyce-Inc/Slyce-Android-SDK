@@ -66,7 +66,7 @@ public class ComManager {
 
                 // Create URL
                 StringBuilder requestURLBuilder = new StringBuilder();
-                requestURLBuilder.append(Constants.POUNCE_BASE_URL).append(Constants.POUNCE_IRID_API).
+                requestURLBuilder.append(Constants.POUNCE_BASE_URL).append(Constants.POUNCE_USERS_SDK_API).
                         append(Constants.POUNCE_CID).append("=").append(clientID);
 
                 // Create request

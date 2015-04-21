@@ -3,9 +3,8 @@ package com.android.slyce.socket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-
 import com.android.slyce.communication.ComManager;
-import com.android.slyce.handler.Synchronizer;
+import com.android.slyce.handler.RequestSynchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.utils.Constants;
@@ -41,7 +40,7 @@ public class WSConnection implements
 
     private Bitmap mBitmap;
 
-    private Synchronizer mSynchronizer;
+    private RequestSynchronizer mRequestSynchronizer;
 
     private String mClientId;
     private String mImageUrl;
@@ -72,7 +71,7 @@ public class WSConnection implements
 
         mixpanel = MixpanelAPI.getInstance(context, Constants.MIXPANEL_TOKEN);
 
-        mSynchronizer = new Synchronizer(listener);
+        mRequestSynchronizer = new RequestSynchronizer(listener);
 
         mRequestUrl = createRequestUrl(clientID, Utils.getAndroidID(context));
 
@@ -99,7 +98,7 @@ public class WSConnection implements
                     StringBuilder error = new StringBuilder();
                     error.append("Message: ").append(ex.getMessage()).append(" Cause: ").append(ex.getCause());
 
-                    mSynchronizer.onError(error.toString());
+                    mRequestSynchronizer.onError(error.toString());
 
                 }else{
 
@@ -186,7 +185,7 @@ public class WSConnection implements
         }
 
         // Notify the host application for basic result
-        mSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+        mRequestSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
 
         // Get extended products results
         ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
@@ -194,7 +193,7 @@ public class WSConnection implements
             public void onExtendedInfo(JSONArray products) {
 
                 // Notify the host application for extended result
-                mSynchronizer.on2DExtendedRecognition(products);
+                mRequestSynchronizer.on2DExtendedRecognition(products);
             }
         });
     }
@@ -279,7 +278,7 @@ public class WSConnection implements
             StringBuilder error = new StringBuilder();
             error.append("Message: ").append(ex.getMessage()).append(" Cause: ").append(ex.getCause());
 
-            mSynchronizer.onError(error.toString());
+            mRequestSynchronizer.onError(error.toString());
         }
     }
 
@@ -337,14 +336,14 @@ public class WSConnection implements
                                     mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
                                     // Notify hosting application that bitmap was uploaded
-                                    mSynchronizer.onStageLevelFinish(OnSlyceRequestListener.StageMessage.BitmapUploaded);
+                                    mRequestSynchronizer.onStageLevelFinish(OnSlyceRequestListener.StageMessage.BitmapUploaded);
 
                                     mWebSocket.send(ticket);
                                     mWebSocket.send(new byte[10]);
 
                                 }else{
                                     // Image was not uploaded
-                                    mSynchronizer.onError("Error on uploading bitmap");
+                                    mRequestSynchronizer.onError("Error on uploading bitmap");
                                 }
                             }
                         });
@@ -389,7 +388,7 @@ public class WSConnection implements
                         searchProfressReport.put(Constants.PROGRESS_VALUE, progress);
                         mixpanel.track(Constants.SEARCH_PROGRESS, searchProfressReport);
 
-                        mSynchronizer.onSlyceProgress(progress, message, token);
+                        mRequestSynchronizer.onSlyceProgress(progress, message, token);
 
                         // Keep sending tickets as long progress != -1
                         ticket = Ticket.createTicket(Constants.RESULTS, Constants.TOKEN, token);
@@ -410,7 +409,7 @@ public class WSConnection implements
                         mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
 
                         // Send an empty products array
-                        mSynchronizer.on3DRecognition(new JSONArray());
+                        mRequestSynchronizer.on3DRecognition(new JSONArray());
                     }
 
                     break;
@@ -431,7 +430,7 @@ public class WSConnection implements
                         mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
 
                         // Send an empty products array
-                        mSynchronizer.on3DRecognition(new JSONArray());
+                        mRequestSynchronizer.on3DRecognition(new JSONArray());
 
                     }else{
 
@@ -464,7 +463,7 @@ public class WSConnection implements
 
                         mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
 
-                        mSynchronizer.on3DRecognition(products);
+                        mRequestSynchronizer.on3DRecognition(products);
                     }
 
                     break;
@@ -479,7 +478,7 @@ public class WSConnection implements
 
                     String error = data.optString(Constants.ERROR);
 
-                    mSynchronizer.onError(error);
+                    mRequestSynchronizer.onError(error);
 
                     break;
             }

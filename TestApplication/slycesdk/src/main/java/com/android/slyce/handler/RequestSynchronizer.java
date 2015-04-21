@@ -8,14 +8,11 @@ import com.android.slyce.models.MoodStocksProgress;
 import com.android.slyce.models.SlyceProgress;
 import org.json.JSONArray;
 
-/**
- * Created by davidsvilem on 3/26/15.
- */
-public class Synchronizer extends Handler {
+public class RequestSynchronizer extends Handler {
 
     private OnSlyceRequestListener mRequestListener;
 
-    public Synchronizer(OnSlyceRequestListener listener){
+    public RequestSynchronizer(OnSlyceRequestListener listener){
         super(Looper.getMainLooper());
         mRequestListener = listener;
     }
@@ -30,10 +27,6 @@ public class Synchronizer extends Handler {
         obtainMessage(2, moodStocksProgress).sendToTarget();
     }
 
-    public void on2DExtendedRecognition(JSONArray products){
-        obtainMessage(6, products).sendToTarget();
-    }
-
     public void on3DRecognition(JSONArray products){
         obtainMessage(3, products).sendToTarget();
     }
@@ -44,6 +37,10 @@ public class Synchronizer extends Handler {
 
     public void onStageLevelFinish(OnSlyceRequestListener.StageMessage message){
         obtainMessage(5, message).sendToTarget();
+    }
+
+    public void on2DExtendedRecognition(JSONArray products){
+        obtainMessage(6, products).sendToTarget();
     }
 
     @Override
@@ -88,9 +85,6 @@ public class Synchronizer extends Handler {
                 mRequestListener.on2DExtendedRecognition((JSONArray) msg.obj);
 
                 break;
-
         }
-
-        super.handleMessage(msg);
     }
 }

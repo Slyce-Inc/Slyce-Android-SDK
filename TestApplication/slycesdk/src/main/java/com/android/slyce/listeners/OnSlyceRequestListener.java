@@ -2,21 +2,16 @@ package com.android.slyce.listeners;
 
 import org.json.JSONArray;
 
-/**
- * Created by davidsvilem on 3/23/15.
- */
 public interface OnSlyceRequestListener {
 
-    public void onSlyceProgress(long progress, String message, String id);
-    public void on2DRecognition(String irid, String productInfo);
-    public void on2DExtendedRecognition(JSONArray products);
-    public void on3DRecognition(JSONArray products);
-    public void onStageLevelFinish(StageMessage message);
-    public void onError(String message);
+    void onSlyceProgress(long progress, String message, String id);
+    void on2DRecognition(String irid, String productInfo);
+    void on2DExtendedRecognition(JSONArray products);
+    void on3DRecognition(JSONArray products);
+    void onStageLevelFinish(StageMessage message);
+    void onError(String message);
 
-    public enum StageMessage{
-
+    enum StageMessage{
         BitmapUploaded,
-
     }
 }

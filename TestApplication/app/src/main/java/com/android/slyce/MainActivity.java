@@ -140,7 +140,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onError(final String message) {
 
-        Toast.makeText(MainActivity.this, "onError: " + message, Toast.LENGTH_LONG).show();
+
 
         progressBar.setVisibility(View.INVISIBLE);
     }

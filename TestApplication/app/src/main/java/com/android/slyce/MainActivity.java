@@ -391,5 +391,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        slyce.close();
+    }
 }

@@ -250,6 +250,7 @@ public final class Slyce implements Scanner.SyncListener{
 
     public void close(){
 
+        // Required by Moodstocks
         if (compatible) {
             try {
                 scanner.close();
@@ -270,17 +271,17 @@ public final class Slyce implements Scanner.SyncListener{
     }
 
     /*
-     * MoodStocks listener
+     * MoodStocks Scanner.SyncListener
      */
     @Override
     public void onSyncStart() {
-        SlyceLog.d("Moodstocks SDK", "Sync will start.");
+        SlyceLog.d(TAG, "Moodstocks Sync will start.");
     }
 
     @Override
     public void onSyncComplete() {
         try {
-            SlyceLog.d("Moodstocks SDK", "Sync succeeded (" + scanner.count() + " images)");
+            SlyceLog.d(TAG, "Moodstocks Sync succeeded (" + scanner.count() + " images)");
         } catch (MoodstocksError e) {
             e.printStackTrace();
         }
@@ -288,12 +289,12 @@ public final class Slyce implements Scanner.SyncListener{
 
     @Override
     public void onSyncFailed(MoodstocksError e) {
-        SlyceLog.d("Moodstocks SDK", "Sync error #" + e.getErrorCode() + ": " + e.getMessage());
+        SlyceLog.d(TAG, "Moodstocks Sync error #" + e.getErrorCode() + ": " + e.getMessage());
     }
 
     @Override
     public void onSyncProgress(int total, int current) {
         int percent = (int) ((float) current / (float) total * 100);
-        SlyceLog.d("Moodstocks SDK", "Sync progressing: " + percent + "%");
+        SlyceLog.d(TAG, "Moodstocks Sync progressing: " + percent + "%");
     }
 }

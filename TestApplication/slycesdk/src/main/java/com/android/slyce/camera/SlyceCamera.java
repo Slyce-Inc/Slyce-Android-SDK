@@ -1,11 +1,8 @@
 package com.android.slyce.camera;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.SurfaceView;
-
 import com.android.slyce.Slyce;
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.CameraSynchronizer;
@@ -16,7 +13,6 @@ import com.moodstocks.android.AutoScannerSession.Listener;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
-import com.moodstocks.android.advanced.ApiSearcher;
 
 import org.json.JSONArray;
 
@@ -29,6 +25,7 @@ public class SlyceCamera implements Listener{
 
     /* MoodStocks */
     private AutoScannerSession session;
+
     private static final int TYPES = Result.Type.IMAGE | Result.Type.QRCODE | Result.Type.EAN13;
 
     /* Hosting Activity */
@@ -58,7 +55,6 @@ public class SlyceCamera implements Listener{
 
         }else{
             // TOOD: start Barcode/QR scanner
-
         }
     }
 
@@ -69,17 +65,27 @@ public class SlyceCamera implements Listener{
     }
 
     public void start() {
-        session.start();
+
+        if(session != null){
+            session.start();
+        }
     }
 
     public void stop() {
-        session.stop();
+
+        if(session != null){
+            session.stop();
+        }
     }
 
     public void snap(){
 
+        // If 2D Enabled snap via Moodstocks
+        // Else snap via Barcode/QR engine
+
     }
 
+    /* Listener */
     @Override
     public void onCameraOpenFailed(Exception e) {
         Log.i(TAG,"onCameraOpenFailed");
@@ -110,4 +116,5 @@ public class SlyceCamera implements Listener{
     public void onWarning(String s) {
         Log.i(TAG,"onWarning");
     }
+
 }

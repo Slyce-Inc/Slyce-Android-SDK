@@ -3,16 +3,25 @@ package com.android.slyce;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import org.json.JSONArray;
 
-public class CameraActivity extends Activity implements OnSlyceCameraListener{
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Random;
+
+public class CameraActivity extends Activity implements OnSlyceCameraListener, View.OnClickListener {
 
     private SlyceCamera slyceCamera;
+    private Button snap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +30,8 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener{
         setContentView(R.layout.activity_camera);
 
         SurfaceView preview = (SurfaceView) findViewById(R.id.preview);
+        snap = (Button) findViewById(R.id.snap);
+        snap.setOnClickListener(this);
 
         Slyce slyce = Slyce.getInstance(this, "YOUR CLIENT ID");
 
@@ -42,8 +53,6 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener{
     /* OnSlyceCameraListener */
     @Override
     public void onBarcodeRecognition(String barcode) {
-
-
 
     }
 
@@ -72,10 +81,25 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener{
     @Override
     public void onSnap(Bitmap bitmap) {
 
+        Toast.makeText(this,
+                "onSnap: " + bitmap.getWidth() + " X " + bitmap.getHeight(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onTap() {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch(v.getId()){
+
+            case R.id.snap:
+
+                slyceCamera.snap();
+
+                break;
+        }
     }
 }

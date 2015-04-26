@@ -1,6 +1,7 @@
 package com.android.slyce.camera;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.SurfaceView;
 import com.android.slyce.Slyce;
@@ -8,11 +9,11 @@ import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.utils.Utils;
-import com.moodstocks.android.AutoScannerSession;
-import com.moodstocks.android.AutoScannerSession.Listener;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
+import com.android.slyce.moodstocks.AutoScannerSession;
+import com.android.slyce.moodstocks.AutoScannerSession.Listener;
 
 import org.json.JSONArray;
 
@@ -82,7 +83,7 @@ public class SlyceCamera implements Listener{
 
         // If 2D Enabled snap via Moodstocks
         // Else snap     via Barcode/QR engine
-
+       session.snap();
     }
 
     /* Listener */
@@ -114,7 +115,13 @@ public class SlyceCamera implements Listener{
 
     @Override
     public void onWarning(String s) {
-        Log.i(TAG,"onWarning");
+        Log.i(TAG, "onWarning");
+    }
+
+    @Override
+    public void onSnap(Bitmap bitmap) {
+        Log.i(TAG, "onSnap");
+        mCameraSynchronizer.onSnap(bitmap);
     }
 
 }

@@ -216,12 +216,7 @@ public class ComManager {
 
                 JSONObject response = performRequest(request);
 
-                String irId = "";
-
-                if(response != null && response.optBoolean(Constants.MS_FOUND)){
-                    irId = response.optString(Constants.MS_ID);
-                }
-                listener.onResponse(irId);
+                handleMSResponse(response, listener);
             }
 
         }).start();
@@ -249,15 +244,36 @@ public class ComManager {
 
                 JSONObject response = Utils.uploadBitmapToMS(url.toString(), scaledBitmap);
 
-                String irId = "";
-
-                if(response != null && response.optBoolean(Constants.MS_FOUND)){
-                    irId = response.optString(Constants.MS_ID);
-                }
-                listener.onResponse(irId);
+                handleMSResponse(response, listener);
 
             }
         }).start();
+    }
+
+    private void handleMSResponse(JSONObject response, OnMoodStocksSearchListener listener){
+        String irId = "";
+
+        if(response == null){
+
+            listener.onResponse(irId, "Moodstocks null response");
+
+        }else{
+
+            if(!response.isNull(Constants.MS_FOUND)){
+
+                if(response.optBoolean(Constants.MS_FOUND)){
+                    irId = response.optString(Constants.MS_ID);
+                    listener.onResponse(irId, "");
+                }else{
+                    listener.onResponse(irId, "Moodstocks not found");
+                }
+
+            }else{
+
+                String error = response.optString(Constants.MS_ERROR);
+                listener.onResponse(irId, error);
+            }
+        }
     }
 
     private JsonObjectRequest createRequest(String url){
@@ -312,7 +328,7 @@ public class ComManager {
     }
 
     public interface OnMoodStocksSearchListener{
-        void onResponse(String irid);
+        void onResponse(String irid, String error);
     }
 
     public interface OnExtendedInfoListener{

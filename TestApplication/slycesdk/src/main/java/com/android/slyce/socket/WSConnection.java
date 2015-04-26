@@ -156,8 +156,8 @@ public class WSConnection implements
                         new ComManager.OnMoodStocksSearchListener() {
 
                             @Override
-                            public void onResponse(String irId) {
-                                handleModdstocksResponse(irId);
+                            public void onResponse(String irId, String error) {
+                                handleMoodstocksResponse(irId, null, error);
                             }
                 });
 
@@ -168,8 +168,8 @@ public class WSConnection implements
                 ComManager.getInstance().seachMSImageURL(mContext, mImageUrl,
                         new ComManager.OnMoodStocksSearchListener() {
                             @Override
-                            public void onResponse(String irId) {
-                                handleModdstocksResponse(irId);
+                            public void onResponse(String irId, String error) {
+                                handleMoodstocksResponse(irId, mImageUrl, error);
                             }
                 });
 
@@ -177,12 +177,39 @@ public class WSConnection implements
         }
     }
 
-    private void handleModdstocksResponse(String irId){
+    private void handleMoodstocksResponse(String irId, String imageUrl, String error){
 
         // Return if irId got back empty or null
         if(TextUtils.isEmpty(irId)){
+
+            // Notify the host application for a 2D search error
+            mRequestSynchronizer.onError(error);
+
+            // Report to MixPanel
+            JSONObject searchError = new JSONObject();
+            try {
+                searchError.put(Constants.DETECTION_TYPE, Constants._2D);
+                searchError.put(Constants.ERROR_MESSAGE, error);
+                mixpanel.track(Constants.SEARCH_ERROR, searchError);
+            } catch (JSONException e){}
+
             return;
         }
+
+        // Report to MixPanel
+        try {
+            JSONObject imageDetectReport = new JSONObject();
+
+            if(imageUrl != null){
+                imageDetectReport.put(Constants.IMAGE_URL, imageUrl);
+            }
+
+            imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
+            imageDetectReport.put(Constants.DATA_IRID, irId);
+
+            mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
+
+        }catch (JSONException e){}
 
         // Notify the host application for basic result
         mRequestSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
@@ -437,7 +464,6 @@ public class WSConnection implements
                         // Report to MixPanel
                         JSONObject imageDetectReport = new JSONObject();
                         imageDetectReport.put(Constants.IMAGE_URL, imageURL);
-                        // TODO: change it according to the type 3D, 2D, UPC, QR
                         imageDetectReport.put(Constants.DETECTION_TYPE, Constants._3D);
 
                         if(!TextUtils.isEmpty(keywords)){

@@ -81,7 +81,7 @@ public class SlyceCamera implements Listener{
     public void snap(){
 
         // If 2D Enabled snap via Moodstocks
-        // Else snap via Barcode/QR engine
+        // Else snap     via Barcode/QR engine
 
     }
 

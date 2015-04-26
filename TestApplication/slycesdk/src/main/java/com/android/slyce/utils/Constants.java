@@ -29,6 +29,7 @@ public class Constants {
     public static final String MS_ECHO_API = "@api.moodstocks.com/v2/echo?success=true";
     public static final String MS_IMAGE_URL = "image_url";
     public static final String MS_FOUND = "found";
+    public static final String MS_ERROR = "error";
     public static final String MS_ID = "id";
 
     /* Image resize value (MoodStocks/Slyce)*/
@@ -60,7 +61,10 @@ public class Constants {
     public static final String SEARCH_PROGRESS = "Search.Progress";
     public static final String DETECTION_TYPE = "detectionType";
     public static final String _3D = "3D";
+    public static final String _2D = "2D";
     public static final String SEARCH_NOT_FOUND = "Search.Not.Found";
+    public static final String SEARCH_ERROR = "Search.Error";
+    public static final String ERROR_MESSAGE = "error";
     public static final String CONTENT = "Content";
     public static final String IMAGE_DETECTED = "Image.Detected";
     public static final String USER_ID = "userID";
@@ -78,6 +82,7 @@ public class Constants {
     public static final String SDK_INIT_SUCCEEDED = "SDK.Init.Succeeded";
     public static final String SDK_INIT_FAILED = "SDK.Init.Failed";
     public static final String TOTAL_DETECTION_TIME = "totalDetectionTime";
+    public static final String DATA_IRID = "irID";
 
     /* Client info */
     public static final String STATUS = "status";

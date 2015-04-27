@@ -4,18 +4,19 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.MoodStocksProgress;
 import com.android.slyce.models.SlyceProgress;
-
+import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
 
 /**
  * Created by davidsvilem on 4/21/15.
  */
 public class CameraSynchronizer extends Handler {
+
+    private final String TAG = CameraSynchronizer.class.getSimpleName();
 
     private OnSlyceCameraListener mCameraListener;
 
@@ -77,19 +78,33 @@ public class CameraSynchronizer extends Handler {
             case 2:
 
                 MoodStocksProgress moodStocksProgress = (MoodStocksProgress) msg.obj;
-                mCameraListener.on2DRecognition(moodStocksProgress.irId, moodStocksProgress.productInfo);
+
+                String irid = moodStocksProgress.irId;
+                String productInfo = moodStocksProgress.productInfo;
+
+                mCameraListener.on2DRecognition(irid, productInfo);
+
+                SlyceLog.i(TAG, "on2DRecognition(" + irid + ", " + productInfo + ")");
 
                 break;
 
             case 3:
 
-                mCameraListener.on2DExtendedRecognition((JSONArray) msg.obj);
+                JSONArray extenedInfo = (JSONArray) msg.obj;
+
+                mCameraListener.on2DExtendedRecognition(extenedInfo);
+
+                SlyceLog.i(TAG, "on2DExtendedRecognition(" + extenedInfo + ")");
 
                 break;
 
             case 4:
 
-                mCameraListener.onError((String) msg.obj);
+                String message = (String) msg.obj;
+
+                mCameraListener.onError(message);
+
+                SlyceLog.i(TAG, "onError(" + message + ")");
 
                 break;
 
@@ -106,19 +121,33 @@ public class CameraSynchronizer extends Handler {
             case 7:
 
                 SlyceProgress slyceProgress = (SlyceProgress) msg.obj;
-                mCameraListener.onSlyceProgress(slyceProgress.progress, slyceProgress.message, slyceProgress.token);
+
+                long progress = slyceProgress.progress;
+                String progressMsg = slyceProgress.message;
+                String token = slyceProgress.token;
+
+                mCameraListener.onSlyceProgress(progress, progressMsg, token);
+
+                SlyceLog.i(TAG, "onSlyceProgress(" + progress + ", " + progressMsg + ", " + token + ")");
 
                 break;
 
             case 8:
 
-                mCameraListener.on3DRecognition((JSONArray) msg.obj);
+                JSONArray products = (JSONArray) msg.obj;
 
+                mCameraListener.on3DRecognition(products);
+
+                SlyceLog.i(TAG, "on3DRecognition(" + products + ")");
                 break;
 
             case 9:
 
-                mCameraListener.onStageLevelFinish((OnSlyceRequestListener.StageMessage) msg.obj);
+                OnSlyceRequestListener.StageMessage stageMsg = (OnSlyceRequestListener.StageMessage) msg.obj;
+
+                mCameraListener.onStageLevelFinish(stageMsg);
+
+                SlyceLog.i(TAG, "onStageLevelFinish(" + stageMsg + ")");
 
                 break;
         }

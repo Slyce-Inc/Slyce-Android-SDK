@@ -164,37 +164,32 @@ public class SlyceCamera extends Handler implements Listener{
                     @Override
                     public void onSlyceProgress(long progress, String message, String id) {
                         mCameraSynchronizer.onSlyceProgress(progress, message, id);
-                        SlyceLog.i(TAG,"onSlyceProgress");
                     }
 
                     @Override
                     public void on2DRecognition(String irid, String productInfo) {
                         mCameraSynchronizer.on2DRecognition(irid, productInfo);
-                        SlyceLog.i(TAG,"on2DRecognition");
                     }
 
                     @Override
                     public void on2DExtendedRecognition(JSONArray products) {
                         mCameraSynchronizer.on2DExtendedRecognition(products);
-                        SlyceLog.i(TAG,"on2DExtendedRecognition");
+
                     }
 
                     @Override
                     public void on3DRecognition(JSONArray products) {
                         mCameraSynchronizer.on3DRecognition(products);
-                        SlyceLog.i(TAG,"on3DRecognition");
                     }
 
                     @Override
                     public void onStageLevelFinish(StageMessage message) {
                         mCameraSynchronizer.onStageLevelFinish(message);
-                        SlyceLog.i(TAG,"onStageLevelFinish");
                     }
 
                     @Override
                     public void onError(String message) {
                         mCameraSynchronizer.onError(message);
-                        SlyceLog.i(TAG,"onError");
                     }
 
                 }, (Bitmap) msg.obj);

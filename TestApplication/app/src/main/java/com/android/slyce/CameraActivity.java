@@ -3,27 +3,19 @@ package com.android.slyce;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-
 import org.json.JSONArray;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Random;
 
 public class CameraActivity extends Activity implements OnSlyceCameraListener, View.OnClickListener {
 
     private SlyceCamera slyceCamera;
     private Button snap;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +30,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         Slyce slyce = Slyce.getInstance(this, "YOUR CLIENT ID");
 
         slyceCamera = new SlyceCamera(this, slyce, preview, this);
+
     }
 
     @Override

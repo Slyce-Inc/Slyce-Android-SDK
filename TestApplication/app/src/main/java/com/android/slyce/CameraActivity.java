@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
+import com.android.slyce.listeners.OnSlyceRequestListener;
+
 import org.json.JSONArray;
 
 import java.io.File;
@@ -70,6 +72,27 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
         Toast.makeText(this,
                 "MoodStocks Extended: " + products, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSlyceProgress(long progress, String message, String token) {
+
+        Toast.makeText(this,
+                "Slyce Progress: " + progress +
+                        "\n" + "Message: " + message +
+                        "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void on3DRecognition(JSONArray products) {
+
+        Toast.makeText(CameraActivity.this, "Found " +  products.length() + " products", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
+
+        Toast.makeText(CameraActivity.this, "Stage Message: " + message, Toast.LENGTH_LONG).show();
     }
 
     @Override

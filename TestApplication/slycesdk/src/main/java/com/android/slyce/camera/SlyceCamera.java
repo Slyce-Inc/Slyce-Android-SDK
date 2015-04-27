@@ -2,12 +2,17 @@ package com.android.slyce.camera;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.SurfaceView;
 import com.android.slyce.Slyce;
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.listeners.OnSlyceCameraListener;
+import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.requests.SlyceProductsRequest;
+import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;
@@ -17,7 +22,7 @@ import com.android.slyce.moodstocks.AutoScannerSession.Listener;
 
 import org.json.JSONArray;
 
-public class SlyceCamera implements Listener{
+public class SlyceCamera extends Handler implements Listener{
 
     private final String TAG = SlyceCamera.class.getSimpleName();
 
@@ -35,6 +40,15 @@ public class SlyceCamera implements Listener{
     /* Client ID*/
     private String mClientId;
 
+    private boolean isContinuousRecognition = true;
+
+    private Slyce mSlyce;
+
+    private static final class SlyceCameraMessage{
+
+        private static final int SEARCH_2D  = 0;
+    }
+
     public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, OnSlyceCameraListener listener){
 
         mActivity = activity;
@@ -42,6 +56,8 @@ public class SlyceCamera implements Listener{
         mClientId = slyce.getClientID();
 
         mCameraSynchronizer = new CameraSynchronizer(listener);
+
+        mSlyce = slyce;
 
         // If 2D Enabled -> MoodStocks automatic scanner
         // Else -> Barcode/QR engine scanner
@@ -60,9 +76,7 @@ public class SlyceCamera implements Listener{
     }
 
     public void setContinuousRecognition(boolean value){
-
-        // TODO: ask Nathan why this value is not at the C'tor, otherwise the app developer can change it at runtime
-
+        isContinuousRecognition = value;
     }
 
     public void start() {
@@ -83,7 +97,13 @@ public class SlyceCamera implements Listener{
 
         // If 2D Enabled snap via Moodstocks
         // Else snap     via Barcode/QR engine
-       session.snap();
+        if(session != null){
+            // Snap via Moodstocks
+            session.snap();
+        }else{
+            // Snap via Barcode/QR engine
+
+        }
     }
 
     /* Listener */
@@ -99,18 +119,21 @@ public class SlyceCamera implements Listener{
 
         session.resume();
 
-        // Notify the host application for basic result
-        mCameraSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+        if(isContinuousRecognition){
 
-        // Get extended products results
-        ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
-            @Override
-            public void onExtendedInfo(JSONArray products) {
+            // Notify the host application for basic result
+            mCameraSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
 
-                // Notify the host application for extended result
-                mCameraSynchronizer.on2DExtendedRecognition(products);
-            }
-        });
+            // Get extended products results
+            ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
+                @Override
+                public void onExtendedInfo(JSONArray products) {
+
+                    // Notify the host application for extended result
+                    mCameraSynchronizer.on2DExtendedRecognition(products);
+                }
+            });
+        }
     }
 
     @Override
@@ -121,7 +144,67 @@ public class SlyceCamera implements Listener{
     @Override
     public void onSnap(Bitmap bitmap) {
         Log.i(TAG, "onSnap");
+
+        // Notify the host app the taken bitmap
         mCameraSynchronizer.onSnap(bitmap);
+
+        // Start search 2D
+        obtainMessage(SlyceCameraMessage.SEARCH_2D, bitmap).sendToTarget();
     }
 
+    @Override
+    public void handleMessage(Message msg) {
+
+        switch(msg.what){
+
+            case SlyceCameraMessage.SEARCH_2D:
+
+                // Slyce + Moodstocks search
+                SlyceProductsRequest request = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
+                    @Override
+                    public void onSlyceProgress(long progress, String message, String id) {
+                        mCameraSynchronizer.onSlyceProgress(progress, message, id);
+                        SlyceLog.i(TAG,"onSlyceProgress");
+                    }
+
+                    @Override
+                    public void on2DRecognition(String irid, String productInfo) {
+                        mCameraSynchronizer.on2DRecognition(irid, productInfo);
+                        SlyceLog.i(TAG,"on2DRecognition");
+                    }
+
+                    @Override
+                    public void on2DExtendedRecognition(JSONArray products) {
+                        mCameraSynchronizer.on2DExtendedRecognition(products);
+                        SlyceLog.i(TAG,"on2DExtendedRecognition");
+                    }
+
+                    @Override
+                    public void on3DRecognition(JSONArray products) {
+                        mCameraSynchronizer.on3DRecognition(products);
+                        SlyceLog.i(TAG,"on3DRecognition");
+                    }
+
+                    @Override
+                    public void onStageLevelFinish(StageMessage message) {
+                        mCameraSynchronizer.onStageLevelFinish(message);
+                        SlyceLog.i(TAG,"onStageLevelFinish");
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mCameraSynchronizer.onError(message);
+                        SlyceLog.i(TAG,"onError");
+                    }
+
+                }, (Bitmap) msg.obj);
+
+                request.execute();
+
+                break;
+
+            default:
+                break;
+        }
+    }
 }

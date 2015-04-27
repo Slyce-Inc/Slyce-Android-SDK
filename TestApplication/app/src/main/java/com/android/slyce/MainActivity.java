@@ -97,8 +97,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onSlyceProgress(final long progress, final String message, String token) {
 
-        String requestToken = slyceProductsRequestImageUrl.getToken();
-
         Toast.makeText(this,
                 "Slyce Progress: " + progress +
                         "\n" + "Message: " + message +
@@ -140,7 +138,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onError(final String message) {
 
-
+        Toast.makeText(MainActivity.this, "onError: " + message, Toast.LENGTH_LONG).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -394,6 +392,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        slyce.close();
+        if(slyce != null){
+            slyce.close();
+        }
     }
 }

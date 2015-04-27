@@ -6,7 +6,9 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.android.slyce.listeners.OnSlyceCameraListener;
+import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.MoodStocksProgress;
+import com.android.slyce.models.SlyceProgress;
 
 import org.json.JSONArray;
 
@@ -48,6 +50,19 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(6).sendToTarget();
     }
 
+    public void onSlyceProgress(long progress, String message, String token){
+        SlyceProgress slyceProgress = new SlyceProgress(progress, message, token);
+        obtainMessage(7, slyceProgress).sendToTarget();
+    }
+
+    public void on3DRecognition(JSONArray products){
+        obtainMessage(8, products).sendToTarget();
+    }
+
+    public void onStageLevelFinish(OnSlyceRequestListener.StageMessage message){
+        obtainMessage(9, message).sendToTarget();
+    }
+
     @Override
     public void handleMessage(Message msg) {
 
@@ -87,6 +102,23 @@ public class CameraSynchronizer extends Handler {
             case 6:
 
                 mCameraListener.onTap();
+
+            case 7:
+
+                SlyceProgress slyceProgress = (SlyceProgress) msg.obj;
+                mCameraListener.onSlyceProgress(slyceProgress.progress, slyceProgress.message, slyceProgress.token);
+
+                break;
+
+            case 8:
+
+                mCameraListener.on3DRecognition((JSONArray) msg.obj);
+
+                break;
+
+            case 9:
+
+                mCameraListener.onStageLevelFinish((OnSlyceRequestListener.StageMessage) msg.obj);
 
                 break;
         }

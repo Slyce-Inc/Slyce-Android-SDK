@@ -47,51 +47,53 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
     /* OnSlyceCameraListener */
     @Override
-    public void onBarcodeRecognition(String barcode) {
+    public void onCameraBarcodeRecognition(String barcode) {
 
+        Toast.makeText(this,
+                "onCameraBarcodeRecognition: " + barcode, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void on2DRecognition(String irId, String productInfo) {
+    public void onCamera2DRecognition(String irId, String productInfo) {
 
         Toast.makeText(this,
-                "MoodStocks Progress: " + irId +
+                "onCamera2DRecognition: " + irId +
                         "\n" + "Message: " + productInfo, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
-    public void on2DExtendedRecognition(JSONArray products) {
+    public void onCamera2DExtendedRecognition(JSONArray products) {
 
         Toast.makeText(this,
-                "MoodStocks Extended: " + products, Toast.LENGTH_LONG).show();
+                "onCamera2DExtendedRecognition: " + products, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onSlyceProgress(long progress, String message, String token) {
+    public void onCameraSlyceProgress(long progress, String message, String token) {
 
         Toast.makeText(this,
-                "Slyce Progress: " + progress +
+                "onCameraSlyceProgress: " + progress +
                         "\n" + "Message: " + message +
                         "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void on3DRecognition(JSONArray products) {
+    public void onCamera3DRecognition(JSONArray products) {
 
-        Toast.makeText(CameraActivity.this, "Found " +  products.length() + " products", Toast.LENGTH_LONG).show();
+        Toast.makeText(CameraActivity.this, "onCamera3DRecognition: " +  products.length() + " products", Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
+    public void onCameraStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
 
-        Toast.makeText(CameraActivity.this, "Stage Message: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(CameraActivity.this, "onCameraStageLevelFinish: " + message, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onError(String message) {
+    public void onSlyceCameraError(String message) {
 
-        Toast.makeText(CameraActivity.this, "onError: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(CameraActivity.this, "onSlyceCameraError: " + message, Toast.LENGTH_LONG).show();
     }
 
     @Override

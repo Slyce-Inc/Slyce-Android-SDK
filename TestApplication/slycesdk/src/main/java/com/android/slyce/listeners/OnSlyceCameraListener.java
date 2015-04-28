@@ -10,18 +10,18 @@ import org.json.JSONArray;
 public interface OnSlyceCameraListener {
 
     /* Standart/Premium */
-    void onBarcodeRecognition(String barcode);
+    void onCameraBarcodeRecognition(String barcode);
 
     /* Premium */
-    void on2DRecognition(String irId, String productInfo);
-    void on2DExtendedRecognition(JSONArray products);
+    void onCamera2DRecognition(String irId, String productInfo);
+    void onCamera2DExtendedRecognition(JSONArray products);
 
-    void onSlyceProgress(long progress, String message, String id);
-    void on3DRecognition(JSONArray products);
-    void onStageLevelFinish(OnSlyceRequestListener.StageMessage message);
+    void onCameraSlyceProgress(long progress, String message, String id);
+    void onCamera3DRecognition(JSONArray products);
+    void onCameraStageLevelFinish(OnSlyceRequestListener.StageMessage message);
 
     /* Error */
-    void onError(String message);
+    void onSlyceCameraError(String message);
 
     /* Pass the Bitmap to host application */
     void onSnap(Bitmap bitmap);

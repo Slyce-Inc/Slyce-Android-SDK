@@ -12,7 +12,6 @@ import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
-import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;

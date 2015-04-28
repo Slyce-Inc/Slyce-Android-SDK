@@ -71,7 +71,7 @@ public class CameraSynchronizer extends Handler {
 
             case 1:
 
-                mCameraListener.onBarcodeRecognition((String) msg.obj);
+                mCameraListener.onCameraBarcodeRecognition((String) msg.obj);
 
                 break;
 
@@ -82,9 +82,9 @@ public class CameraSynchronizer extends Handler {
                 String irid = moodStocksProgress.irId;
                 String productInfo = moodStocksProgress.productInfo;
 
-                mCameraListener.on2DRecognition(irid, productInfo);
+                mCameraListener.onCamera2DRecognition(irid, productInfo);
 
-                SlyceLog.i(TAG, "on2DRecognition(" + irid + ", " + productInfo + ")");
+                SlyceLog.i(TAG, "onCamera2DRecognition(" + irid + ", " + productInfo + ")");
 
                 break;
 
@@ -92,9 +92,9 @@ public class CameraSynchronizer extends Handler {
 
                 JSONArray extenedInfo = (JSONArray) msg.obj;
 
-                mCameraListener.on2DExtendedRecognition(extenedInfo);
+                mCameraListener.onCamera2DExtendedRecognition(extenedInfo);
 
-                SlyceLog.i(TAG, "on2DExtendedRecognition(" + extenedInfo + ")");
+                SlyceLog.i(TAG, "onCamera2DExtendedRecognition(" + extenedInfo + ")");
 
                 break;
 
@@ -102,9 +102,9 @@ public class CameraSynchronizer extends Handler {
 
                 String message = (String) msg.obj;
 
-                mCameraListener.onError(message);
+                mCameraListener.onSlyceCameraError(message);
 
-                SlyceLog.i(TAG, "onError(" + message + ")");
+                SlyceLog.i(TAG, "onSlyceCameraError(" + message + ")");
 
                 break;
 
@@ -112,11 +112,15 @@ public class CameraSynchronizer extends Handler {
 
                 mCameraListener.onSnap((Bitmap) msg.obj);
 
+                SlyceLog.i(TAG, "onSnap()");
+
                 break;
 
             case 6:
 
                 mCameraListener.onTap();
+
+                SlyceLog.i(TAG, "onTap()");
 
             case 7:
 
@@ -126,9 +130,9 @@ public class CameraSynchronizer extends Handler {
                 String progressMsg = slyceProgress.message;
                 String token = slyceProgress.token;
 
-                mCameraListener.onSlyceProgress(progress, progressMsg, token);
+                mCameraListener.onCameraSlyceProgress(progress, progressMsg, token);
 
-                SlyceLog.i(TAG, "onSlyceProgress(" + progress + ", " + progressMsg + ", " + token + ")");
+                SlyceLog.i(TAG, "onCameraSlyceProgress(" + progress + ", " + progressMsg + ", " + token + ")");
 
                 break;
 
@@ -136,18 +140,18 @@ public class CameraSynchronizer extends Handler {
 
                 JSONArray products = (JSONArray) msg.obj;
 
-                mCameraListener.on3DRecognition(products);
+                mCameraListener.onCamera3DRecognition(products);
 
-                SlyceLog.i(TAG, "on3DRecognition(" + products + ")");
+                SlyceLog.i(TAG, "onCamera3DRecognition(" + products + ")");
                 break;
 
             case 9:
 
                 OnSlyceRequestListener.StageMessage stageMsg = (OnSlyceRequestListener.StageMessage) msg.obj;
 
-                mCameraListener.onStageLevelFinish(stageMsg);
+                mCameraListener.onCameraStageLevelFinish(stageMsg);
 
-                SlyceLog.i(TAG, "onStageLevelFinish(" + stageMsg + ")");
+                SlyceLog.i(TAG, "onCameraStageLevelFinish(" + stageMsg + ")");
 
                 break;
         }

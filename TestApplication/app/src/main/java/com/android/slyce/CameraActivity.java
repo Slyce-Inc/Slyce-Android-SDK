@@ -3,19 +3,27 @@ package com.android.slyce;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import org.json.JSONArray;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Random;
+
 public class CameraActivity extends Activity implements OnSlyceCameraListener, View.OnClickListener {
 
     private SlyceCamera slyceCamera;
     private Button snap;
+
+    private ProgressBar snapProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,8 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         SurfaceView preview = (SurfaceView) findViewById(R.id.preview);
         snap = (Button) findViewById(R.id.snap);
         snap.setOnClickListener(this);
+
+        snapProgress = (ProgressBar) findViewById(R.id.snap_progress);
 
         Slyce slyce = Slyce.getInstance(this, "YOUR CLIENT ID");
 
@@ -99,6 +109,8 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     @Override
     public void onSnap(Bitmap bitmap) {
 
+        snapProgress.setVisibility(View.INVISIBLE);
+
         Toast.makeText(this,
                 "onSnap: " + bitmap.getWidth() + " X " + bitmap.getHeight(), Toast.LENGTH_LONG).show();
     }
@@ -116,8 +128,38 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
             case R.id.snap:
 
                 slyceCamera.snap();
+                snapProgress.setVisibility(View.VISIBLE);
 
                 break;
         }
+    }
+
+    public static String[] saveImage(Bitmap finalBitmap) {
+
+        String[] data = new String[2];
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-" + n + ".jpg";
+        File file = new File(myDir, fname);
+        if (file.exists()) file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        data[0] = fname;
+        data[1] = file.getPath();
+
+        return data;
     }
 }

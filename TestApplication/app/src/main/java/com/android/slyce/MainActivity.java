@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -27,9 +28,13 @@ import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
+
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnSlyceRequestListener, TextView.OnEditorActionListener {
 
@@ -396,4 +401,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             slyce.close();
         }
     }
+
+
+
 }

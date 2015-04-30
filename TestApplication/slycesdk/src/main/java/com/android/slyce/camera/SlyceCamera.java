@@ -12,7 +12,9 @@ import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
+import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.Utils;
+import com.android.slyce.zbar.BarcodeManager;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
@@ -21,7 +23,7 @@ import com.android.slyce.moodstocks.AutoScannerSession.Listener;
 
 import org.json.JSONArray;
 
-public class SlyceCamera extends Handler implements Listener{
+public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnBarcodeListener{
 
     private final String TAG = SlyceCamera.class.getSimpleName();
 
@@ -43,6 +45,9 @@ public class SlyceCamera extends Handler implements Listener{
 
     private Slyce mSlyce;
 
+    /* Barcode/QR scanner engine */
+    private BarcodeManager barcodeManager;
+
     private static final class SlyceCameraMessage{
 
         private static final int SEARCH_2D  = 0;
@@ -62,6 +67,7 @@ public class SlyceCamera extends Handler implements Listener{
         // Else -> Barcode/QR engine scanner
         if(slyce.is2DSearchEnabled()){
 
+            // Start MoodStocks detection
             try {
                 session = new AutoScannerSession(activity, Scanner.get(), this, preview);
                 session.setResultTypes(TYPES);
@@ -70,7 +76,9 @@ public class SlyceCamera extends Handler implements Listener{
             }
 
         }else{
-            // TOOD: start Barcode/QR scanner
+
+            // Start Barcode/QR scanner
+            barcodeManager = new BarcodeManager(preview, this);
         }
     }
 
@@ -90,6 +98,10 @@ public class SlyceCamera extends Handler implements Listener{
         if(session != null){
             session.stop();
         }
+
+        if(barcodeManager != null){
+            barcodeManager.pause();
+        }
     }
 
     public void snap(){
@@ -101,9 +113,38 @@ public class SlyceCamera extends Handler implements Listener{
             session.snap();
         }else{
             // Snap via Barcode/QR engine
-
+            barcodeManager.snap();
         }
     }
+
+    /* Barcode engine listener */
+    @Override
+    public void onBarcodeResult(String result) {
+        Log.i(TAG, "onBarcodeResult");
+
+        if(isContinuousRecognition){
+
+            // Resume scan after 2 seconds
+            new  Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    barcodeManager.resumeScan();
+                }
+            }, Constants.BARCODE_SCAN_DELAY);
+
+            mCameraSynchronizer.onBarcodeRecognition(result);
+        }
+    }
+
+    @Override
+    public void onBarcodeSnap(Bitmap bitmap) {
+        Log.i(TAG, "onBarcodeSnap");
+
+        // Notify the host app the taken bitmap
+        mCameraSynchronizer.onSnap(bitmap);
+    }
+
+    /* */
 
     /* Listener */
     @Override
@@ -150,6 +191,7 @@ public class SlyceCamera extends Handler implements Listener{
         // Start search 2D
         obtainMessage(SlyceCameraMessage.SEARCH_2D, bitmap).sendToTarget();
     }
+    /* */
 
     @Override
     public void handleMessage(Message msg) {

@@ -115,6 +115,8 @@ public class Constants {
     public static final String TICKET_CREATION_FAILED = "ticketCreationFailed";
     public static final String ERROR = "error";
 
+    /* Barcode */
+    public static final int BARCODE_SCAN_DELAY = 2000;
 
 
 

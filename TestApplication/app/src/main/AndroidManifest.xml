@@ -31,7 +31,6 @@
             android:configChanges="orientation|screenSize">
 
         </activity>
-
     </application>
 
 </manifest>

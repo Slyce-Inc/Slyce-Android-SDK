@@ -77,7 +77,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
         }else{
 
             // Start Barcode/QR scanner
-            barcodeManager = new BarcodeManager(preview, this);
+            barcodeManager = new BarcodeManager(activity, preview, this);
         }
     }
 
@@ -90,6 +90,10 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
         if(session != null){
             session.start();
         }
+
+        if(barcodeManager != null){
+            barcodeManager.start();
+        }
     }
 
     public void stop() {
@@ -99,14 +103,15 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
         }
 
         if(barcodeManager != null){
-            barcodeManager.pause();
+//            barcodeManager.pause();
+            barcodeManager.stop();
         }
     }
 
     public void snap(){
 
         // If 2D Enabled snap via Moodstocks
-        // Else snap     via Barcode/QR engine
+        // Else snap  via Barcode/QR engine
         if(session != null){
             // Snap via Moodstocks
             session.snap();
@@ -147,7 +152,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
         new  Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                barcodeManager.resumeScan();
+                barcodeManager.resume();
 
             }
         }, Constants.AUTO_SCAN_DELAY);
@@ -168,7 +173,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
     /* Listener */
     @Override
     public void onCameraOpenFailed(Exception e) {
-        Log.i(TAG,"onCameraOpenFailed");
+        Log.i(TAG, "onCameraOpenFailed");
     }
 
     @Override

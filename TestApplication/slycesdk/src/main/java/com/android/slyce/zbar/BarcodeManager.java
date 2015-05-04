@@ -6,6 +6,7 @@
  */
 package com.android.slyce.zbar;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
@@ -18,7 +19,11 @@ import android.os.Handler;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
+import com.android.slyce.moodstocks.CameraFrame;
+import com.android.slyce.moodstocks.CameraManager;
+import com.moodstocks.android.Result;
 import com.moodstocks.android.advanced.Tools;
+import com.moodstocks.android.core.Loader;
 
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
@@ -32,16 +37,9 @@ import java.io.FileOutputStream;
 
 /* Import ZBar Class files */
 
-public class BarcodeManager
-{
-    private Camera mCamera;
-    private CameraPreview mPreview;
-    private Handler autoFocusHandler;
+public class BarcodeManager implements CameraManager.Listener {
 
     ImageScanner scanner;
-
-    private boolean barcodeScanned = false;
-    private boolean previewing = true;
 
     /* Notify SlyceCamera on barcode scan result */
     private OnBarcodeListener listener;
@@ -49,139 +47,102 @@ public class BarcodeManager
     /* */
     private boolean isSnap = false;
 
-    private boolean isFlashOn = false;
+    private CameraManager cameraManager;
+
+    private boolean started = false;
+
+    private boolean paused = false;
 
     static {
         System.loadLibrary("iconv");
-    } 
+    }
 
-    public BarcodeManager(SurfaceView preview, OnBarcodeListener listener) {
+    static {
+        Loader.load();
+    }
+
+    public BarcodeManager(Activity parent, SurfaceView preview, OnBarcodeListener listener) {
 
         this.listener = listener;
-
-        autoFocusHandler = new Handler();
-        mCamera = getCameraInstance();
 
         /* Instance barcode scanner */
         scanner = new ImageScanner();
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
 
-        mPreview = new CameraPreview(mCamera, previewCb, autoFocusCB, preview);
-    }
-
-    public void pause() {
-        releaseCamera();
-    }
-
-    /** A safe way to get an instance of the Camera object. */
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open();
-        } catch (Exception e){
-        }
-        return c;
-    }
-
-    private void releaseCamera() {
-        if (mCamera != null) {
-            previewing = false;
-            mCamera.setPreviewCallback(null);
-            mCamera.release();
-            mCamera = null;
-        }
-    }
-
-    private Runnable doAutoFocus = new Runnable() {
-            public void run() {
-                if (previewing)
-                    mCamera.autoFocus(autoFocusCB);
-            }
-        };
-
-    PreviewCallback previewCb = new PreviewCallback() {
-
-            public void onPreviewFrame(byte[] data, Camera camera) {
-
-                Camera.Parameters parameters = camera.getParameters();
-                Size size = parameters.getPreviewSize();
-
-                Image barcode = new Image(size.width, size.height, "Y800");
-                barcode.setData(data);
-
-                int result = scanner.scanImage(barcode);
-                
-                if (result != 0) {
-                    previewing = false;
-                    mCamera.setPreviewCallback(null);
-                    mCamera.stopPreview();
-                    
-                    SymbolSet syms = scanner.getResults();
-
-                    for (Symbol sym : syms) {
-                        String barcodeResult = sym.getData();
-                        barcodeScanned = true;
-
-                        listener.onBarcodeResult(barcodeResult);
-                    }
-                }
-
-                if(isSnap) {
-                    isSnap = false;
-                    Bitmap bitmap = createBitmap(data, camera);
-                    listener.onBarcodeSnap(bitmap);
-                }
-            }
-        };
-
-    // Mimic continuous auto-focusing
-    AutoFocusCallback autoFocusCB = new AutoFocusCallback() {
-            public void onAutoFocus(boolean success, Camera camera) {
-                autoFocusHandler.postDelayed(doAutoFocus, 1000);
-            }
-        };
-
-    public void resumeScan(){
-        if (barcodeScanned) {
-            barcodeScanned = false;
-            mCamera.setPreviewCallback(previewCb);
-            mCamera.startPreview();
-            previewing = true;
-            mCamera.autoFocus(autoFocusCB);
-        }
-    }
-
-    private Bitmap createBitmap(byte[] data, Camera camera){
-
-        Camera.Parameters parameters = camera.getParameters();
-        Size size = parameters.getPreviewSize();
-
-        Bitmap query = Tools.convertNV21ToBitmap(data, size.width, size.height, 90);
-
-        return query;
+        this.cameraManager = new CameraManager(parent, this, preview);
     }
 
     public void snap(){
         isSnap = true;
     }
 
+    public void start() {
+        // TODO: expose front/back choice?
+        this.cameraManager.start(true, true);
+        this.started = true;
+    }
+
+    public void stop() {
+        this.started = false;
+        this.cameraManager.stop();
+    }
+
+    public void resume() {
+        this.paused = false;
+    }
+
+    public void pause() {
+        this.paused = true;
+    }
+
     public void turnFlash(){
+        cameraManager.turnFlash();
+    }
 
-        Camera.Parameters params = mCamera.getParameters();
+    /*
+     *  CameraManager.Listener call backs
+     */
+    @Override
+    public boolean isListening() {
+        return true;
+    }
 
-        if(isFlashOn){
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-            isFlashOn = false;
+    @Override
+    public void onCameraOpenException(Exception e) {
 
-        }else{
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-            isFlashOn = true;
+    }
+
+    @Override
+    public void onNewFrameInBackground(CameraFrame f) {
+
+        Image barcode = new Image(f.size.width, f.size.height, "Y800");
+        barcode.setData(f.data);
+
+        int result = scanner.scanImage(barcode);
+
+        if (result != 0) {
+
+            SymbolSet syms = scanner.getResults();
+
+            for (Symbol sym : syms) {
+                String barcodeResult = sym.getData();
+
+                listener.onBarcodeResult(barcodeResult);
+            }
         }
 
-        params.getFlashMode();
-        mCamera.setParameters(params);
+        if(isSnap) {
+            isSnap = false;
+            Bitmap query = Tools.convertNV21ToBitmap(f.data, f.size.width, f.size.height, 90);
+            listener.onBarcodeSnap(query);
+        }
+
+        f.release();
     }
+    /*
+     *
+     */
 
     public interface OnBarcodeListener{
         void onBarcodeResult(String result);

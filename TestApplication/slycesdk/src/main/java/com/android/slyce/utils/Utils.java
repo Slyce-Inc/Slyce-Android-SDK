@@ -6,10 +6,17 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
 import org.json.JSONObject;
 
@@ -346,6 +353,45 @@ public class Utils {
         }
 
         return deviceType;
+    }
+
+    public static void getGoogleAdvertisingID(final Context context, final CallBack listener){
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                AdvertisingIdClient.Info adInfo = null;
+                try {
+                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
+
+                } catch (IOException e) {
+                    // Unrecoverable error connecting to Google Play services (e.g.,
+                    // the old version of the service doesn't support getting AdvertisingId).
+                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // Google Play services is not available entirely.
+                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
+                } catch (GooglePlayServicesRepairableException e) {
+                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
+                }
+                final String id = adInfo.getId();
+                final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onReady(id);
+                    }
+                });
+            }
+
+        }).start();
+    }
+
+    public interface CallBack{
+        void onReady(String value);
     }
 }
 

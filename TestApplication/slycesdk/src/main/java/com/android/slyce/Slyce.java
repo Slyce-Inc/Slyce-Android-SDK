@@ -84,7 +84,7 @@ public final class Slyce implements Scanner.SyncListener{
 
         try {
 
-            JSONObject peopleAnalytics = new JSONObject();
+            final JSONObject peopleAnalytics = new JSONObject();
 
             mixpanel.getPeople().identify(mixpanel.getDistinctId());
 
@@ -98,11 +98,23 @@ public final class Slyce implements Scanner.SyncListener{
             peopleAnalytics.put(Constants.MP_SDK_VERSION, Constants.SDK_VERSION);
             peopleAnalytics.put(Constants.CREATED, created);
 
-            // Make it user profile
-            mixpanel.getPeople().set(peopleAnalytics);
 
-            // Make it super property
-            mixpanel.registerSuperProperties(peopleAnalytics);
+            // Get Google Advertising ID
+            Utils.getGoogleAdvertisingID(context, new Utils.CallBack() {
+                @Override
+                public void onReady(String value) {
+
+                    try {
+                        peopleAnalytics.put(Constants.GOOGLE_ADVERTISING_ID, value);
+                    } catch (JSONException e) {}
+
+                    // Make it user profile
+                    mixpanel.getPeople().set(peopleAnalytics);
+
+                    // Make it super property
+                    mixpanel.registerSuperProperties(peopleAnalytics);
+                }
+            });
 
             // Report time stamp (one shot event)
             JSONObject createdJson = new JSONObject();

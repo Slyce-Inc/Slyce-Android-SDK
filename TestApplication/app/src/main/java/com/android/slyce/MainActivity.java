@@ -365,15 +365,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     return;
                 }
 
-                JSONObject options = null;
-                try {
-                    options = new JSONObject();
-                    options.put( "storeID","2811");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl, options);
+                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl);
                 slyceProductsRequestImageUrl.execute();
 
                 progressBar.setVisibility(View.VISIBLE);

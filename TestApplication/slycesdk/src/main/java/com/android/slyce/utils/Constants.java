@@ -83,6 +83,7 @@ public class Constants {
     public static final String SDK_INIT_FAILED = "SDK.Init.Failed";
     public static final String TOTAL_DETECTION_TIME = "totalDetectionTime";
     public static final String DATA_IRID = "irID";
+    public static final String GOOGLE_ADVERTISING_ID = "GoogleAdvertisingID";
 
     /* Client info */
     public static final String STATUS = "status";

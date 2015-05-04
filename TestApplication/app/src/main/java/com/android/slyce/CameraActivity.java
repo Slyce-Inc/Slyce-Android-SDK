@@ -44,7 +44,6 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         Slyce slyce = Slyce.getInstance(this, "YOUR CLIENT ID");
 
         slyceCamera = new SlyceCamera(this, slyce, preview, this);
-
     }
 
     @Override
@@ -142,34 +141,5 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
                 break;
         }
-    }
-
-    public static String[] saveImage(Bitmap finalBitmap) {
-
-        String[] data = new String[2];
-
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/saved_images");
-        myDir.mkdirs();
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
-        File file = new File(myDir, fname);
-        if (file.exists()) file.delete();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        data[0] = fname;
-        data[1] = file.getPath();
-
-        return data;
     }
 }

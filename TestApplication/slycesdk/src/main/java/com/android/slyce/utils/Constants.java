@@ -6,9 +6,9 @@ package com.android.slyce.utils;
 public class Constants {
 
     /* SDK version*/
-    public static final String SDK_VERSION = "1.7";
+    public static final String SDK_VERSION = "1.8";
 
-    public static final boolean ShouldLog = true;
+    public static final boolean ShouldLog = false;
 
     /* Base URL */
 //    public static final String WS_URL = "wss://staging-foundation.slyceapp.com/api/v1/stream?";

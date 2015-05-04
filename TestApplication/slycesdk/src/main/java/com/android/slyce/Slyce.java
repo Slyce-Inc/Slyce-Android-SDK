@@ -98,7 +98,6 @@ public final class Slyce implements Scanner.SyncListener{
             peopleAnalytics.put(Constants.MP_SDK_VERSION, Constants.SDK_VERSION);
             peopleAnalytics.put(Constants.CREATED, created);
 
-
             // Get Google Advertising ID
             Utils.getGoogleAdvertisingID(context, new Utils.CallBack() {
                 @Override

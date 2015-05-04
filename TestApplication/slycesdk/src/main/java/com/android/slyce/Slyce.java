@@ -271,7 +271,6 @@ public final class Slyce implements Scanner.SyncListener{
                 e.printStackTrace();
             }
         }
-
     }
 
     /**

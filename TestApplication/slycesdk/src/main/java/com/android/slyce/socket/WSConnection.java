@@ -65,6 +65,8 @@ public class WSConnection implements
     private boolean isCancelled = false;
     private boolean mIs2D;
 
+    private JSONObject mOptions;
+
     public WSConnection(Context context, String clientID, boolean is2D, OnSlyceRequestListener listener){
 
         mContext = context.getApplicationContext();
@@ -159,7 +161,7 @@ public class WSConnection implements
                             public void onResponse(String irId, String error) {
                                 handleMoodstocksResponse(irId, null, error);
                             }
-                });
+                        });
 
                 break;
 
@@ -171,7 +173,7 @@ public class WSConnection implements
                             public void onResponse(String irId, String error) {
                                 handleMoodstocksResponse(irId, mImageUrl, error);
                             }
-                });
+                        });
 
                 break;
         }
@@ -227,7 +229,7 @@ public class WSConnection implements
 
     public void sendRequestImageUrl(String imageUrl){
 
-        String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.IMAGE_URL, imageUrl);
+        String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.IMAGE_URL, imageUrl, mOptions);
 
         mWebSocket.send(ticket);
 
@@ -238,7 +240,7 @@ public class WSConnection implements
 
         mBitmap = bitmap;
 
-        String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.TICKET_TYPE, Constants.PRODUCT_SEARCH);
+        String ticket = Ticket.createTicket(Constants.CREATE_TICKET, Constants.TICKET_TYPE, Constants.PRODUCT_SEARCH, mOptions);
 
         mWebSocket.send(ticket);
 
@@ -247,6 +249,10 @@ public class WSConnection implements
 
     public void setBitmap(Bitmap bitmap){
         mBitmap = bitmap;
+    }
+
+    public void setOptions(JSONObject options){
+        mOptions = options;
     }
 
     public void setImageUrl(String imageUrl){
@@ -338,7 +344,7 @@ public class WSConnection implements
                     mixpanel.registerSuperProperties(props);
 
                     // Create ticket
-                    ticket = Ticket.createTicket(Constants.IMAGE_UPLOADED, Constants.TOKEN, token);
+                    ticket = Ticket.createTicket(Constants.IMAGE_UPLOADED, Constants.TOKEN, token, null);
 
                     // Image destination URL
                     String uploadUrl = data.optString(Constants.UPLOAD_URL);
@@ -418,7 +424,7 @@ public class WSConnection implements
                         mRequestSynchronizer.onSlyceProgress(progress, message, token);
 
                         // Keep sending tickets as long progress != -1
-                        ticket = Ticket.createTicket(Constants.RESULTS, Constants.TOKEN, token);
+                        ticket = Ticket.createTicket(Constants.RESULTS, Constants.TOKEN, token, null);
 
                         mWebSocket.send(ticket);
                         mWebSocket.send(new byte[10]);

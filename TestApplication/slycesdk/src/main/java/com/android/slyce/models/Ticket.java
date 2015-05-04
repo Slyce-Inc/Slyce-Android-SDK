@@ -9,17 +9,22 @@ import org.json.JSONObject;
  */
 public class Ticket {
 
-    public static String createTicket(String event, String data, String dataValue){
+    public static String createTicket(String event, String data, String dataValue, JSONObject options){
 
         JSONObject ticket = new JSONObject();
 
         try {
 
-                JSONObject tokenObj = new JSONObject();
-                tokenObj.put(data, dataValue);
+            JSONObject tokenObj = new JSONObject();
+            tokenObj.put(data, dataValue);
 
-                ticket.put("event", event);
-                ticket.put("data", tokenObj);
+            // Added options Json to ticket creation
+            if(options != null){
+                tokenObj.put("options",options);
+            }
+
+            ticket.put("event", event);
+            ticket.put("data", tokenObj);
 
         } catch (JSONException e) {
             e.printStackTrace();

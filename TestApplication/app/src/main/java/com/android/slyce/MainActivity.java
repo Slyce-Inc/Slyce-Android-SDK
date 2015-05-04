@@ -34,6 +34,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -346,9 +348,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         alert.setMessage("Enter Image URL");
         alert.setTitle("Upload Image URL");
 
-        // TODO://remove this image url before production
-        edittext.setText("http://pouncewidgetsnaps.s3.amazonaws.com/JCP4.jpg");
-
         alert.setView(edittext);
 
         alert.setPositiveButton("Go", new DialogInterface.OnClickListener() {
@@ -366,7 +365,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     return;
                 }
 
-                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl);
+                JSONObject options = null;
+                try {
+                    options = new JSONObject();
+                    options.put( "storeID","2811");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl, options);
                 slyceProductsRequestImageUrl.execute();
 
                 progressBar.setVisibility(View.VISIBLE);

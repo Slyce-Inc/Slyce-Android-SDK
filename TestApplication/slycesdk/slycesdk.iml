@@ -87,12 +87,12 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="play-services-3.1.59" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="moodstocks" level="project" />
     <orderEntry type="library" exported="" name="zbar" level="project" />
     <orderEntry type="library" exported="" name="moodstocks-native" level="project" />
+    <orderEntry type="library" exported="" name="play-services-4.0.30" level="project" />
   </component>
 </module>

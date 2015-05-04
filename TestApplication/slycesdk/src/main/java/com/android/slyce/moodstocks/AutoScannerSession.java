@@ -36,8 +36,6 @@ import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
 import com.moodstocks.android.advanced.Image;
 import com.moodstocks.android.advanced.Tools;
-import com.moodstocks.android.camera.CameraFrame;
-import com.moodstocks.android.camera.CameraManager;
 import com.moodstocks.android.core.Loader;
 
 /**
@@ -391,4 +389,7 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
     isSnap = true;
   }
 
+  public void turnFlash(){
+    cameraManager.turnFlash();
+  }
 }

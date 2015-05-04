@@ -15,7 +15,8 @@
         android:text="Snap"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:textAllCaps="false"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -23,5 +24,14 @@
         android:id="@+id/snap_progress"
         android:visibility="invisible"
         android:layout_centerInParent="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/flash"
+        android:text="Flash"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
 
 </RelativeLayout>

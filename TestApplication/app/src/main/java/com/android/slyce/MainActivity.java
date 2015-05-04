@@ -1,6 +1,7 @@
 package com.android.slyce;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +28,11 @@ import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.SlyceLog;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+
 import org.json.JSONArray;
 
 import java.io.File;
@@ -401,7 +407,4 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             slyce.close();
         }
     }
-
-
-
 }

@@ -20,7 +20,6 @@ import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
 import com.android.slyce.moodstocks.AutoScannerSession;
 import com.android.slyce.moodstocks.AutoScannerSession.Listener;
-
 import org.json.JSONArray;
 
 public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnBarcodeListener{
@@ -50,7 +49,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
     private static final class SlyceCameraMessage{
 
-        private static final int SEARCH_2D  = 0;
+        private static final int SEARCH = 0;
     }
 
     public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, OnSlyceCameraListener listener){
@@ -117,21 +116,43 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
         }
     }
 
+    public void turnFlash(){
+
+        if(barcodeManager != null){
+            barcodeManager.turnFlash();
+        }
+
+        if(session != null){
+            session.turnFlash();
+        }
+    }
+
+    public void focuseAtPoint(){
+
+        if(session != null){
+
+        }
+
+        if(barcodeManager != null){
+
+        }
+    }
+
     /* Barcode engine listener */
     @Override
     public void onBarcodeResult(String result) {
         Log.i(TAG, "onBarcodeResult");
 
+        // Resume the automatic scan after 2 seconds
+        new  Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                barcodeManager.resumeScan();
+
+            }
+        }, Constants.AUTO_SCAN_DELAY);
+
         if(isContinuousRecognition){
-
-            // Resume scan after 2 seconds
-            new  Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    barcodeManager.resumeScan();
-                }
-            }, Constants.BARCODE_SCAN_DELAY);
-
             mCameraSynchronizer.onBarcodeRecognition(result);
         }
     }
@@ -140,10 +161,8 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
     public void onBarcodeSnap(Bitmap bitmap) {
         Log.i(TAG, "onBarcodeSnap");
 
-        // Notify the host app the taken bitmap
-        mCameraSynchronizer.onSnap(bitmap);
+        handleSnap(bitmap);
     }
-
     /* */
 
     /* Listener */
@@ -157,7 +176,13 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
         String irId = result.getValue();
 
-        session.resume();
+        // Resume the automatic scan after 2 seconds
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                session.resume();
+            }
+        }, Constants.AUTO_SCAN_DELAY);
 
         if(isContinuousRecognition){
 
@@ -185,20 +210,25 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
     public void onSnap(Bitmap bitmap) {
         Log.i(TAG, "onSnap");
 
-        // Notify the host app the taken bitmap
-        mCameraSynchronizer.onSnap(bitmap);
-
-        // Start search 2D
-        obtainMessage(SlyceCameraMessage.SEARCH_2D, bitmap).sendToTarget();
+        handleSnap(bitmap);
     }
     /* */
+
+    private void handleSnap(Bitmap bitmap){
+
+        // Notify the host application on the taken bitmap
+        mCameraSynchronizer.onSnap(bitmap);
+
+        // Start search Slyce + MoodStock (if 2D enabled)
+        obtainMessage(SlyceCameraMessage.SEARCH, bitmap).sendToTarget();
+    }
 
     @Override
     public void handleMessage(Message msg) {
 
         switch(msg.what){
 
-            case SlyceCameraMessage.SEARCH_2D:
+            case SlyceCameraMessage.SEARCH:
 
                 // Slyce + Moodstocks search
                 SlyceProductsRequest request = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {

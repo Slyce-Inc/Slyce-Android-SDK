@@ -98,6 +98,7 @@ public class CameraPreview implements SurfaceHolder.Callback {
             mCamera.setPreviewCallback(previewCallback);
             mCamera.startPreview();
             mCamera.autoFocus(autoFocusCallback);
+
         } catch (Exception e){
             Log.d("DBG", "Error starting camera preview: " + e.getMessage());
         }

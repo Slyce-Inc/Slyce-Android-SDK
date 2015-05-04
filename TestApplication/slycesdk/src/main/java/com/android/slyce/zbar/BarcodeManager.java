@@ -49,6 +49,8 @@ public class BarcodeManager
     /* */
     private boolean isSnap = false;
 
+    private boolean isFlashOn = false;
+
     static {
         System.loadLibrary("iconv");
     } 
@@ -162,6 +164,23 @@ public class BarcodeManager
 
     public void snap(){
         isSnap = true;
+    }
+
+    public void turnFlash(){
+
+        Camera.Parameters params = mCamera.getParameters();
+
+        if(isFlashOn){
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            isFlashOn = false;
+
+        }else{
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            isFlashOn = true;
+        }
+
+        params.getFlashMode();
+        mCamera.setParameters(params);
     }
 
     public interface OnBarcodeListener{

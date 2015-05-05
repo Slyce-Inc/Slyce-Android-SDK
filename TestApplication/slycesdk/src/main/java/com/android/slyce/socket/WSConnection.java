@@ -102,6 +102,14 @@ public class WSConnection implements
                     StringBuilder error = new StringBuilder();
                     error.append("Message: ").append(ex.getMessage()).append(" Cause: ").append(ex.getCause());
 
+                    // 1. Report to MixPanel
+                    JSONObject searchError = new JSONObject();
+                    try {
+                        searchError.put(Constants.DETECTION_TYPE, Constants._3D);
+//                        searchError.put(Constants.ERROR_MESSAGE, error);
+                        mixpanel.track(Constants.SEARCH_ERROR, searchError);
+                    } catch (JSONException e){}
+
                     mRequestSynchronizer.onError(error.toString());
 
                 }else{
@@ -236,7 +244,7 @@ public class WSConnection implements
             is2DSearchNotFound = true;
 
             // If 3D search also not found then report to MixPanel
-            if(!is3DSearchNotFound){
+            if(is3DSearchNotFound){
                 try {
                     JSONObject searchNotFound = new JSONObject();
                     searchNotFound.put(Constants.DETECTION_TYPE, Constants._2D);
@@ -332,6 +340,14 @@ public class WSConnection implements
         if(ex != null){
             StringBuilder error = new StringBuilder();
             error.append("Message: ").append(ex.getMessage()).append(" Cause: ").append(ex.getCause());
+
+            // 1. Report to MixPanel
+            JSONObject searchError = new JSONObject();
+            try {
+                searchError.put(Constants.DETECTION_TYPE, Constants._3D);
+//                searchError.put(Constants.ERROR_MESSAGE, error);
+                mixpanel.track(Constants.SEARCH_ERROR, searchError);
+            } catch (JSONException e){}
 
             mRequestSynchronizer.onError(error.toString());
         }
@@ -461,7 +477,7 @@ public class WSConnection implements
                         is3DSearchNotFound = true;
 
                         // If 2D search also not found then report to MixPanel
-                        if(!is2DSearchNotFound){
+                        if(is2DSearchNotFound || !mIs2D){
                             JSONObject searchNotFound = new JSONObject();
                             searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
                             searchNotFound.put(Constants.TOTAL_DETECTION_TIME, time);
@@ -483,12 +499,12 @@ public class WSConnection implements
                     long totalDetectionTime = System.currentTimeMillis() - startDetectionTime;
                     long time = TimeUnit.MILLISECONDS.toSeconds(totalDetectionTime);
 
-                    if(products == null){
+                    if(products == null || products.length() == 0){
                         // No products found
                         is3DSearchNotFound = true;
 
                         // If 2D search also not found then report to MixPanel
-                        if(!is2DSearchNotFound){
+                        if(is2DSearchNotFound || !mIs2D){
                             JSONObject searchNotFound = new JSONObject();
                             searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
                             mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
@@ -585,7 +601,6 @@ public class WSConnection implements
     }
 
     public interface OnTokenListener{
-
-        public void onTokenReceived(String token);
+        void onTokenReceived(String token);
     }
 }

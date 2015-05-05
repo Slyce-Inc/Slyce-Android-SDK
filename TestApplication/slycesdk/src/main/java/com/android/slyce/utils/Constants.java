@@ -23,7 +23,6 @@ public class Constants {
     public static final String POUNCE_STATUS = "status";
     public static final String POUNCE_SKU = "sku";
 
-
     /* 2D */
     public static final String MS_SEARCH_API = "@api.moodstocks.com/v2/search";
     public static final String MS_ECHO_API = "@api.moodstocks.com/v2/echo?success=true";

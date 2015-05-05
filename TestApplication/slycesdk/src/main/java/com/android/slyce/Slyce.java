@@ -162,19 +162,19 @@ public final class Slyce implements Scanner.SyncListener{
 
                     mSharedPrefHelper.setPremium(jsonResponse.optString(Constants.PREMIUM));
 
-                    JSONObject moodstocksJson = jsonResponse.optJSONObject(Constants.MS);
+                    JSONObject msJson = jsonResponse.optJSONObject(Constants.MS);
 
-                    if(moodstocksJson != null){
+                    if(msJson != null){
 
-                        final String isEnabled = moodstocksJson.optString(Constants.ENABLED);
-                        final String key = moodstocksJson.optString(Constants.KEY);
-                        final String secret = moodstocksJson.optString(Constants.SECRET);
+                        final String isEnabled = msJson.optString(Constants.ENABLED);
+                        final String key = msJson.optString(Constants.KEY);
+                        final String secret = msJson.optString(Constants.SECRET);
 
                         mSharedPrefHelper.setMSEnabled(isEnabled);
                         mSharedPrefHelper.setMSkey(key);
                         mSharedPrefHelper.setMSsecret(secret);
 
-                        // If 2D is enabled initiate MoodStocks
+                        // If 2D is enabled initiate MS
                         if(Boolean.valueOf(isEnabled)){
 
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -255,7 +255,7 @@ public final class Slyce implements Scanner.SyncListener{
 
     public void close(){
 
-        // Required by Moodstocks
+        // Required by MS
         if (compatible) {
             try {
                 scanner.close();
@@ -275,17 +275,17 @@ public final class Slyce implements Scanner.SyncListener{
     }
 
     /*
-     * MoodStocks Scanner.SyncListener
+     * 2D Scanner.SyncListener
      */
     @Override
     public void onSyncStart() {
-        SlyceLog.d(TAG, "Moodstocks Sync will start.");
+        SlyceLog.d(TAG, "MS Sync will start.");
     }
 
     @Override
     public void onSyncComplete() {
         try {
-            SlyceLog.d(TAG, "Moodstocks Sync succeeded (" + scanner.count() + " images)");
+            SlyceLog.d(TAG, "MS Sync succeeded (" + scanner.count() + " images)");
         } catch (MoodstocksError e) {
             e.printStackTrace();
         }
@@ -293,12 +293,12 @@ public final class Slyce implements Scanner.SyncListener{
 
     @Override
     public void onSyncFailed(MoodstocksError e) {
-        SlyceLog.d(TAG, "Moodstocks Sync error #" + e.getErrorCode() + ": " + e.getMessage());
+        SlyceLog.d(TAG, "MS Sync error #" + e.getErrorCode() + ": " + e.getMessage());
     }
 
     @Override
     public void onSyncProgress(int total, int current) {
         int percent = (int) ((float) current / (float) total * 100);
-        SlyceLog.d(TAG, "Moodstocks Sync progressing: " + percent + "%");
+        SlyceLog.d(TAG, "MS Sync progressing: " + percent + "%");
     }
 }

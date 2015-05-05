@@ -24,7 +24,7 @@ public class Constants {
     public static final String POUNCE_SKU = "sku";
 
 
-    /* MoodStocks */
+    /* 2D */
     public static final String MS_SEARCH_API = "@api.moodstocks.com/v2/search";
     public static final String MS_ECHO_API = "@api.moodstocks.com/v2/echo?success=true";
     public static final String MS_IMAGE_URL = "image_url";
@@ -32,7 +32,7 @@ public class Constants {
     public static final String MS_ERROR = "error";
     public static final String MS_ID = "id";
 
-    /* Image resize value (MoodStocks/Slyce)*/
+    /* Image resize value (MS/Slyce)*/
     public static final int IMAGE_RESIZE = 450;
 
     /* Error messages */

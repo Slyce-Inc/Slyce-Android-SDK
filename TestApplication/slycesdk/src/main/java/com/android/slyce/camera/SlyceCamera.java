@@ -29,7 +29,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
     /* responsible for sending messages to host application */
     private CameraSynchronizer mCameraSynchronizer;
 
-    /* MoodStocks */
+    /* MS */
     private AutoScannerSession session;
 
     private static final int TYPES = Result.Type.IMAGE | Result.Type.QRCODE | Result.Type.EAN13;
@@ -62,11 +62,11 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
         mSlyce = slyce;
 
-        // If 2D Enabled -> MoodStocks automatic scanner
+        // If 2D Enabled -> MS automatic scanner
         // Else -> Barcode/QR engine scanner
         if(slyce.is2DSearchEnabled()){
 
-            // Start MoodStocks detection
+            // Start MS detection
             try {
                 session = new AutoScannerSession(activity, Scanner.get(), this, preview);
                 session.setResultTypes(TYPES);
@@ -110,10 +110,10 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
     public void snap(){
 
-        // If 2D Enabled snap via Moodstocks
+        // If 2D Enabled snap via MS
         // Else snap  via Barcode/QR engine
         if(session != null){
-            // Snap via Moodstocks
+            // Snap via MS
             session.snap();
         }else{
             // Snap via Barcode/QR engine
@@ -235,7 +235,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
             case SlyceCameraMessage.SEARCH:
 
-                // Slyce + Moodstocks search
+                // Slyce + 2D search
                 SlyceProductsRequest request = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
                     @Override
                     public void onSlyceProgress(long progress, String message, String id) {

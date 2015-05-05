@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void on2DRecognition(String irId, String productInfo) {
 
         Toast.makeText(this,
-                "MoodStocks Progress: " + irId +
+                "2D Progress: " + irId +
                         "\n" + "Message: " + productInfo, Toast.LENGTH_LONG).show();
 
         progressBar.setVisibility(View.INVISIBLE);
@@ -118,7 +118,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void on2DExtendedRecognition(JSONArray products) {
         Toast.makeText(this,
-                "MoodStocks Extended: " + products, Toast.LENGTH_LONG).show();
+                "2D Extended: " + products, Toast.LENGTH_LONG).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }

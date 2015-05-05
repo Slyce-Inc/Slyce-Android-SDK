@@ -124,9 +124,9 @@ public class WSConnection implements
             }
         });
 
-        // MoodStocks
+        // MS
         if(mIs2D){
-            callMoodstocksMethod(methodType);
+            perform2DSearchMethod(methodType);
         }
     }
 
@@ -148,18 +148,18 @@ public class WSConnection implements
         }
     }
 
-    private void callMoodstocksMethod(MethodType type){
+    private void perform2DSearchMethod(MethodType type){
 
         switch (type){
 
             case SEND_IMAGE:
 
                 ComManager.getInstance().searchMSImageFile(mContext, mBitmap,
-                        new ComManager.OnMoodStocksSearchListener() {
+                        new ComManager.On2DSearchListener() {
 
                             @Override
                             public void onResponse(String irId, String error) {
-                                handleMoodstocksResponse(irId, null, error);
+                                handle2DSearchResponse(irId, null, error);
                             }
                         });
 
@@ -168,10 +168,10 @@ public class WSConnection implements
             case SEND_IMAGE_URL:
 
                 ComManager.getInstance().seachMSImageURL(mContext, mImageUrl,
-                        new ComManager.OnMoodStocksSearchListener() {
+                        new ComManager.On2DSearchListener() {
                             @Override
                             public void onResponse(String irId, String error) {
-                                handleMoodstocksResponse(irId, mImageUrl, error);
+                                handle2DSearchResponse(irId, mImageUrl, error);
                             }
                         });
 
@@ -179,7 +179,7 @@ public class WSConnection implements
         }
     }
 
-    private void handleMoodstocksResponse(String irId, String imageUrl, String error){
+    private void handle2DSearchResponse(String irId, String imageUrl, String error){
 
         // Return if irId got back empty or null
         if(TextUtils.isEmpty(irId)){

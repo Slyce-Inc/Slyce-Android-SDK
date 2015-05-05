@@ -17,9 +17,9 @@ public class SharedPrefHelper {
     private static SharedPreferences mSharedPreferences;
 
     private String SLYCE_PREMIUM_MODE = "slyce_premium_mode";
-    private String SLYCE_MOODSTOCKS_MODE = "slyce_moodstocks_mode";
-    private String SLYCE_MOODSTOCKS_SECRET = "slyce_moodstocks_secret";
-    private String SLYCE_MOODSTOCKS_KEY = "slyce_moodstocks_key";
+    private String SLYCE_2D_MODE = "slyce_2D_mode";
+    private String SLYCE_2D_SECRET = "slyce_2D_secret";
+    private String SLYCE_2D_KEY = "slyce_2D_key";
     private String SLYCE_CLIENT_ID = "slyce_client_id";
     private String SLYCE_PEOPLE_ANALYTICS_CREATED = "slyce_people_analytics_created";
 
@@ -57,7 +57,7 @@ public class SharedPrefHelper {
 
     public boolean isMSEnbaled(){
 
-        return mSharedPreferences.getBoolean(SLYCE_MOODSTOCKS_MODE, false);
+        return mSharedPreferences.getBoolean(SLYCE_2D_MODE, false);
     }
 
     public void setMSEnabled(String value){
@@ -68,7 +68,7 @@ public class SharedPrefHelper {
 
         isMSEnabled = value.trim().toLowerCase().equalsIgnoreCase("true") ? true : false;
 
-        editor.putBoolean(SLYCE_MOODSTOCKS_MODE, isMSEnabled);
+        editor.putBoolean(SLYCE_2D_MODE, isMSEnabled);
 
         editor.commit();
     }
@@ -76,23 +76,23 @@ public class SharedPrefHelper {
     public void setMSsecret(String value){
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(SLYCE_MOODSTOCKS_SECRET, value);
+        editor.putString(SLYCE_2D_SECRET, value);
         editor.commit();
     }
 
     public String getMSsecret(){
-       return  mSharedPreferences.getString(SLYCE_MOODSTOCKS_SECRET, null);
+       return  mSharedPreferences.getString(SLYCE_2D_SECRET, null);
     }
 
     public void setMSkey(String value){
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(SLYCE_MOODSTOCKS_KEY, value);
+        editor.putString(SLYCE_2D_KEY, value);
         editor.commit();
     }
 
     public String getMSkey(){
-        return  mSharedPreferences.getString(SLYCE_MOODSTOCKS_KEY, null);
+        return  mSharedPreferences.getString(SLYCE_2D_KEY, null);
     }
 
     public void setClientID(String clientID){

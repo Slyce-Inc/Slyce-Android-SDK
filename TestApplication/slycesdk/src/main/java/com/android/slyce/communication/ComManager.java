@@ -3,22 +3,17 @@ package com.android.slyce.communication;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.android.slyce.async.Util;
-import com.android.slyce.communication.utils.AuthFailureError;
 import com.android.slyce.communication.utils.BasicNetwork;
 import com.android.slyce.communication.utils.HttpHeaderParser;
 import com.android.slyce.communication.utils.HttpStack;
 import com.android.slyce.communication.utils.HurlStack;
 import com.android.slyce.communication.utils.JsonObjectRequest;
-import com.android.slyce.communication.utils.JsonRequest;
 import com.android.slyce.communication.utils.Network;
 import com.android.slyce.communication.utils.NetworkResponse;
 import com.android.slyce.communication.utils.Request;
 import com.android.slyce.communication.utils.Response;
 import com.android.slyce.communication.utils.VolleyError;
-import com.android.slyce.report.java_websocket.util.Base64;
 import com.android.slyce.requests.AuthRequest;
-import com.android.slyce.socket.WSConnection;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.SharedPrefHelper;
 import com.android.slyce.utils.SlyceLog;
@@ -27,8 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by davidsvilem on 3/25/15.
@@ -140,7 +133,7 @@ public class ComManager {
             @Override
             public void run() {
 
-                // Get MoodStocks Api Key, Api Secret
+                // Get MS Api Key, Api Secret
                 SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
                 String key = sharedPrefHelper.getMSkey();
                 String secret = sharedPrefHelper.getMSsecret();
@@ -174,14 +167,14 @@ public class ComManager {
         }).start();
     }
 
-    public void seachMSImageURL(final Context context, final String imageUrl, final OnMoodStocksSearchListener listener){
+    public void seachMSImageURL(final Context context, final String imageUrl, final On2DSearchListener listener){
 
         new Thread(new Runnable() {
 
             @Override
             public void run() {
 
-                // Get MoodStocks Api Key, Api Secret
+                // Get MS Api Key, Api Secret
                 SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
                 String key = sharedPrefHelper.getMSkey();
                 String secret = sharedPrefHelper.getMSsecret();
@@ -222,13 +215,13 @@ public class ComManager {
         }).start();
     }
 
-    public void searchMSImageFile(final Context context, final Bitmap bitmap, final OnMoodStocksSearchListener listener){
+    public void searchMSImageFile(final Context context, final Bitmap bitmap, final On2DSearchListener listener){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                // Get MoodStocks Api Key, Api Secret
+                // Get MS Api Key, Api Secret
                 SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
                 String key = sharedPrefHelper.getMSkey();
                 String secret = sharedPrefHelper.getMSsecret();
@@ -250,12 +243,14 @@ public class ComManager {
         }).start();
     }
 
-    private void handleMSResponse(JSONObject response, OnMoodStocksSearchListener listener){
+    private void handleMSResponse(JSONObject response, On2DSearchListener listener){
+
         String irId = "";
 
         if(response == null){
 
-            listener.onResponse(irId, "Moodstocks null response");
+            // TODO: fill in here an error
+            listener.onResponse(irId, "");
 
         }else{
 
@@ -265,7 +260,8 @@ public class ComManager {
                     irId = response.optString(Constants.MS_ID);
                     listener.onResponse(irId, "");
                 }else{
-                    listener.onResponse(irId, "Moodstocks not found");
+                    // TODO: fill in here an error
+                    listener.onResponse(irId, "");
                 }
 
             }else{
@@ -327,7 +323,7 @@ public class ComManager {
         void onResponse(JSONObject jsonResponse);
     }
 
-    public interface OnMoodStocksSearchListener{
+    public interface On2DSearchListener {
         void onResponse(String irid, String error);
     }
 

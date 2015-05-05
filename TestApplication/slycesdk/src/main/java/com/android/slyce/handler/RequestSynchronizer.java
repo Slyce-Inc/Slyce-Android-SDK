@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.models.MoodStocksProgress;
+import com.android.slyce.models.Search2DProgress;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
 
@@ -27,8 +27,8 @@ public class RequestSynchronizer extends Handler {
     }
 
     public void on2DRecognition(String irId, String productInfo){
-        MoodStocksProgress moodStocksProgress = new MoodStocksProgress(irId, productInfo);
-        obtainMessage(2, moodStocksProgress).sendToTarget();
+        Search2DProgress search2DProgress = new Search2DProgress(irId, productInfo);
+        obtainMessage(2, search2DProgress).sendToTarget();
     }
 
     public void on3DRecognition(JSONArray products){
@@ -68,10 +68,10 @@ public class RequestSynchronizer extends Handler {
 
             case 2:
 
-                MoodStocksProgress moodStocksProgress = (MoodStocksProgress) msg.obj;
+                Search2DProgress search2DProgress = (Search2DProgress) msg.obj;
 
-                String irid = moodStocksProgress.irId;
-                String productInfo = moodStocksProgress.productInfo;
+                String irid = search2DProgress.irId;
+                String productInfo = search2DProgress.productInfo;
 
                 mRequestListener.on2DRecognition(irid, productInfo);
 

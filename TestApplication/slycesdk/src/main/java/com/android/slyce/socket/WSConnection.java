@@ -64,6 +64,8 @@ public class WSConnection implements
 
     private boolean isCancelled = false;
     private boolean mIs2D;
+    private boolean is2DSearchNotFound = false;
+    private boolean is3DSearchNotFound = false;
 
     private JSONObject mOptions;
 
@@ -154,7 +156,7 @@ public class WSConnection implements
 
             case SEND_IMAGE:
 
-                ComManager.getInstance().searchMSImageFile(mContext, mBitmap,
+                ComManager.getInstance().search2DImageFile(mContext, mBitmap,
                         new ComManager.On2DSearchListener() {
 
                             @Override
@@ -167,7 +169,7 @@ public class WSConnection implements
 
             case SEND_IMAGE_URL:
 
-                ComManager.getInstance().seachMSImageURL(mContext, mImageUrl,
+                ComManager.getInstance().seach2DImageURL(mContext, mImageUrl,
                         new ComManager.On2DSearchListener() {
                             @Override
                             public void onResponse(String irId, String error) {
@@ -181,13 +183,10 @@ public class WSConnection implements
 
     private void handle2DSearchResponse(String irId, String imageUrl, String error){
 
-        // Return if irId got back empty or null
-        if(TextUtils.isEmpty(irId)){
+        if(!error.isEmpty()){
+            // Error with 2D search
 
-            // Notify the host application for a 2D search error
-            mRequestSynchronizer.onError(error);
-
-            // Report to MixPanel
+            // 1. Report to MixPanel
             JSONObject searchError = new JSONObject();
             try {
                 searchError.put(Constants.DETECTION_TYPE, Constants._2D);
@@ -195,36 +194,59 @@ public class WSConnection implements
                 mixpanel.track(Constants.SEARCH_ERROR, searchError);
             } catch (JSONException e){}
 
+            // 2. Notify the host application for a 2D search error
+            mRequestSynchronizer.onError(error);
+
             return;
         }
 
-        // Report to MixPanel
-        try {
-            JSONObject imageDetectReport = new JSONObject();
+        if(!irId.isEmpty()){
+            // 2D search found
 
-            if(imageUrl != null){
-                imageDetectReport.put(Constants.IMAGE_URL, imageUrl);
+            // 1. Report to MixPanel
+            try {
+                JSONObject imageDetectReport = new JSONObject();
+
+                if(imageUrl != null){
+                    imageDetectReport.put(Constants.IMAGE_URL, imageUrl);
+                }
+
+                imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
+                imageDetectReport.put(Constants.DATA_IRID, irId);
+
+                mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
+
+            }catch (JSONException e){}
+
+            // 2. Notify the host application for 2D search found
+            mRequestSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+
+            // Get extended products results
+            ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
+                @Override
+                public void onExtendedInfo(JSONArray products) {
+
+                    // 3. Notify the host application for 2D extended result
+                    mRequestSynchronizer.on2DExtendedRecognition(products);
+                }
+            });
+
+        }else{
+            // 2D search not found
+            is2DSearchNotFound = true;
+
+            // If 3D search also not found then report to MixPanel
+            if(!is3DSearchNotFound){
+                try {
+                    JSONObject searchNotFound = new JSONObject();
+                    searchNotFound.put(Constants.DETECTION_TYPE, Constants._2D);
+                    mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
+                } catch (JSONException e) {}
             }
 
-            imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
-            imageDetectReport.put(Constants.DATA_IRID, irId);
-
-            mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
-
-        }catch (JSONException e){}
-
-        // Notify the host application for basic result
-        mRequestSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
-
-        // Get extended products results
-        ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
-            @Override
-            public void onExtendedInfo(JSONArray products) {
-
-                // Notify the host application for extended result
-                mRequestSynchronizer.on2DExtendedRecognition(products);
-            }
-        });
+            // Notify the host application for a 2D search not found (empty data)
+            mRequestSynchronizer.on2DRecognition("","");
+        }
     }
 
     public void sendRequestImageUrl(String imageUrl){
@@ -436,10 +458,15 @@ public class WSConnection implements
                         long time = TimeUnit.MILLISECONDS.toSeconds(totalDetectionTime);
 
                         // If progress = -1 received then no products found
-                        JSONObject searchNotFound = new JSONObject();
-                        searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
-                        searchNotFound.put(Constants.TOTAL_DETECTION_TIME, time);
-                        mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
+                        is3DSearchNotFound = true;
+
+                        // If 2D search also not found then report to MixPanel
+                        if(!is2DSearchNotFound){
+                            JSONObject searchNotFound = new JSONObject();
+                            searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
+                            searchNotFound.put(Constants.TOTAL_DETECTION_TIME, time);
+                            mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
+                        }
 
                         // Send an empty products array
                         mRequestSynchronizer.on3DRecognition(new JSONArray());
@@ -457,10 +484,15 @@ public class WSConnection implements
                     long time = TimeUnit.MILLISECONDS.toSeconds(totalDetectionTime);
 
                     if(products == null){
+                        // No products found
+                        is3DSearchNotFound = true;
 
-                        JSONObject searchNotFound = new JSONObject();
-                        searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
-                        mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
+                        // If 2D search also not found then report to MixPanel
+                        if(!is2DSearchNotFound){
+                            JSONObject searchNotFound = new JSONObject();
+                            searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
+                            mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
+                        }
 
                         // Send an empty products array
                         mRequestSynchronizer.on3DRecognition(new JSONArray());

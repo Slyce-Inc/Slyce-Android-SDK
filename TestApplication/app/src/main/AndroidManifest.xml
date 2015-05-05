@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.slyce" >
 
-    // Required by Slyce SDK
-    <uses-permission android:name="android.permission.INTERNET" />
-
     // Required by the TestApplication
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 

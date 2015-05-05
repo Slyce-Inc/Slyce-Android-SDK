@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.slycesdk">
 
+    <!-- Required by Slyce SDK-->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- required by MS and ZBar -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

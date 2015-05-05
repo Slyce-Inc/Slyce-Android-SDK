@@ -2,6 +2,7 @@ package com.android.slyce.communication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 
 import com.android.slyce.communication.utils.BasicNetwork;
 import com.android.slyce.communication.utils.HttpHeaderParser;
@@ -167,7 +168,7 @@ public class ComManager {
         }).start();
     }
 
-    public void seachMSImageURL(final Context context, final String imageUrl, final On2DSearchListener listener){
+    public void seach2DImageURL(final Context context, final String imageUrl, final On2DSearchListener listener){
 
         new Thread(new Runnable() {
 
@@ -209,13 +210,13 @@ public class ComManager {
 
                 JSONObject response = performRequest(request);
 
-                handleMSResponse(response, listener);
+                handle2DResponse(response, listener);
             }
 
         }).start();
     }
 
-    public void searchMSImageFile(final Context context, final Bitmap bitmap, final On2DSearchListener listener){
+    public void search2DImageFile(final Context context, final Bitmap bitmap, final On2DSearchListener listener){
 
         new Thread(new Runnable() {
             @Override
@@ -237,39 +238,23 @@ public class ComManager {
 
                 JSONObject response = Utils.uploadBitmapToMS(url.toString(), scaledBitmap);
 
-                handleMSResponse(response, listener);
+                handle2DResponse(response, listener);
 
             }
         }).start();
     }
 
-    private void handleMSResponse(JSONObject response, On2DSearchListener listener){
+    private void handle2DResponse(JSONObject response, On2DSearchListener listener){
 
         String irId = "";
+        String error = "";
 
-        if(response == null){
-
-            // TODO: fill in here an error
-            listener.onResponse(irId, "");
-
-        }else{
-
-            if(!response.isNull(Constants.MS_FOUND)){
-
-                if(response.optBoolean(Constants.MS_FOUND)){
-                    irId = response.optString(Constants.MS_ID);
-                    listener.onResponse(irId, "");
-                }else{
-                    // TODO: fill in here an error
-                    listener.onResponse(irId, "");
-                }
-
-            }else{
-
-                String error = response.optString(Constants.MS_ERROR);
-                listener.onResponse(irId, error);
-            }
+        if(response != null){
+            error = response.optString(Constants.MS_ERROR);
+            irId = response.optString(Constants.MS_ID);
         }
+
+        listener.onResponse(irId, error);
     }
 
     private JsonObjectRequest createRequest(String url){

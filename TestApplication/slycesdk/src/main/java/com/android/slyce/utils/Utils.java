@@ -12,14 +12,9 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-
-import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -28,6 +23,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -355,43 +352,101 @@ public class Utils {
         return deviceType;
     }
 
-    public static void getGoogleAdvertisingID(final Context context, final CallBack listener){
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                AdvertisingIdClient.Info adInfo = null;
-                try {
-                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
-
-                } catch (IOException e) {
-                    // Unrecoverable error connecting to Google Play services (e.g.,
-                    // the old version of the service doesn't support getting AdvertisingId).
-                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    // Google Play services is not available entirely.
-                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
-                } catch (GooglePlayServicesRepairableException e) {
-                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
-                }
-                final String id = adInfo.getId();
-                final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onReady(id);
-                    }
-                });
-            }
-
-        }).start();
-    }
+//    public static void getGoogleAdvertisingID(final Context context, final CallBack listener){
+//
+//        new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//
+//                AdvertisingIdClient.Info adInfo = null;
+//                try {
+//                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
+//
+//                } catch (IOException e) {
+//                    // Unrecoverable error connecting to Google Play services (e.g.,
+//                    // the old version of the service doesn't support getting AdvertisingId).
+//                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
+//                } catch (GooglePlayServicesNotAvailableException e) {
+//                    // Google Play services is not available entirely.
+//                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
+//                } catch (GooglePlayServicesRepairableException e) {
+//                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
+//                }
+//                final String id = adInfo.getId();
+//                final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
+//
+//                new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        listener.onReady(id);
+//                    }
+//                });
+//            }
+//
+//        }).start();
+//    }
 
     public interface CallBack{
         void onReady(String value);
+    }
+
+    public static void getGoogleAdvertisingID(final Context context, final CallBack listener){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                String advertisingId = null;
+
+                Exception exception = null;
+                try {
+
+                    Class<?> mAdvertisingIdClientClass = Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient");
+
+                    Method getAdvertisingIdInfoMethod = mAdvertisingIdClientClass.getMethod("getAdvertisingIdInfo", new Class[]{Context.class});
+                    Object mInfoClass = getAdvertisingIdInfoMethod.invoke(null, new Object[]{context});
+
+                    Method getIdMethod = mInfoClass.getClass().getMethod("getId", new Class[0]);
+                    Method isLimitAdTrackingEnabledMethod = mInfoClass.getClass().getMethod("isLimitAdTrackingEnabled", new Class[0]);
+
+                    advertisingId = getIdMethod.invoke(mInfoClass, new Object[0]).toString();
+//                    boolean mIsLimitedTrackingEnabled = ((Boolean)isLimitAdTrackingEnabledMethod.invoke(mInfoClass, new Object[0])).booleanValue();
+
+                    final String id = advertisingId;
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onReady(id);
+                        }
+                    });
+
+                } catch (ClassNotFoundException e) {
+                    exception = e;
+                } catch (NoSuchMethodException e) {
+                    exception = e;
+                } catch (IllegalAccessException e) {
+                    exception = e;
+                } catch (IllegalArgumentException e) {
+                    exception = e;
+                } catch (InvocationTargetException e) {
+                    exception = e;
+                } finally{
+
+                    if(exception != null){
+                        if(exception.getMessage() != null){
+                            SlyceLog.i(TAG, exception.getClass().getSimpleName() + ": " + exception.getMessage());
+                        }
+                        if(exception.getCause() != null){
+                            SlyceLog.i(TAG, exception.getClass().getSimpleName() + ": " + exception.getCause());
+                        }
+                    }else{
+                        SlyceLog.i(TAG, "Google Advertising Id: " + advertisingId);
+                    }
+                }
+            }
+        }).start();
     }
 }
 

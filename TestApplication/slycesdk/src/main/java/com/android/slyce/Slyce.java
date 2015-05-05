@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
-
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.utils.Constants;
@@ -15,12 +13,8 @@ import com.android.slyce.utils.Utils;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Scanner;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -98,7 +92,7 @@ public final class Slyce implements Scanner.SyncListener{
             peopleAnalytics.put(Constants.MP_SDK_VERSION, Constants.SDK_VERSION);
             peopleAnalytics.put(Constants.CREATED, created);
 
-            // Get Google Advertising ID
+            // Get Google Advertising ID for MixPanel
             Utils.getGoogleAdvertisingID(context, new Utils.CallBack() {
                 @Override
                 public void onReady(String value) {

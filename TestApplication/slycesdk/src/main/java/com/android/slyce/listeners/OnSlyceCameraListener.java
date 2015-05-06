@@ -2,6 +2,8 @@ package com.android.slyce.listeners;
 
 import android.graphics.Bitmap;
 
+import com.android.slyce.models.SlyceBarcode;
+
 import org.json.JSONArray;
 
 /**
@@ -10,7 +12,7 @@ import org.json.JSONArray;
 public interface OnSlyceCameraListener {
 
     /* Standart/Premium */
-    void onCameraBarcodeRecognition(String barcode);
+    void onCameraBarcodeRecognition(SlyceBarcode barcode);
 
     /* Premium */
     void onCamera2DRecognition(String irId, String productInfo);

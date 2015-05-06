@@ -1,8 +1,12 @@
 package com.android.slyce.listeners;
 
+import com.android.slyce.models.SlyceBarcode;
+
 import org.json.JSONArray;
 
 public interface OnSlyceRequestListener {
+
+    void onBarcodeRecognition(SlyceBarcode barcode);
 
     void onSlyceProgress(long progress, String message, String id);
 

@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.Search2DProgress;
+import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
 
@@ -19,6 +20,10 @@ public class RequestSynchronizer extends Handler {
     public RequestSynchronizer(OnSlyceRequestListener listener){
         super(Looper.getMainLooper());
         mRequestListener = listener;
+    }
+
+    public void onBarcodeRecognition(SlyceBarcode barcode){
+        obtainMessage(0, barcode).sendToTarget();
     }
 
     public void onSlyceProgress(long progress, String message, String token){
@@ -51,6 +56,13 @@ public class RequestSynchronizer extends Handler {
     public void handleMessage(Message msg) {
 
         switch (msg.what){
+
+            case 0:
+
+                SlyceBarcode barcode = (SlyceBarcode) msg.obj;
+                mRequestListener.onBarcodeRecognition(barcode);
+
+                break;
 
             case 1:
 

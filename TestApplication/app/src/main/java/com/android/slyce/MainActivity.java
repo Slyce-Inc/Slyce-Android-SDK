@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
@@ -119,6 +120,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void on2DExtendedRecognition(JSONArray products) {
         Toast.makeText(this,
                 "2D Extended: " + products, Toast.LENGTH_LONG).show();
+
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onBarcodeRecognition(SlyceBarcode barcode) {
+
+        Toast.makeText(this,
+                "Barcode: " + barcode.getBarcode(), Toast.LENGTH_LONG).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }

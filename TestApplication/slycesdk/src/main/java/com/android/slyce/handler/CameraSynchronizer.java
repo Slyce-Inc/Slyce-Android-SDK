@@ -4,9 +4,12 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+
+import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.Search2DProgress;
+import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
@@ -26,7 +29,7 @@ public class CameraSynchronizer extends Handler {
         mCameraListener = listener;
     }
 
-    public void onBarcodeRecognition(String barcode){
+    public void onBarcodeRecognition(SlyceBarcode barcode){
         obtainMessage(1, barcode).sendToTarget();
     }
 
@@ -71,7 +74,7 @@ public class CameraSynchronizer extends Handler {
 
             case 1:
 
-                mCameraListener.onCameraBarcodeRecognition((String) msg.obj);
+                mCameraListener.onCameraBarcodeRecognition((SlyceBarcode) msg.obj);
 
                 break;
 

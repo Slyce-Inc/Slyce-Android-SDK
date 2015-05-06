@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.SurfaceView;
 import com.android.slyce.Slyce;
 import com.android.slyce.communication.ComManager;
+import com.android.slyce.enums.SlyceBarcodeType;
 import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.Utils;
@@ -158,7 +160,8 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
         }, Constants.AUTO_SCAN_DELAY);
 
         if(isContinuousRecognition){
-            mCameraSynchronizer.onBarcodeRecognition(result);
+            // TODO: Create SlyceBarcode based on barcode scanner type and result
+            mCameraSynchronizer.onBarcodeRecognition(new SlyceBarcode(SlyceBarcodeType.EAN_13, result));
         }
     }
 
@@ -178,6 +181,8 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
     @Override
     public void onResult(Result result) {
+
+        // result.getType() == Result.Type.IMAGE ? "Image:" : "Barcode:"
 
         String irId = result.getValue();
 
@@ -237,6 +242,11 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
                 // Slyce + 2D search
                 SlyceProductsRequest request = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
+                    @Override
+                    public void onBarcodeRecognition(SlyceBarcode barcode) {
+                        mCameraSynchronizer.onBarcodeRecognition(barcode);
+                    }
+
                     @Override
                     public void onSlyceProgress(long progress, String message, String id) {
                         mCameraSynchronizer.onSlyceProgress(progress, message, id);

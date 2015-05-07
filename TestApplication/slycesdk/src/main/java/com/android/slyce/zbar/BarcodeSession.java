@@ -16,11 +16,13 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.android.slyce.moodstocks.CameraFrame;
 import com.android.slyce.moodstocks.CameraManager;
+import com.android.slyce.utils.SlyceLog;
 import com.moodstocks.android.Result;
 import com.moodstocks.android.advanced.Tools;
 import com.moodstocks.android.core.Loader;
@@ -38,6 +40,8 @@ import java.io.FileOutputStream;
 /* Import ZBar Class files */
 
 public class BarcodeSession implements CameraManager.Listener {
+
+    private final String TAG = BarcodeSession.class.getSimpleName();
 
     ImageScanner scanner;
 

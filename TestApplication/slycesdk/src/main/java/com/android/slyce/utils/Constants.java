@@ -61,11 +61,14 @@ public class Constants {
     public static final String DETECTION_TYPE = "detectionType";
     public static final String _3D = "3D";
     public static final String _2D = "2D";
+    public static final String QR = "QR";
+    public static final String UPC = "UPC";
     public static final String SEARCH_NOT_FOUND = "Search.Not.Found";
     public static final String SEARCH_ERROR = "Search.Error";
     public static final String ERROR_MESSAGE = "error";
     public static final String CONTENT = "Content";
     public static final String IMAGE_DETECTED = "Image.Detected";
+    public static final String BARCODE_DETECTED = "Barcode.Detected";
     public static final String USER_ID = "userID";
     public static final String MP_CLIENT_ID = "clientID";
     public static final String NAME = "name";
@@ -82,6 +85,7 @@ public class Constants {
     public static final String SDK_INIT_FAILED = "SDK.Init.Failed";
     public static final String TOTAL_DETECTION_TIME = "totalDetectionTime";
     public static final String DATA_IRID = "irID";
+    public static final String DATA_BARCODE = "data";
     public static final String GOOGLE_ADVERTISING_ID = "GoogleAdvertisingID";
 
     /* Client info */

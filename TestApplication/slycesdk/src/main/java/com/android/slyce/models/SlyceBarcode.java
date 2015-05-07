@@ -19,6 +19,7 @@ public class SlyceBarcode {
     public SlyceBarcode(SlyceBarcodeType type, String barcode){
         this.type = type;
         this.barcode = barcode;
+        this.typeString = type.toString();
     }
 
     public SlyceBarcodeType getType() {

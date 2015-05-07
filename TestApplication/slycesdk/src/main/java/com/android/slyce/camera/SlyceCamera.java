@@ -12,6 +12,7 @@ import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.BarcodeHelper;
 import com.android.slyce.utils.BarcodeHelper.ScannerType;
@@ -24,6 +25,8 @@ import com.moodstocks.android.Scanner;
 import com.android.slyce.moodstocks.AutoScannerSession;
 import com.android.slyce.moodstocks.AutoScannerSession.Listener;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnBarcodeListener{
 
@@ -161,10 +164,8 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
 
         if(isContinuousRecognition){
 
-            // Create SlyceBarcode object based on type {SlyceBarcodeType} nad {ScannerType}
-            SlyceBarcode slyceBarcode = BarcodeHelper.createSlyceBarcode(type, ScannerType._3D, result);
-
-            mCameraSynchronizer.onBarcodeRecognition(slyceBarcode);
+            // Handle barcode detection
+            handleBarcodeResult(type, result, ScannerType._3D);
         }
     }
 
@@ -185,7 +186,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
     @Override
     public void onResult(Result result) {
 
-        String irId = result.getValue();
+        String value = result.getValue();
 
         // Resume the automatic scan after 2 seconds
         new Handler().postDelayed(new Runnable() {
@@ -203,10 +204,10 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                 // Image detection
 
                 // Notify the host application for basic result
-                mCameraSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+                mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
 
                 // Get extended products results
-                ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
+                ComManager.getInstance().getIRIDInfo(mClientId, value, new ComManager.OnExtendedInfoListener() {
                     @Override
                     public void onExtendedInfo(JSONArray products) {
 
@@ -216,13 +217,9 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                 });
 
             }else{
-                // Barcode detection
-
-                // Create a SlyceBarcode object
-                SlyceBarcode barcode = BarcodeHelper.createSlyceBarcode(type, ScannerType._2D, irId);
-
-                // Notify the host applicatin for barcode detection
-                mCameraSynchronizer.onBarcodeRecognition(barcode);
+                
+                // Handle barcode detection
+                handleBarcodeResult(type, value, ScannerType._2D);
             }
         }
     }
@@ -247,6 +244,23 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
 
         // Start search Slyce + MoodStock (if 2D enabled)
         obtainMessage(SlyceCameraMessage.SEARCH, bitmap).sendToTarget();
+    }
+
+    private void handleBarcodeResult(int type, String result, ScannerType scannerType){
+
+        // Create a SlyceBarcode object
+        SlyceBarcode slyceBarcode = BarcodeHelper.createSlyceBarcode(type, scannerType, result);
+
+        // Notify the host applicatin for barcode detection
+        mCameraSynchronizer.onBarcodeRecognition(slyceBarcode);
+
+        try {
+            JSONObject imageDetectReport = new JSONObject();
+            imageDetectReport.put(Constants.DETECTION_TYPE, slyceBarcode.getTypeString());
+            imageDetectReport.put(Constants.DATA_BARCODE, slyceBarcode.getBarcode());
+            MixpanelAPI mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
+            mixpanel.track(Constants.BARCODE_DETECTED, imageDetectReport);
+        } catch (JSONException e){}
     }
 
     @Override

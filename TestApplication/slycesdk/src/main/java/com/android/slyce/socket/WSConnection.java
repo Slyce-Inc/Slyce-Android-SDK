@@ -526,13 +526,16 @@ public class WSConnection implements
                         String format = barcode.optString(Constants.BARCODE_FORMAT);
                         String parsedResult = barcode.optString(Constants.PARSED_RESULT);
 
-                        //TODO: report to mix panel on barcode detection
-
                         // Create SlyceBarcode object
                         SlyceBarcode slyceBarcode = BarcodeHelper.createSlyceBarcode(format, BarcodeHelper.ScannerType._Slyce, parsedResult);
 
                         // Notify the host application on barcode recognition
                         mRequestSynchronizer.onBarcodeRecognition(slyceBarcode);
+
+                        JSONObject imageDetectReport = new JSONObject();
+                        imageDetectReport.put(Constants.DETECTION_TYPE, slyceBarcode.getTypeString());
+                        imageDetectReport.put(Constants.DATA_BARCODE, slyceBarcode.getBarcode());
+                        mixpanel.track(Constants.BARCODE_DETECTED, imageDetectReport);
 
                         return;
                     }

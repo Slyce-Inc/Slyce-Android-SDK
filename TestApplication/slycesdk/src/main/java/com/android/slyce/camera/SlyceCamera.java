@@ -8,15 +8,16 @@ import android.util.Log;
 import android.view.SurfaceView;
 import com.android.slyce.Slyce;
 import com.android.slyce.communication.ComManager;
-import com.android.slyce.enums.SlyceBarcodeType;
 import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.requests.SlyceProductsRequest;
+import com.android.slyce.utils.BarcodeHelper;
+import com.android.slyce.utils.BarcodeHelper.ScannerType;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.Utils;
-import com.android.slyce.zbar.BarcodeManager;
+import com.android.slyce.zbar.BarcodeSession;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
@@ -24,7 +25,7 @@ import com.android.slyce.moodstocks.AutoScannerSession;
 import com.android.slyce.moodstocks.AutoScannerSession.Listener;
 import org.json.JSONArray;
 
-public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnBarcodeListener{
+public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnBarcodeListener{
 
     private final String TAG = SlyceCamera.class.getSimpleName();
 
@@ -34,7 +35,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
     /* MS */
     private AutoScannerSession session;
 
-    private static final int TYPES = Result.Type.IMAGE | Result.Type.QRCODE | Result.Type.EAN13;
+    private static final int TYPES = Result.Type.IMAGE | Result.Type.QRCODE | Result.Type.EAN13 | Result.Type.DATAMATRIX | Result.Type.EAN8 | Result.Type.QRCODE | Result.Type.NONE;
 
     /* Hosting Activity */
     private Activity mActivity;
@@ -47,7 +48,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
     private Slyce mSlyce;
 
     /* Barcode/QR scanner engine */
-    private BarcodeManager barcodeManager;
+    private BarcodeSession barcodeSession;
 
     private static final class SlyceCameraMessage{
 
@@ -79,7 +80,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
         }else{
 
             // Start Barcode/QR scanner
-            barcodeManager = new BarcodeManager(activity, preview, this);
+            barcodeSession = new BarcodeSession(activity, preview, this);
         }
     }
 
@@ -93,8 +94,8 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
             session.start();
         }
 
-        if(barcodeManager != null){
-            barcodeManager.start();
+        if(barcodeSession != null){
+            barcodeSession.start();
         }
     }
 
@@ -104,9 +105,9 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
             session.stop();
         }
 
-        if(barcodeManager != null){
+        if(barcodeSession != null){
 //            barcodeManager.pause();
-            barcodeManager.stop();
+            barcodeSession.stop();
         }
     }
 
@@ -119,14 +120,14 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
             session.snap();
         }else{
             // Snap via Barcode/QR engine
-            barcodeManager.snap();
+            barcodeSession.snap();
         }
     }
 
     public void turnFlash(){
 
-        if(barcodeManager != null){
-            barcodeManager.turnFlash();
+        if(barcodeSession != null){
+            barcodeSession.turnFlash();
         }
 
         if(session != null){
@@ -140,28 +141,30 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
         }
 
-        if(barcodeManager != null){
+        if(barcodeSession != null){
 
         }
     }
 
     /* Barcode engine listener */
     @Override
-    public void onBarcodeResult(String result) {
+    public void onBarcodeResult(int type, String result) {
         Log.i(TAG, "onBarcodeResult");
 
         // Resume the automatic scan after 2 seconds
         new  Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                barcodeManager.resume();
-
+                barcodeSession.resume();
             }
         }, Constants.AUTO_SCAN_DELAY);
 
         if(isContinuousRecognition){
-            // TODO: Create SlyceBarcode based on barcode scanner type and result
-            mCameraSynchronizer.onBarcodeRecognition(new SlyceBarcode(SlyceBarcodeType.EAN_13, result));
+
+            // Create SlyceBarcode object based on type {SlyceBarcodeType} nad {ScannerType}
+            SlyceBarcode slyceBarcode = BarcodeHelper.createSlyceBarcode(type, ScannerType._3D, result);
+
+            mCameraSynchronizer.onBarcodeRecognition(slyceBarcode);
         }
     }
 
@@ -182,8 +185,6 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
     @Override
     public void onResult(Result result) {
 
-        // result.getType() == Result.Type.IMAGE ? "Image:" : "Barcode:"
-
         String irId = result.getValue();
 
         // Resume the automatic scan after 2 seconds
@@ -196,18 +197,33 @@ public class SlyceCamera extends Handler implements Listener, BarcodeManager.OnB
 
         if(isContinuousRecognition){
 
-            // Notify the host application for basic result
-            mCameraSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+            int type = result.getType();
 
-            // Get extended products results
-            ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
-                @Override
-                public void onExtendedInfo(JSONArray products) {
+            if(type == Result.Type.IMAGE){
+                // Image detection
 
-                    // Notify the host application for extended result
-                    mCameraSynchronizer.on2DExtendedRecognition(products);
-                }
-            });
+                // Notify the host application for basic result
+                mCameraSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+
+                // Get extended products results
+                ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
+                    @Override
+                    public void onExtendedInfo(JSONArray products) {
+
+                        // Notify the host application for extended result
+                        mCameraSynchronizer.on2DExtendedRecognition(products);
+                    }
+                });
+
+            }else{
+                // Barcode detection
+
+                // Create a SlyceBarcode object
+                SlyceBarcode barcode = BarcodeHelper.createSlyceBarcode(type, ScannerType._2D, irId);
+
+                // Notify the host applicatin for barcode detection
+                mCameraSynchronizer.onBarcodeRecognition(barcode);
+            }
         }
     }
 

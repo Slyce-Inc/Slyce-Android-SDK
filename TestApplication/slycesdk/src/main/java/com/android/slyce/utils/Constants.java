@@ -111,18 +111,17 @@ public class Constants {
     public static final String PROGRESS = "progress";
     public static final String TOKEN = "token";
     public static final String PRODUCTS = "products";
+    public static final String BARCODE = "barcode";
     public static final String WORK_FLOW_ENDED = "workflowEnded";
     public static final String TICKET_CREATION_FAILED = "ticketCreationFailed";
     public static final String ERROR = "error";
 
     /* Barcode */
-    public static final int AUTO_SCAN_DELAY = 2000;
+    public static final int AUTO_SCAN_DELAY = 4000;
+    public static final String BARCODE_FORMAT = "barcodeFormat";
+    public static final String PARSED_RESULT = "parsedResult";
 
-
-
-
-
-
-
+    /* Slyce */
+    public static final String ERROR_REASON = "errorReason";
 
 }

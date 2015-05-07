@@ -7,6 +7,8 @@ import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.RequestSynchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.utils.BarcodeHelper;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.models.Ticket;
 import com.android.slyce.utils.SlyceLog;
@@ -494,26 +496,48 @@ public class WSConnection implements
 
                     // Notify the app developer for the results
                     JSONArray products = data.optJSONArray(Constants.PRODUCTS);
+                    JSONObject barcode = data.optJSONObject(Constants.BARCODE);
+                    String errorReason = data.optString(Constants.ERROR_REASON);
 
                     // Calculate detection time
                     long totalDetectionTime = System.currentTimeMillis() - startDetectionTime;
                     long time = TimeUnit.MILLISECONDS.toSeconds(totalDetectionTime);
 
-                    if(products == null || products.length() == 0){
-                        // No products found
+                    if(!TextUtils.isEmpty(errorReason)){
+                        // Not found
                         is3DSearchNotFound = true;
 
                         // If 2D search also not found then report to MixPanel
                         if(is2DSearchNotFound || !mIs2D){
                             JSONObject searchNotFound = new JSONObject();
                             searchNotFound.put(Constants.DETECTION_TYPE, Constants._3D);
+                            searchNotFound.put(Constants.ERROR_MESSAGE, errorReason);
                             mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
                         }
 
                         // Send an empty products array
                         mRequestSynchronizer.on3DRecognition(new JSONArray());
 
-                    }else{
+                        return;
+                    }
+
+                    if(barcode != null){
+
+                        String format = barcode.optString(Constants.BARCODE_FORMAT);
+                        String parsedResult = barcode.optString(Constants.PARSED_RESULT);
+
+                        //TODO: report to mix panel on barcode detection
+
+                        // Create SlyceBarcode object
+                        SlyceBarcode slyceBarcode = BarcodeHelper.createSlyceBarcode(format, BarcodeHelper.ScannerType._Slyce, parsedResult);
+
+                        // Notify the host application on barcode recognition
+                        mRequestSynchronizer.onBarcodeRecognition(slyceBarcode);
+
+                        return;
+                    }
+
+                    if(products != null){
 
                         // Report to MixPanel
                         JSONObject imageDetectReport = new JSONObject();
@@ -544,6 +568,8 @@ public class WSConnection implements
                         mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
 
                         mRequestSynchronizer.on3DRecognition(products);
+
+                        return;
                     }
 
                     break;

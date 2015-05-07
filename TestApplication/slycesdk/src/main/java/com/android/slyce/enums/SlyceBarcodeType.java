@@ -5,7 +5,23 @@ package com.android.slyce.enums;
  */
 public enum SlyceBarcodeType {
 
-    EAN_13,
-    QR_CODE
+    SFBarcodeTypeNone,
+    SFBarcodeTypeAztec,// not in use
+    SFBarcodeTypeCodabar,
+    SFBarcodeTypeCode39,
+    SFBarcodeTypeCode93,
+    SFBarcodeTypeCode128,
+    SFBarcodeTypeDataMatrix,
+    SFBarcodeTypeEan8,
+    SFBarcodeTypeEan13,
+    SFBarcodeTypeITF,// not in use
+    SFBarcodeTypeMaxiCode,
+    SFBarcodeTypePDF417,
+    SFBarcodeTypeQRCode,
+    SFBarcodeTypeRSS14,// not in use
+    SFBarcodeTypeRSSExpanded,// not in use
+    SFBarcodeTypeUPCA,
+    SFBarcodeTypeUPCE,
+    SFBarcodeTypeUPCEANExtension,// not in use
 
 }

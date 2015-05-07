@@ -37,7 +37,7 @@ import java.io.FileOutputStream;
 
 /* Import ZBar Class files */
 
-public class BarcodeManager implements CameraManager.Listener {
+public class BarcodeSession implements CameraManager.Listener {
 
     ImageScanner scanner;
 
@@ -61,7 +61,7 @@ public class BarcodeManager implements CameraManager.Listener {
         Loader.load();
     }
 
-    public BarcodeManager(Activity parent, SurfaceView preview, OnBarcodeListener listener) {
+    public BarcodeSession(Activity parent, SurfaceView preview, OnBarcodeListener listener) {
 
         this.listener = listener;
 
@@ -105,12 +105,12 @@ public class BarcodeManager implements CameraManager.Listener {
      */
     @Override
     public boolean isListening() {
-        return true;
+        return (this.started && !this.paused);
     }
 
     @Override
     public void onCameraOpenException(Exception e) {
-
+        // TODO: notify the host app on error while open the camera
     }
 
     @Override
@@ -123,12 +123,18 @@ public class BarcodeManager implements CameraManager.Listener {
 
         if (result != 0) {
 
+            if (this.started && !this.paused) {
+                pause();
+            }
+
             SymbolSet syms = scanner.getResults();
 
             for (Symbol sym : syms) {
                 String barcodeResult = sym.getData();
 
-                listener.onBarcodeResult(barcodeResult);
+                int type = sym.getType();
+
+                listener.onBarcodeResult(type, barcodeResult);
             }
         }
 
@@ -145,7 +151,7 @@ public class BarcodeManager implements CameraManager.Listener {
      */
 
     public interface OnBarcodeListener{
-        void onBarcodeResult(String result);
+        void onBarcodeResult(int type, String result);
         void onBarcodeSnap(Bitmap bitmap);
     }
 

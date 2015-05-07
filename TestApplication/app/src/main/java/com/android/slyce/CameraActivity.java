@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.utils.SlyceLog;
+
 import org.json.JSONArray;
 
 import java.io.File;
@@ -60,26 +63,29 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
     /* OnSlyceCameraListener */
     @Override
-    public void onCameraBarcodeRecognition(String barcode) {
+    public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
 
         Toast.makeText(this,
-                "onCameraBarcodeRecognition: " + barcode, Toast.LENGTH_LONG).show();
+                        "onCameraBarcodeRecognition:" + "\n" +
+                        "Barcode Type: " + barcode.getType() + "\n" +
+                        "Barcode: " + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCamera2DRecognition(String irId, String productInfo) {
 
         Toast.makeText(this,
-                "onCamera2DRecognition: " + irId +
-                        "\n" + "Message: " + productInfo, Toast.LENGTH_LONG).show();
-
+                "onCamera2DRecognition:" +
+                        "IrId: " + irId + "\n" +
+                        "Product Info: " + productInfo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCamera2DExtendedRecognition(JSONArray products) {
 
         Toast.makeText(this,
-                "onCamera2DExtendedRecognition: " + products, Toast.LENGTH_LONG).show();
+                "onCamera2DExtendedRecognition:" +
+                        "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -88,25 +94,25 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         Toast.makeText(this,
                 "onCameraSlyceProgress: " + progress +
                         "\n" + "Message: " + message +
-                        "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
+                        "\n" + "Token: " + token, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCamera3DRecognition(JSONArray products) {
 
-        Toast.makeText(CameraActivity.this, "onCamera3DRecognition: " +  products.length() + " products", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "onCamera3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
 
-        Toast.makeText(CameraActivity.this, "onCameraStageLevelFinish: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "onCameraStageLevelFinish:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSlyceCameraError(String message) {
 
-        Toast.makeText(CameraActivity.this, "onSlyceCameraError: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "onSlyceCameraError: " + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -115,7 +121,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         snapProgress.setVisibility(View.INVISIBLE);
 
         Toast.makeText(this,
-                "onSnap: " + bitmap.getWidth() + " X " + bitmap.getHeight(), Toast.LENGTH_LONG).show();
+                "onSnap: " + "\n" + "Bitmap Size: " + bitmap.getWidth() + " X " + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

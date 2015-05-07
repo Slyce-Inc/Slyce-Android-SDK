@@ -101,17 +101,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onSlyceProgress(final long progress, final String message, String token) {
 
         Toast.makeText(this,
-                "Slyce Progress: " + progress +
+                "onSlyceProgress:" +
+                        "\n" + "Progress: " + progress +
                         "\n" + "Message: " + message +
-                        "\n" + "Token: " + token, Toast.LENGTH_LONG).show();
+                        "\n" + "Token: " + token, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void on2DRecognition(String irId, String productInfo) {
 
         Toast.makeText(this,
-                "2D Progress: " + irId +
-                        "\n" + "Message: " + productInfo, Toast.LENGTH_LONG).show();
+                "on2DRecognition:" +
+                        "IrId: " + irId + "\n" +
+                        "Product Info: " + productInfo, Toast.LENGTH_SHORT).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -119,7 +121,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void on2DExtendedRecognition(JSONArray products) {
         Toast.makeText(this,
-                "2D Extended: " + products, Toast.LENGTH_LONG).show();
+                "on2DExtendedRecognition:" +
+                        "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -128,7 +131,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onBarcodeRecognition(SlyceBarcode barcode) {
 
         Toast.makeText(this,
-                "Barcode: " + barcode.getBarcode(), Toast.LENGTH_LONG).show();
+                "onBarcodeRecognition:" + "\n" +
+                "Barcode Type: " + barcode.getType() + "\n" +
+                "Barcode: " + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -136,9 +141,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void on3DRecognition(final JSONArray products) {
 
-        Toast.makeText(MainActivity.this, "Found " +  products.length() + " products", Toast.LENGTH_LONG).show();
-
-        SlyceLog.i(TAG, "Products: " + products.toString());
+        Toast.makeText(MainActivity.this, "on3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
 
         if(products.length() > 0){
             results.setText(products.toString());
@@ -150,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onError(final String message) {
 
-        Toast.makeText(MainActivity.this, "onError: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, "onError: " + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -158,7 +161,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onStageLevelFinish(StageMessage message) {
 
-        Toast.makeText(MainActivity.this, "Stage Message: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, "onStageLevelFinish:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
     // OnSlyceRequestListener callbacks
 
@@ -196,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     @Override
                     public void onOpenSuccess() {
 
-                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_SHORT).show();
 
                         // Hide progress
                         progressBar.setVisibility(View.INVISIBLE);
@@ -215,7 +218,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         // Hide progress
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        Toast.makeText(MainActivity.this, "Slyce SDK open failed: " + message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Slyce SDK open failed: " + message, Toast.LENGTH_SHORT).show();
                     }
                 });
 

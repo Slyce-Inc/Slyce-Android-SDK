@@ -236,7 +236,6 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
   }
 
   // CameraManager.Listener
-
   /**
    * {@link CameraManager.Listener CameraManager.Listener} implementation
    * @exclude

@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 import com.android.slyce.Slyce;
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.CameraSynchronizer;
@@ -85,6 +87,24 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
             // Start Barcode/QR scanner
             barcodeSession = new BarcodeSession(activity, preview, this);
         }
+
+        // Detect touch point on camera preview
+        if(preview != null){
+            preview.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        mCameraSynchronizer.onTap(event.getRawX(), event.getRawY());
+                        focuseAtPoint();
+                        return true;
+
+                    }
+                    return false;
+                }
+            });
+        }
     }
 
     public void setContinuousRecognition(boolean value){
@@ -109,7 +129,6 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         }
 
         if(barcodeSession != null){
-//            barcodeManager.pause();
             barcodeSession.stop();
         }
     }
@@ -139,13 +158,12 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
     }
 
     public void focuseAtPoint(){
-
         if(session != null){
-
+            session.requestFocus();
         }
 
         if(barcodeSession != null){
-
+            barcodeSession.requestFocus();
         }
     }
 
@@ -217,7 +235,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                 });
 
             }else{
-                
+
                 // Handle barcode detection
                 handleBarcodeResult(type, value, ScannerType._2D);
             }

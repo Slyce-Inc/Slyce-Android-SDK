@@ -1,6 +1,7 @@
 package com.android.slyce.handler;
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -13,6 +14,8 @@ import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
+
+import java.util.Objects;
 
 /**
  * Created by davidsvilem on 4/21/15.
@@ -50,8 +53,11 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(5, bitmap).sendToTarget();
     }
 
-    public void onTap(){
-        obtainMessage(6).sendToTarget();
+    public void onTap(float x, float y){
+        Object[] point = new Object[2];
+        point[0] = x;
+        point[1] = y;
+        obtainMessage(6, point).sendToTarget();
     }
 
     public void onSlyceProgress(long progress, String message, String token){
@@ -121,9 +127,12 @@ public class CameraSynchronizer extends Handler {
 
             case 6:
 
-                mCameraListener.onTap();
+                Object[] point = (Object[]) msg.obj;
+                mCameraListener.onTap((float) point[0], (float) point[1]);
 
-                SlyceLog.i(TAG, "onTap()");
+                SlyceLog.i(TAG, "onTap("+(float)point[0]+","+(float)point[1]+")");
+
+                break;
 
             case 7:
 

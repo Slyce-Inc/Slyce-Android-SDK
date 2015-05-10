@@ -355,4 +355,8 @@ public class CameraManager extends Handler implements CameraInstance.Listener,
     camera.getCamera().setParameters(params);
   }
 
+  public void requestFocus(){
+    camera.requestFocus();
+  }
+
 }

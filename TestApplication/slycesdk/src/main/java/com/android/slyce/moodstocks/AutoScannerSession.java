@@ -391,4 +391,8 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
   public void turnFlash(){
     cameraManager.turnFlash();
   }
+
+  public void requestFocus(){
+    cameraManager.requestFocus();
+  }
 }

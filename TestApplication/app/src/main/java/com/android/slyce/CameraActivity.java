@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,8 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     private Button snap;
     private Button flash;
 
+    private SurfaceView preview;
+
     private ProgressBar snapProgress;
 
     @Override
@@ -35,14 +38,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
         setContentView(R.layout.activity_camera);
 
-        SurfaceView preview = (SurfaceView) findViewById(R.id.preview);
-        snap = (Button) findViewById(R.id.snap);
-        snap.setOnClickListener(this);
-
-        flash = (Button) findViewById(R.id.flash);
-        flash.setOnClickListener(this);
-
-        snapProgress = (ProgressBar) findViewById(R.id.snap_progress);
+        initViews();
 
         Slyce slyce = Slyce.getInstance(this, "YOUR CLIENT ID");
 
@@ -59,6 +55,19 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     protected void onPause() {
         super.onPause();
         slyceCamera.stop();
+    }
+
+    private void initViews(){
+
+        preview = (SurfaceView) findViewById(R.id.preview);
+
+        snap = (Button) findViewById(R.id.snap);
+        snap.setOnClickListener(this);
+
+        flash = (Button) findViewById(R.id.flash);
+        flash.setOnClickListener(this);
+
+        snapProgress = (ProgressBar) findViewById(R.id.snap_progress);
     }
 
     /* OnSlyceCameraListener */
@@ -125,8 +134,9 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
-    public void onTap() {
+    public void onTap(float x, float y) {
 
+        Toast.makeText(this, "onTap:" + "\n" + "X: " + x + "\n" + "Y:" + y, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.android.slyce.camera;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -96,10 +97,21 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
 
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
-                        mCameraSynchronizer.onTap(event.getRawX(), event.getRawY());
-                        focuseAtPoint();
-                        return true;
+                        float x = event.getX();
+                        float y =  event.getY();
 
+                        mCameraSynchronizer.onTap(x, y);
+
+                        // Create the rect
+                        Rect touchRect = new Rect(
+                                (int)(x - 100),
+                                (int)(y - 100),
+                                (int)(x + 100),
+                                (int)(y + 100));
+
+                        focuseAtPoint(true, touchRect);
+
+                        return true;
                     }
                     return false;
                 }
@@ -157,13 +169,13 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         }
     }
 
-    public void focuseAtPoint(){
+    public void focuseAtPoint(boolean focusAtPoint, final Rect focusRect){
         if(session != null){
             session.requestFocus();
         }
 
         if(barcodeSession != null){
-            barcodeSession.requestFocus();
+            barcodeSession.requestFocus(focusAtPoint, focusRect);
         }
     }
 

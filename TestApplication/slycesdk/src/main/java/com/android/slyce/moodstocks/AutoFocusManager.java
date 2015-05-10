@@ -23,8 +23,10 @@
 
 package com.android.slyce.moodstocks;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.os.Handler;
@@ -50,7 +52,7 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
   private static int FOCUS_REQUEST = 0;
 
   /** The 1.5s delay between autofocus request. */
-  private static final long FOCUS_DELAY = 1500;
+  private static final long FOCUS_DELAY = 1500*10;
 
   /**
    * Constructor.
@@ -67,10 +69,10 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
   }
 
   /** Starts requesting an autofocus every 1.5 seconds. */
-  protected void start() {
+  protected void start(boolean focusAtPoint, final Rect focusRect) {
     if (this.camera == null) return;
     safeCancelAutoFocus();
-    safeAutoFocus();
+    safeAutoFocus(focusAtPoint, focusRect);
     this.focussing = true;
   }
 
@@ -92,12 +94,15 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
    * Manually require an autofocus.
    * This method bypasses the 1.5 seconds loop to perform an autofocus as soon as possible.
    */
-  protected void requestFocus() {
-    if (!this.focussing && !this.is_focus) {
-      this.focussing = true;
-      stop();
-      start();
-    }
+  protected void requestFocus(boolean focusAtPoint, final Rect focusRect) {
+//    if (!this.focussing && !this.is_focus) {
+//      this.focussing = true;
+//      stop();
+//      start(focusAtPoint, focusRect);
+//    }
+    this.focussing = true;
+    stop();
+    start(focusAtPoint, focusRect);
   }
 
   /**
@@ -108,7 +113,7 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
   public void handleMessage(Message m) {
     if (m.what == FOCUS_REQUEST && this.camera != null) {
       safeCancelAutoFocus();
-      safeAutoFocus();
+      safeAutoFocus(false, null);
       this.focussing = true;
     }
   }
@@ -142,13 +147,38 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
    * Wrapper around {@link Camera#autoFocus(Camera.AutoFocusCallback)}
    * method that suppresses any thrown {@link RuntimeException}.
    */
-  private void safeAutoFocus() {
+  private void safeAutoFocus(boolean focusAtPoint, final Rect focusRect) {
     if (this.camera != null) {
       try {
-        this.camera.autoFocus(this);
+        if(focusAtPoint){
+          doTouchFocus(focusRect);
+        }else{
+          this.camera.autoFocus(this);
+        }
       } catch (RuntimeException e) {
         Log.e("AutoFocusManager", "Unexpected Runtime Exception while calling autofocus");
       }
+    }
+  }
+
+  /**
+   * Called from PreviewSurfaceView to set touch focus.
+   * @param - Rect - new area for auto focus
+   */
+  public void doTouchFocus(final Rect focusRect) {
+    try {
+      List<Camera.Area> focusList = new ArrayList<Camera.Area>();
+      Camera.Area focusArea = new Camera.Area(focusRect, 1000);
+      focusList.add(focusArea);
+
+      Camera.Parameters param = camera.getParameters();
+      param.setFocusAreas(focusList);
+      param.setMeteringAreas(focusList);
+      camera.setParameters(param);
+
+      camera.autoFocus(this);
+    } catch (Exception e) {
+      Log.i("AutoFocusManager", "Unable to autofocus");
     }
   }
 

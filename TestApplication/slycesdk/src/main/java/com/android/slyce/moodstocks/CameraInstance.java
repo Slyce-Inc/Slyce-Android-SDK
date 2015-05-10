@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import android.graphics.ImageFormat;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Message;
@@ -177,7 +178,7 @@ public class CameraInstance extends Handler implements Camera.PreviewCallback {
       this.camera.setPreviewCallback(this);
       this.camera.startPreview();
       if (this.focusManager != null)
-        this.focusManager.start();
+        this.focusManager.start(false, null);
     } catch (IOException e) {
       Log.e(TAG, "`startPreview` received IOException");
       e.printStackTrace();
@@ -199,9 +200,9 @@ public class CameraInstance extends Handler implements Camera.PreviewCallback {
   }
 
   /** Requests autofocus */
-  protected void requestFocus() {
+  protected void requestFocus(boolean focusAtPoint, final Rect focusRect) {
     if (this.focusManager != null)
-      this.focusManager.requestFocus();
+      this.focusManager.requestFocus(focusAtPoint, focusRect);
   }
 
   /**

@@ -393,6 +393,6 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
   }
 
   public void requestFocus(){
-    cameraManager.requestFocus();
+//    cameraManager.requestFocus();
   }
 }

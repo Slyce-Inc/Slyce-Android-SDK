@@ -25,6 +25,7 @@ package com.android.slyce.moodstocks;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Looper;
@@ -355,8 +356,8 @@ public class CameraManager extends Handler implements CameraInstance.Listener,
     camera.getCamera().setParameters(params);
   }
 
-  public void requestFocus(){
-    camera.requestFocus();
+  public void requestFocus(boolean focusAtPoint, final Rect focusRect){
+    camera.requestFocus(focusAtPoint, focusRect);
   }
 
 }

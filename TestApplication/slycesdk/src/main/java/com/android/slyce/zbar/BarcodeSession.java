@@ -104,8 +104,8 @@ public class BarcodeSession implements CameraManager.Listener {
         cameraManager.turnFlash();
     }
 
-    public void requestFocus(){
-        cameraManager.requestFocus();
+    public void requestFocus(boolean focusAtPoint, final Rect focusRect){
+        cameraManager.requestFocus(focusAtPoint, focusRect);
     }
 
     /*

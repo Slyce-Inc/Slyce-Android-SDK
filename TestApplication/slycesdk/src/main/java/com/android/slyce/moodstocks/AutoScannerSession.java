@@ -389,8 +389,8 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
     isSnap = true;
   }
 
-  public void turnFlash(){
-    cameraManager.turnFlash();
+  public boolean turnFlash(){
+    return cameraManager.turnFlash();
   }
 
   public void requestFocus(boolean focusAtPoint, final Rect focusRect){

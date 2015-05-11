@@ -339,7 +339,7 @@ public class CameraManager extends Handler implements CameraInstance.Listener,
     }
   }
 
-  public void turnFlash(){
+  public boolean turnFlash(){
 
     Camera.Parameters params = camera.getCamera().getParameters();
 
@@ -354,6 +354,9 @@ public class CameraManager extends Handler implements CameraInstance.Listener,
 
     params.getFlashMode();
     camera.getCamera().setParameters(params);
+
+    // Return flash new state
+    return isFlashOn;
   }
 
   public void requestFocus(boolean focusAtPoint, final Rect focusRect){

@@ -56,12 +56,17 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
     /* Barcode/QR scanner engine */
     private BarcodeSession barcodeSession;
 
+    /* Options Json from SlyceProductRequest */
+    private JSONObject mOptions;
+
+    private MixpanelAPI mixpanel;
+
     private static final class SlyceCameraMessage{
 
         private static final int SEARCH = 0;
     }
 
-    public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, OnSlyceCameraListener listener){
+    public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, JSONObject options, OnSlyceCameraListener listener){
 
         mActivity = activity;
 
@@ -70,6 +75,10 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         mCameraSynchronizer = new CameraSynchronizer(listener);
 
         mSlyce = slyce;
+
+        mOptions = options;
+
+        mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
 
         // If 2D Enabled -> MS automatic scanner
         // Else -> Barcode/QR engine scanner
@@ -153,18 +162,26 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
 
     public void turnFlash(){
 
+        boolean flashNewState = false;
+
         if(barcodeSession != null){
-            barcodeSession.turnFlash();
+            flashNewState = barcodeSession.turnFlash();
         }
 
         if(session != null){
-            session.turnFlash();
+            flashNewState = session.turnFlash();
+        }
+
+        if(flashNewState){
+            mixpanel.track(Constants.FLASH_TURNED_ON, null);
+        }else{
+            mixpanel.track(Constants.FLASH_TURNED_OFF, null);
         }
     }
 
     private void focusAreas(boolean focusAtPoint, float x, float y){
 
-        // Create the rect
+        // Create the rect of focus area 100px around the center (x,y)
         Rect touchRect = new Rect(
                 (int)(x - Constants.FOCUS_SQUARE_AREA),
                 (int)(y - Constants.FOCUS_SQUARE_AREA),
@@ -180,7 +197,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         }
     }
 
-    public void focuseAtPoint(float x, float y){
+    public void focusAtPoint(float x, float y){
         focusAreas(true, x, y);
     }
 
@@ -238,6 +255,14 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
             if(type == Result.Type.IMAGE){
                 // Image detection
 
+                try {
+                    JSONObject imageDetectReport = new JSONObject();
+                    imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
+                    imageDetectReport.put(Constants.DATA_IRID, value);
+                    mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
+                    mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
+                } catch (JSONException e) {}
+
                 // Notify the host application for basic result
                 mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
 
@@ -277,6 +302,9 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         // Notify the host application on the taken bitmap
         mCameraSynchronizer.onSnap(bitmap);
 
+        // Report to MP on image snapped
+        mixpanel.track(Constants.IMAGE_SNAPPED, null);
+
         // Start search Slyce + MoodStock (if 2D enabled)
         obtainMessage(SlyceCameraMessage.SEARCH, bitmap).sendToTarget();
     }
@@ -293,7 +321,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
             JSONObject imageDetectReport = new JSONObject();
             imageDetectReport.put(Constants.DETECTION_TYPE, slyceBarcode.getTypeString());
             imageDetectReport.put(Constants.DATA_BARCODE, slyceBarcode.getBarcode());
-            MixpanelAPI mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
+            mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
             mixpanel.track(Constants.BARCODE_DETECTED, imageDetectReport);
         } catch (JSONException e){}
     }
@@ -325,7 +353,6 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                     @Override
                     public void on2DExtendedRecognition(JSONArray products) {
                         mCameraSynchronizer.on2DExtendedRecognition(products);
-
                     }
 
                     @Override
@@ -343,7 +370,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                         mCameraSynchronizer.onError(message);
                     }
 
-                }, (Bitmap) msg.obj);
+                }, (Bitmap) msg.obj, mOptions);
 
                 request.execute();
 

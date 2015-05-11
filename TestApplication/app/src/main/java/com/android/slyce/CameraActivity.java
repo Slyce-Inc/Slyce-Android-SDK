@@ -43,7 +43,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
         Slyce slyce = Slyce.getInstance(this, "YOUR CLIENT ID");
 
-        slyceCamera = new SlyceCamera(this, slyce, preview, this);
+        slyceCamera = new SlyceCamera(this, slyce, preview, null, this);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     public void onCamera2DRecognition(String irId, String productInfo) {
 
         Toast.makeText(this,
-                "onCamera2DRecognition:" +
+                "onCamera2DRecognition:" + "\n" +
                         "IrId: " + irId + "\n" +
                         "Product Info: " + productInfo, Toast.LENGTH_SHORT).show();
     }
@@ -163,7 +163,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
             case R.id.focus_at_point:
 
-                slyceCamera.focuseAtPoint(250, 250);
+                slyceCamera.focusAtPoint(250, 250);
 
                 break;
         }

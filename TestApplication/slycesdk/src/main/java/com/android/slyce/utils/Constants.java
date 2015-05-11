@@ -87,6 +87,9 @@ public class Constants {
     public static final String DATA_IRID = "irID";
     public static final String DATA_BARCODE = "data";
     public static final String GOOGLE_ADVERTISING_ID = "GoogleAdvertisingID";
+    public static final String IMAGE_SNAPPED = "Image.Snapped";
+    public static final String FLASH_TURNED_OFF = "Flash.Turned.OFF";
+    public static final String FLASH_TURNED_ON = "Flash.Turned.ON";
 
     /* Client info */
     public static final String STATUS = "status";

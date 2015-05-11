@@ -25,14 +25,12 @@ package com.android.slyce.moodstocks;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
 
 /** Class managing the camera autofocus by requesting an autofocus every 1.5s */
 @SuppressWarnings("deprecation")
@@ -52,7 +50,7 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
   private static int FOCUS_REQUEST = 0;
 
   /** The 1.5s delay between autofocus request. */
-  private static final long FOCUS_DELAY = 1500;
+  private static final long FOCUS_DELAY = 2000;
 
   /**
    * Constructor.
@@ -184,16 +182,15 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
         param.setMeteringAreas(focusList);
         camera.setParameters(param);
 
-        camera.autoFocus(this);
         Log.i("AutoFocusManager", "doTouchFocus with focus areas");
       } else{
-        // Regular auto focus
-        this.camera.autoFocus(this);
         Log.i("AutoFocusManager", "doTouchFocus with regular focus");
       }
 
     } catch (Exception e) {
-      Log.i("AutoFocusManager", "Unable to autofocus");
+      Log.i("AutoFocusManager", "Unable to perform focus areas");
+    } finally{
+      camera.autoFocus(this);
     }
   }
 

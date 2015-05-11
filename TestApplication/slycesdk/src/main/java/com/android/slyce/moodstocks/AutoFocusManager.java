@@ -52,7 +52,7 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
   private static int FOCUS_REQUEST = 0;
 
   /** The 1.5s delay between autofocus request. */
-  private static final long FOCUS_DELAY = 1500*10;
+  private static final long FOCUS_DELAY = 4000;
 
   /**
    * Constructor.
@@ -100,9 +100,12 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
 //      stop();
 //      start(focusAtPoint, focusRect);
 //    }
-    this.focussing = true;
-    stop();
-    start(focusAtPoint, focusRect);
+
+    if(!this.focussing){
+      this.focussing = true;
+      stop();
+      start(focusAtPoint, focusRect);
+    }
   }
 
   /**
@@ -127,6 +130,7 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
     this.sendEmptyMessageDelayed(FOCUS_REQUEST, FOCUS_DELAY);
     this.focussing = false;
     this.is_focus = success;
+    Log.i("AutoFocusManager", "onAutoFocus success = " + success);
   }
 
   /**

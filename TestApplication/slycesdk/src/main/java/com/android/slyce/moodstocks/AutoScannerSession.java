@@ -25,6 +25,7 @@ package com.android.slyce.moodstocks;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -392,7 +393,7 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
     cameraManager.turnFlash();
   }
 
-  public void requestFocus(){
-//    cameraManager.requestFocus();
+  public void requestFocus(boolean focusAtPoint, final Rect focusRect){
+    cameraManager.requestFocus(focusAtPoint, focusRect);
   }
 }

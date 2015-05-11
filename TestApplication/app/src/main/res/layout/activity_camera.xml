@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
     <Button
         android:id="@+id/snap"
         android:layout_width="wrap_content"
@@ -33,5 +32,16 @@
         android:textAllCaps="false"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"/>
+
+    <Button
+        android:id="@+id/focus_at_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Focus At Point"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

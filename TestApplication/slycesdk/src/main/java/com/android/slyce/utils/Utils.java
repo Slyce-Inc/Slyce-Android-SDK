@@ -86,7 +86,7 @@ public class Utils {
 
         // Bitmap to input stream
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, bos);
         byte[] bitmapData = bos.toByteArray();
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bitmapData);
 
@@ -189,7 +189,7 @@ public class Utils {
 
             // Bitmap to input stream
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, bos);
             byte[] bitmapdata = bos.toByteArray();
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bitmapdata);
 

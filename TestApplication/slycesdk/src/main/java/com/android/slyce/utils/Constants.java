@@ -32,7 +32,7 @@ public class Constants {
     public static final String MS_ID = "id";
 
     /* Image resize value (MS/Slyce)*/
-    public static final int IMAGE_RESIZE = 450;
+    public static final int IMAGE_RESIZE = 500;
 
     /* Error messages */
     public static final String SLYCE_INIT_ERROR = "Slyce initiation error: ";
@@ -127,5 +127,7 @@ public class Constants {
 
     /* Slyce */
     public static final String ERROR_REASON = "errorReason";
+
+    public static final int FOCUS_SQUARE_AREA = 100;
 
 }

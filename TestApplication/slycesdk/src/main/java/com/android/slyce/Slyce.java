@@ -254,7 +254,6 @@ public final class Slyce implements Scanner.SyncListener{
     }
 
     public void close(){
-
         // Required by MS
         if (compatible) {
             try {

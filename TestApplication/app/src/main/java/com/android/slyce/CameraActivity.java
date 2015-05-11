@@ -27,6 +27,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     private SlyceCamera slyceCamera;
     private Button snap;
     private Button flash;
+    private Button focuseAtPoint;
 
     private SurfaceView preview;
 
@@ -66,6 +67,9 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
         flash = (Button) findViewById(R.id.flash);
         flash.setOnClickListener(this);
+
+        focuseAtPoint = (Button) findViewById(R.id.focus_at_point);
+        focuseAtPoint.setOnClickListener(this);
 
         snapProgress = (ProgressBar) findViewById(R.id.snap_progress);
     }
@@ -154,6 +158,12 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
             case R.id.flash:
 
                 slyceCamera.turnFlash();
+
+                break;
+
+            case R.id.focus_at_point:
+
+                slyceCamera.focuseAtPoint(250, 250);
 
                 break;
         }

@@ -102,14 +102,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
 
                         mCameraSynchronizer.onTap(x, y);
 
-                        // Create the rect
-                        Rect touchRect = new Rect(
-                                (int)(x - 100),
-                                (int)(y - 100),
-                                (int)(x + 100),
-                                (int)(y + 100));
-
-                        focuseAtPoint(true, touchRect);
+                        focusAreas(true, x, y);
 
                         return true;
                     }
@@ -169,14 +162,26 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         }
     }
 
-    public void focuseAtPoint(boolean focusAtPoint, final Rect focusRect){
+    private void focusAreas(boolean focusAtPoint, float x, float y){
+
+        // Create the rect
+        Rect touchRect = new Rect(
+                (int)(x - Constants.FOCUS_SQUARE_AREA),
+                (int)(y - Constants.FOCUS_SQUARE_AREA),
+                (int)(x + Constants.FOCUS_SQUARE_AREA),
+                (int)(y + Constants.FOCUS_SQUARE_AREA));
+
         if(session != null){
-            session.requestFocus();
+            session.requestFocus(focusAtPoint, touchRect);
         }
 
         if(barcodeSession != null){
-            barcodeSession.requestFocus(focusAtPoint, focusRect);
+            barcodeSession.requestFocus(focusAtPoint, touchRect);
         }
+    }
+
+    public void focuseAtPoint(float x, float y){
+        focusAreas(true, x, y);
     }
 
     /* Barcode engine listener */

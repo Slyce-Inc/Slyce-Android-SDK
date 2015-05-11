@@ -52,7 +52,7 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
   private static int FOCUS_REQUEST = 0;
 
   /** The 1.5s delay between autofocus request. */
-  private static final long FOCUS_DELAY = 4000;
+  private static final long FOCUS_DELAY = 1500;
 
   /**
    * Constructor.
@@ -171,16 +171,27 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
    */
   public void doTouchFocus(final Rect focusRect) {
     try {
-      List<Camera.Area> focusList = new ArrayList<Camera.Area>();
-      Camera.Area focusArea = new Camera.Area(focusRect, 1000);
-      focusList.add(focusArea);
 
       Camera.Parameters param = camera.getParameters();
-      param.setFocusAreas(focusList);
-      param.setMeteringAreas(focusList);
-      camera.setParameters(param);
 
-      camera.autoFocus(this);
+      if(param.getMaxNumMeteringAreas() > 0){// check that metering areas are supported
+
+        List<Camera.Area> focusList = new ArrayList<Camera.Area>();
+        Camera.Area focusArea = new Camera.Area(focusRect, 1000);
+        focusList.add(focusArea);
+
+        param.setFocusAreas(focusList);
+        param.setMeteringAreas(focusList);
+        camera.setParameters(param);
+
+        camera.autoFocus(this);
+        Log.i("AutoFocusManager", "doTouchFocus with focus areas");
+      } else{
+        // Regular auto focus
+        this.camera.autoFocus(this);
+        Log.i("AutoFocusManager", "doTouchFocus with regular focus");
+      }
+
     } catch (Exception e) {
       Log.i("AutoFocusManager", "Unable to autofocus");
     }

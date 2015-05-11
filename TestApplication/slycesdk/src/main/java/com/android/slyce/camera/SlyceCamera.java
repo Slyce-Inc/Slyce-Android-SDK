@@ -299,9 +299,6 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
 
     private void handleSnap(Bitmap bitmap){
 
-        // Notify the host application on the taken bitmap
-        mCameraSynchronizer.onSnap(bitmap);
-
         // Report to MP on image snapped
         mixpanel.track(Constants.IMAGE_SNAPPED, null);
 
@@ -327,11 +324,13 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
     }
 
     @Override
-    public void handleMessage(Message msg) {
+    public void handleMessage(final Message msg) {
 
         switch(msg.what){
 
             case SlyceCameraMessage.SEARCH:
+
+                final Bitmap bitmap = (Bitmap) msg.obj;
 
                 // Slyce + 2D search
                 SlyceProductsRequest request = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
@@ -363,6 +362,11 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                     @Override
                     public void onStageLevelFinish(StageMessage message) {
                         mCameraSynchronizer.onStageLevelFinish(message);
+
+                        if(message == StageMessage.BitmapUploaded){
+                            // Notify the host application on the taken bitmap
+                            mCameraSynchronizer.onImageStartRequest(bitmap);
+                        }
                     }
 
                     @Override

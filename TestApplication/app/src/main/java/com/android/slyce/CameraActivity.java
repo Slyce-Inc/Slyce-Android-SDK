@@ -129,12 +129,12 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
-    public void onSnap(Bitmap bitmap) {
+    public void onImageStartRequest(Bitmap bitmap) {
 
         snapProgress.setVisibility(View.INVISIBLE);
 
         Toast.makeText(this,
-                "onSnap: " + "\n" + "Bitmap Size: " + bitmap.getWidth() + " X " + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
+                "onImageStartRequest: " + "\n" + "Bitmap Size: " + bitmap.getWidth() + " X " + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

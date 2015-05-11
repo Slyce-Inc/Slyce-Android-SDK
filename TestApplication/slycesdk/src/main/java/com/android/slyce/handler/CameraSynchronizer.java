@@ -49,7 +49,7 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(4, message).sendToTarget();
     }
 
-    public void onSnap(Bitmap bitmap){
+    public void onImageStartRequest(Bitmap bitmap){
         obtainMessage(5, bitmap).sendToTarget();
     }
 
@@ -119,9 +119,9 @@ public class CameraSynchronizer extends Handler {
 
             case 5:
 
-                mCameraListener.onSnap((Bitmap) msg.obj);
+                mCameraListener.onImageStartRequest((Bitmap) msg.obj);
 
-                SlyceLog.i(TAG, "onSnap()");
+                SlyceLog.i(TAG, "onImageStartRequest()");
 
                 break;
 

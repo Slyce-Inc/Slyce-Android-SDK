@@ -172,7 +172,7 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
 
       Camera.Parameters param = camera.getParameters();
 
-      if(param.getMaxNumMeteringAreas() > 0){// check that metering areas are supported
+//      if(param.getMaxNumMeteringAreas() > 0)// check that metering areas are supported
 
         List<Camera.Area> focusList = new ArrayList<Camera.Area>();
         Camera.Area focusArea = new Camera.Area(focusRect, 1000);
@@ -183,9 +183,6 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
         camera.setParameters(param);
 
         Log.i("AutoFocusManager", "doTouchFocus with focus areas");
-      } else{
-        Log.i("AutoFocusManager", "doTouchFocus with regular focus");
-      }
 
     } catch (Exception e) {
       Log.i("AutoFocusManager", "Unable to perform focus areas");
@@ -193,5 +190,4 @@ public class AutoFocusManager extends Handler implements Camera.AutoFocusCallbac
       camera.autoFocus(this);
     }
   }
-
 }

@@ -71,7 +71,9 @@ public class WSConnection implements
 
     private JSONObject mOptions;
 
-    public WSConnection(Context context, String clientID, boolean is2D, OnSlyceRequestListener listener){
+    private WSConnection.MethodType mRequestType;
+
+    public WSConnection(Context context, String clientID, boolean is2D, OnSlyceRequestListener listener, WSConnection.MethodType type){
 
         mContext = context.getApplicationContext();
 
@@ -84,13 +86,15 @@ public class WSConnection implements
         mIs2D = is2D;
 
         mClientId = clientID;
+
+        mRequestType = type;
     }
 
     public void setOnTokenListener(OnTokenListener listener){
         mTokenListener = listener;
     }
 
-    public void connect(final MethodType methodType){
+    public void connect(){
 
         // Slyce
         AsyncHttpClient client = AsyncHttpClient.getDefaultInstance();
@@ -122,7 +126,7 @@ public class WSConnection implements
                     setCallbacks();
 
                     // Set request type
-                    setMethodType(methodType);
+                    setMethodType(mRequestType);
 
                     // Check if the request has been cancelled before connection has been established
                     if(isCancelled){
@@ -131,14 +135,14 @@ public class WSConnection implements
                     }
 
                     // Ready to perform a request
-                    callSlyceMethod(methodType);
+                    callSlyceMethod(mRequestType);
                 }
             }
         });
 
         // MS
         if(mIs2D){
-            perform2DSearchMethod(methodType);
+            perform2DSearchMethod(mRequestType);
         }
     }
 

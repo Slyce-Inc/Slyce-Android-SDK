@@ -12,6 +12,7 @@ import android.view.View;
 import com.android.slyce.Slyce;
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.CameraSynchronizer;
+import com.android.slyce.interfaces.SlyceCameraInterface;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
@@ -31,7 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnBarcodeListener{
+public class SlyceCamera extends Handler implements SlyceCameraInterface, Listener, BarcodeSession.OnBarcodeListener{
 
     private final String TAG = SlyceCamera.class.getSimpleName();
 
@@ -107,7 +108,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                         float x = event.getX();
-                        float y =  event.getY();
+                        float y = event.getY();
 
                         mCameraSynchronizer.onTap(x, y);
 
@@ -121,34 +122,10 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         }
     }
 
-    public void setContinuousRecognition(boolean value){
-        isContinuousRecognition = value;
-    }
 
-    public void start() {
-
-        if(session != null){
-            session.start();
-        }
-
-        if(barcodeSession != null){
-            barcodeSession.start();
-        }
-    }
-
-    public void stop() {
-
-        if(session != null){
-            session.stop();
-        }
-
-        if(barcodeSession != null){
-            barcodeSession.stop();
-        }
-    }
-
-    public void snap(){
-
+    /* Interface methods for host application */
+    @Override
+    public void snap() {
         // If 2D Enabled snap via MS
         // Else snap  via Barcode/QR engine
         if(session != null){
@@ -160,8 +137,40 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
         }
     }
 
-    public void turnFlash(){
+    @Override
+    public void start() {
+        if(session != null){
+            session.start();
+        }
 
+        if(barcodeSession != null){
+            barcodeSession.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if(session != null){
+            session.stop();
+        }
+
+        if(barcodeSession != null){
+            barcodeSession.stop();
+        }
+    }
+
+    @Override
+    public void focusAtPoint(float x, float y) {
+        focusAreas(true, x, y);
+    }
+
+    @Override
+    public void setContinuousRecognition(boolean value) {
+        isContinuousRecognition = value;
+    }
+
+    @Override
+    public void turnFlash() {
         boolean flashNewState = false;
 
         if(barcodeSession != null){
@@ -178,30 +187,9 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
             mixpanel.track(Constants.FLASH_TURNED_OFF, null);
         }
     }
+    /* */
 
-    private void focusAreas(boolean focusAtPoint, float x, float y){
-
-        // Create the rect of focus area 100px around the center (x,y)
-        Rect touchRect = new Rect(
-                (int)(x - Constants.FOCUS_SQUARE_AREA),
-                (int)(y - Constants.FOCUS_SQUARE_AREA),
-                (int)(x + Constants.FOCUS_SQUARE_AREA),
-                (int)(y + Constants.FOCUS_SQUARE_AREA));
-
-        if(session != null){
-            session.requestFocus(focusAtPoint, touchRect);
-        }
-
-        if(barcodeSession != null){
-            barcodeSession.requestFocus(focusAtPoint, touchRect);
-        }
-    }
-
-    public void focusAtPoint(float x, float y){
-        focusAreas(true, x, y);
-    }
-
-    /* Barcode engine listener */
+    /* Barcode Engine Listener */
     @Override
     public void onBarcodeResult(int type, String result) {
         Log.i(TAG, "onBarcodeResult");
@@ -229,7 +217,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
     }
     /* */
 
-    /* Listener */
+    /* MS Listener */
     @Override
     public void onCameraOpenFailed(Exception e) {
         Log.i(TAG, "onCameraOpenFailed");
@@ -277,7 +265,6 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
                 });
 
             }else{
-
                 // Handle barcode detection
                 handleBarcodeResult(type, value, ScannerType._2D);
             }
@@ -297,6 +284,7 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
     }
     /* */
 
+    /* Private methods */
     private void handleSnap(Bitmap bitmap){
 
         // Report to MP on image snapped
@@ -322,6 +310,25 @@ public class SlyceCamera extends Handler implements Listener, BarcodeSession.OnB
             mixpanel.track(Constants.BARCODE_DETECTED, imageDetectReport);
         } catch (JSONException e){}
     }
+
+    private void focusAreas(boolean focusAtPoint, float x, float y){
+
+        // Create the rect of focus area 100px around the center (x,y)
+        Rect touchRect = new Rect(
+                (int)(x - Constants.FOCUS_SQUARE_AREA),
+                (int)(y - Constants.FOCUS_SQUARE_AREA),
+                (int)(x + Constants.FOCUS_SQUARE_AREA),
+                (int)(y + Constants.FOCUS_SQUARE_AREA));
+
+        if(session != null){
+            session.requestFocus(focusAtPoint, touchRect);
+        }
+
+        if(barcodeSession != null){
+            barcodeSession.requestFocus(focusAtPoint, touchRect);
+        }
+    }
+    /* */
 
     @Override
     public void handleMessage(final Message msg) {

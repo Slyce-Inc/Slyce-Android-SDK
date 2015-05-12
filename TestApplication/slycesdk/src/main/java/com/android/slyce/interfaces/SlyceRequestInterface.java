@@ -5,5 +5,8 @@ package com.android.slyce.interfaces;
  */
 public interface SlyceRequestInterface {
 
+    String getToken();
+    void cancel();
+    void execute();
 
 }

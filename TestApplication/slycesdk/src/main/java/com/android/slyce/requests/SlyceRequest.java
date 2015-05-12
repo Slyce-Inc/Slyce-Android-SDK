@@ -1,6 +1,7 @@
 package com.android.slyce.requests;
 
 import com.android.slyce.Slyce;
+import com.android.slyce.interfaces.SlyceRequestInterface;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.socket.WSConnection;
 import com.android.slyce.utils.SlyceLog;
@@ -10,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by davidsvilem on 3/23/15.
  */
-public class SlyceRequest implements WSConnection.OnTokenListener{
+public class SlyceRequest implements SlyceRequestInterface ,WSConnection.OnTokenListener{
 
     private static String TAG = SlyceRequest.class.getSimpleName();
 
@@ -36,15 +37,23 @@ public class SlyceRequest implements WSConnection.OnTokenListener{
         wsConnection.setOnTokenListener(this);
     }
 
-    public String getToken(){
+    @Override
+    public void onTokenReceived(String token) {
+        this.token = token;
+    }
+
+    @Override
+    public String getToken() {
         return token;
     }
 
-    public void cancel(){
+    @Override
+    public void cancel() {
         wsConnection.close();
     }
 
-    public void execute(){
+    @Override
+    public void execute() {
         if(!oneShotexecution.compareAndSet(false, true)){
             SlyceLog.e(TAG, "execute can be called only once, please create another instance of GetProductsRequest");
             return;
@@ -61,10 +70,5 @@ public class SlyceRequest implements WSConnection.OnTokenListener{
         }
 
         wsConnection.connect();
-    }
-
-    @Override
-    public void onTokenReceived(String token) {
-        this.token = token;
     }
 }

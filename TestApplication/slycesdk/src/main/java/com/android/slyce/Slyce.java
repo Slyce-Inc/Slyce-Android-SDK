@@ -52,6 +52,10 @@ public final class Slyce implements Scanner.SyncListener{
         return mInstance;
     }
 
+    public static Slyce get(){
+        return mInstance;
+    }
+
     private Slyce(Context context, String clientID) {
 
         // Get Mixpanel object

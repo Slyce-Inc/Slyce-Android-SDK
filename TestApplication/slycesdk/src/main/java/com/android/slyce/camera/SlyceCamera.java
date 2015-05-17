@@ -47,9 +47,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
     /* Hosting Activity */
     private Activity mActivity;
 
-    /* Client ID*/
-    private String mClientId;
-
     private boolean isContinuousRecognition = true;
 
     private Slyce mSlyce;
@@ -71,11 +68,9 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
         mActivity = activity;
 
-        mClientId = slyce.getClientID();
+        mSlyce = slyce;
 
         mCameraSynchronizer = new CameraSynchronizer(listener);
-
-        mSlyce = slyce;
 
         mOptions = options;
 
@@ -255,7 +250,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
                 mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
 
                 // Get extended products results
-                ComManager.getInstance().getIRIDInfo(mClientId, value, new ComManager.OnExtendedInfoListener() {
+                ComManager.getInstance().getIRIDInfo(mSlyce.getClientID(), value, new ComManager.OnExtendedInfoListener() {
                     @Override
                     public void onExtendedInfo(JSONArray products) {
 
@@ -273,7 +268,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
     @Override
     public void onWarning(String s) {
-        Log.i(TAG, "onWarning");
+        Log.i(TAG, "onWarning: "+ s);
     }
 
     @Override

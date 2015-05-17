@@ -1,19 +1,16 @@
 package com.android.slyce;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -25,18 +22,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.requests.SlyceProductsRequest;
-import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnSlyceRequestListener, TextView.OnEditorActionListener {
+public class MainActivity extends Activity implements View.OnClickListener, OnSlyceRequestListener, TextView.OnEditorActionListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -44,6 +40,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Button uploadImage;
     private Button cancelRequests;
     private Button cameraActivity;
+    private Button fullUIMode;
 
     private TextView acceptTextView;
     private TextView premium;
@@ -86,6 +83,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         premium = (TextView) findViewById(R.id.premium);
         results = (TextView) findViewById(R.id.results);
         cameraActivity = (Button) findViewById(R.id.camera_activity);
+        fullUIMode = (Button) findViewById(R.id.full_ui_mode);
 
         results.setTextIsSelectable(true);
 
@@ -94,6 +92,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         acceptTextView.setOnClickListener(this);
         cancelRequests.setOnClickListener(this);
         cameraActivity.setOnClickListener(this);
+        fullUIMode.setOnClickListener(this);
 
         clientIdEditText.setOnEditorActionListener(this);
     }
@@ -259,6 +258,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.camera_activity:
 
                 startActivity(new Intent(this, CameraActivity.class));
+
+                break;
+
+            case R.id.full_ui_mode:
+
+                startActivity(new Intent(this, FullUIModeActivity.class));
 
                 break;
         }

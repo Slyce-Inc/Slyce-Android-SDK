@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.slycesdk">
+    package="com.android.slycesdk" >
 
-    <!-- Required by Slyce SDK-->
+    <!-- Required by Slyce SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- required by MS and ZBar -->
@@ -14,16 +15,22 @@
     <uses-feature
         android:name="android.hardware.preview.any"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
-    <uses-feature android:name="android.hardware.camera.autofocus"
-        android:required="false"/>
+    <application android:allowBackup="true" >
 
-    <application android:allowBackup="true">
-        <!-- required by MixPanel-->
+        <!-- required by MixPanel -->
         // Allow us to set MixPanel flush interval reports to 10000 milliseconds
         <meta-data
             android:name="com.mixpanel.android.MPConfig.FlushInterval"
             android:value="10000" />
+
+        <activity
+            android:name="com.android.slyce.activities.SlyceActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 
 </manifest>

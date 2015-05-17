@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,4 +10,65 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</FrameLayout>
+    <RelativeLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/camera_fragment_layout_padding">
+        <Button
+            android:id="@+id/close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="close"/>
+
+        <Button
+            android:id="@+id/scan_tips_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="scan tips"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/camera_fragment_layout_padding"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/snap_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="snap"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/scan_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_layout"
+        android:layout_above="@id/bottom_layout"
+        android:padding="@dimen/camera_fragment_layout_padding">
+
+        <Button
+            android:id="@+id/gallery_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gallery"/>
+
+        <Button
+            android:id="@+id/flash_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="flash"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

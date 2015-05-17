@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ProgressBar;
+import android.util.Log;
 import android.widget.Toast;
 import com.android.slyce.activities.SlyceCameraFragment;
 import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
@@ -16,6 +15,8 @@ import org.json.JSONArray;
 
 public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmentListener{
 
+    private final String TAG = FullUIModeActivity.class.getSimpleName();
+
     private Slyce slyce;
 
     @Override
@@ -24,6 +25,7 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
         setContentView(R.layout.activity_full_uimode);
 
         slyce = Slyce.getInstance(this, "jcpenney852");
+
         slyce.open(new OnSlyceOpenListener() {
             @Override
             public void onOpenSuccess() {
@@ -40,12 +42,10 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
 
     private void openSlyceCameraFragment(String clientID){
 
-        // Add SlyceFragment
-        SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(clientID);
+        // Add SlyceCameraFragment
+        SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(clientID, null);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.slyce_fragment_container, slyceFragment);
 
         // Commit the transaction

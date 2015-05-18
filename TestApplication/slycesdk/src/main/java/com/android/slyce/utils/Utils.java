@@ -12,6 +12,9 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import org.json.JSONObject;
@@ -275,20 +278,8 @@ public class Utils {
         return result;
     }
 
-    public static String getDeviceID(Context context) {
-        return Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
-
     public static String getOSVersion() {
         return Build.VERSION.RELEASE;
-    }
-
-    public static String getDeviceManufacturer() {
-        return Build.MANUFACTURER;
-    }
-
-    public static String getDeviceModel() {
-        return Build.MODEL;
     }
 
     public static String getHostAppName(Context context) {
@@ -352,41 +343,6 @@ public class Utils {
         return deviceType;
     }
 
-//    public static void getGoogleAdvertisingID(final Context context, final CallBack listener){
-//
-//        new Thread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//
-//                AdvertisingIdClient.Info adInfo = null;
-//                try {
-//                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
-//
-//                } catch (IOException e) {
-//                    // Unrecoverable error connecting to Google Play services (e.g.,
-//                    // the old version of the service doesn't support getting AdvertisingId).
-//                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
-//                } catch (GooglePlayServicesNotAvailableException e) {
-//                    // Google Play services is not available entirely.
-//                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
-//                } catch (GooglePlayServicesRepairableException e) {
-//                    SlyceLog.e(TAG,"getGoogleAdvertisingID Error");
-//                }
-//                final String id = adInfo.getId();
-//                final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
-//
-//                new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        listener.onReady(id);
-//                    }
-//                });
-//            }
-//
-//        }).start();
-//    }
-
     public interface CallBack{
         void onReady(String value);
     }
@@ -447,6 +403,18 @@ public class Utils {
                 }
             }
         }).start();
+    }
+
+    public static void performAlphaAnimation(View view, float x, float y){
+        view.setVisibility(View.VISIBLE);
+        view.setX(x);
+        view.setY(y);
+
+        AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
+        animation.setDuration(1000);
+        animation.setStartOffset(0);
+        animation.setFillAfter(true);
+        view.startAnimation(animation);
     }
 }
 

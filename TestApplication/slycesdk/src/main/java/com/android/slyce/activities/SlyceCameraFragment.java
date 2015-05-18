@@ -12,7 +12,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.slyce.Slyce;
@@ -23,6 +25,7 @@ import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.utils.SlyceLog;
+import com.android.slyce.utils.Utils;
 import com.android.slycesdk.R;
 
 import org.json.JSONArray;
@@ -53,12 +56,14 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     /* Camera surface view */
     private SurfaceView mPreview;
 
-    /* Buttons */
+    /* Views */
     private Button mCloseButton;
     private Button mScanTipsButton;
     private Button mGalleryButton;
     private Button mFlashButton;
     private Button mSnapButton;
+
+    private ImageView mOnTapView;
 
     /* Slyce SDK object */
     private Slyce mSlyce;
@@ -188,6 +193,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     @Override
     public void onTap(float x, float y) {
         mListener.onTap(x, y);
+
+        Utils.performAlphaAnimation(mOnTapView, x, y);
     }
 
     private void createSlyceCamera(){
@@ -201,6 +208,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         mGalleryButton = (Button) view.findViewById(R.id.gallery_button);
         mFlashButton = (Button) view.findViewById(R.id.flash_button);
         mSnapButton = (Button) view.findViewById(R.id.snap_button);
+
+        mOnTapView = (ImageView) view.findViewById(R.id.on_tap_view);
 
         mCloseButton.setOnClickListener(this);
         mScanTipsButton.setOnClickListener(this);

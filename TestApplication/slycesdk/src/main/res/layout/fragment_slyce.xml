@@ -49,7 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/top_layout"
         android:layout_above="@id/bottom_layout"
-        android:padding="@dimen/camera_fragment_layout_padding">
+        android:padding="@dimen/camera_fragment_layout_padding"
+        >
 
         <Button
             android:id="@+id/gallery_button"
@@ -64,11 +65,18 @@
             android:layout_alignParentRight="true"
             android:text="flash"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            />
+        <View
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/on_tap_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/slyce_scan_focus_on_tap"
+        android:visibility="gone"/>
+
 
 </RelativeLayout>

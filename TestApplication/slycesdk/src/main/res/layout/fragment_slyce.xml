@@ -15,19 +15,23 @@
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/camera_fragment_layout_padding">
+        android:padding="@dimen/camera_fragment_layout_padding"
+        android:background="@color/fragment_slyce_top_background">
         <Button
             android:id="@+id/close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="close"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/scan_tips_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/slyce_scan_tips"
+            android:background="@android:color/transparent"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:text="scan tips"/>
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -35,13 +39,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/camera_fragment_layout_padding"
+        android:background="@color/fragment_slyce_bottom_background"
         android:layout_alignParentBottom="true">
-        <Button
+        <ImageButton
             android:id="@+id/snap_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="snap"/>
+            android:src="@drawable/slyce_snap"
+            android:background="@android:color/transparent"
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -53,18 +60,22 @@
         android:padding="@dimen/camera_fragment_layout_padding"
         >
 
-        <Button
+        <ImageButton
             android:id="@+id/gallery_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="gallery"/>
+            android:src="@drawable/slyce_gallery"
+            android:background="@android:color/transparent"
+            />
 
-        <Button
+        <CheckBox
             android:id="@+id/flash_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="flash"/>
+            android:background="@android:color/transparent"
+            android:button="@drawable/slyce_flash_selector"
+            />
 
         <View
             android:layout_width="50dp"

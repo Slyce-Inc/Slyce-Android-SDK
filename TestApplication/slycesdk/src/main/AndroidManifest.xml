@@ -27,10 +27,6 @@
             android:name="com.mixpanel.android.MPConfig.FlushInterval"
             android:value="10000" />
 
-        <activity
-            android:name="com.android.slyce.activities.SlyceActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
     </application>
 
 </manifest>

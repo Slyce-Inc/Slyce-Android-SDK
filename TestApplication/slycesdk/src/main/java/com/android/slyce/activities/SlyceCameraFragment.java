@@ -19,6 +19,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -65,10 +67,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     /* Views */
     private Button mCloseButton;
-    private Button mScanTipsButton;
-    private Button mGalleryButton;
-    private Button mFlashButton;
-    private Button mSnapButton;
+    private ImageButton mScanTipsButton;
+    private ImageButton mGalleryButton;
+    private CheckBox mFlashButton;
+    private ImageButton mSnapButton;
 
     private ImageView mOnTapView;
 
@@ -225,10 +227,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     private void initViews(View view){
         mPreview = (SurfaceView) view.findViewById(R.id.preview);
         mCloseButton = (Button) view.findViewById(R.id.close_button);
-        mScanTipsButton = (Button) view.findViewById(R.id.scan_tips_button);
-        mGalleryButton = (Button) view.findViewById(R.id.gallery_button);
-        mFlashButton = (Button) view.findViewById(R.id.flash_button);
-        mSnapButton = (Button) view.findViewById(R.id.snap_button);
+        mScanTipsButton = (ImageButton) view.findViewById(R.id.scan_tips_button);
+        mGalleryButton = (ImageButton) view.findViewById(R.id.gallery_button);
+        mFlashButton = (CheckBox) view.findViewById(R.id.flash_button);
+        mSnapButton = (ImageButton) view.findViewById(R.id.snap_button);
 
         mOnTapView = (ImageView) view.findViewById(R.id.on_tap_view);
 

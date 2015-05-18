@@ -78,6 +78,15 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     /* Slyce Camera object */
     private SlyceCamera mSlyceCamera;
 
+    /* Notify the ImageProcessFragment on events */
+    private OnImageProcessListener mImageProcessListener;
+
+    public interface OnImageProcessListener{
+
+        void onSnap(Bitmap bitmap);
+        void onProgress(long progress, String message);
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -101,11 +110,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     public SlyceCameraFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -203,6 +207,11 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     }
 
     @Override
+    public void onSnap(Bitmap bitmap) {
+        mListener.onSnap(bitmap);
+    }
+
+    @Override
     public void onTap(float x, float y) {
         mListener.onTap(x, y);
 
@@ -292,11 +301,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
             // Show ImageProcessFragment
             startImageProcessFragment(pickedImageString);
-
-//                ImageView imgView = (ImageView) findViewById(R.id.imgView);
-//                // Set the Image in ImageView after decoding the String
-//                imgView.setImageBitmap(BitmapFactory
-//                        .decodeFile(imgDecodableString));
 
         } else {
             SlyceLog.i(TAG, "You haven't picked Image");

@@ -28,5 +28,6 @@ public interface OnSlyceCameraListener {
 
     /* Miscellaneous */
     void onImageStartRequest(Bitmap bitmap);
+    void onSnap(Bitmap bitmap);
     void onTap(float x, float y);
 }

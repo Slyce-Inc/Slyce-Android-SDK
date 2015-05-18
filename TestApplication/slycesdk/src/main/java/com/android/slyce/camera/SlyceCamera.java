@@ -285,6 +285,9 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         // Report to MP on image snapped
         mixpanel.track(Constants.IMAGE_SNAPPED, null);
 
+        // Notify the host application on snaped image
+        mCameraSynchronizer.onSnap(bitmap);
+
         // Start search Slyce + MoodStock (if 2D enabled)
         obtainMessage(SlyceCameraMessage.SEARCH, bitmap).sendToTarget();
     }

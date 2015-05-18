@@ -1,11 +1,15 @@
 package com.android.slyce.activities;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import com.android.slycesdk.R;
 
 /**
@@ -13,11 +17,11 @@ import com.android.slycesdk.R;
  * Use the {@link ImageProcessFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ImageProcessFragment extends Fragment {
+public class ImageProcessFragment extends Fragment implements SlyceCameraFragment.OnImageProcessListener{
 
     private static final String ARG_IMAGE_STRING = "arg_image_string";
 
-    private String mImageString;
+    private String mImgDecodableString;
 
     /**
      * Use this factory method to create a new instance of
@@ -42,7 +46,7 @@ public class ImageProcessFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mImageString = getArguments().getString(ARG_IMAGE_STRING);
+            mImgDecodableString = getArguments().getString(ARG_IMAGE_STRING);
         }
     }
 
@@ -61,5 +65,24 @@ public class ImageProcessFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private void createBitmapFromString(String imgDecodableString){
+
+//        ImageView imgView = (ImageView) findViewById(R.id.imgView);
+//        // Set the Image in ImageView after decoding the String
+//        imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+
+    }
+
+    /** {@link SlyceCameraFragment.OnImageProcessListener} */
+    @Override
+    public void onSnap(Bitmap bitmap) {
+
+    }
+
+    @Override
+    public void onProgress(long progress, String message) {
+
     }
 }

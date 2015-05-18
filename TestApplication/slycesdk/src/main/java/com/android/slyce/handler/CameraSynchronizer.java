@@ -73,6 +73,10 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(9, message).sendToTarget();
     }
 
+    public void onSnap(Bitmap bitmap){
+        obtainMessage(10, bitmap).sendToTarget();
+    }
+
     @Override
     public void handleMessage(Message msg) {
 
@@ -164,6 +168,14 @@ public class CameraSynchronizer extends Handler {
                 mCameraListener.onCameraStageLevelFinish(stageMsg);
 
                 SlyceLog.i(TAG, "onCameraStageLevelFinish(" + stageMsg + ")");
+
+                break;
+
+            case 10:
+
+                mCameraListener.onSnap((Bitmap) msg.obj);
+
+                SlyceLog.i(TAG, "onSnap()");
 
                 break;
         }

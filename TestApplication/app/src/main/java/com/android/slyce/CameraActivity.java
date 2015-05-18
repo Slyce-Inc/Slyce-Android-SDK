@@ -144,6 +144,11 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
+    public void onSnap(Bitmap bitmap) {
+        Toast.makeText(this, "onSnap:" + "\n" + "Width: " + bitmap.getWidth() + "\n" + "Height:" + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClick(View v) {
 
         switch(v.getId()){

@@ -105,7 +105,12 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
     }
 
     @Override
-    public void onTap(float x, float y) {
+    public void onSnap(Bitmap bitmap) {
+        Toast.makeText(this, "onSnap", Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onTap(float x, float y) {
+        Toast.makeText(this, "onTap", Toast.LENGTH_SHORT).show();
     }
 }

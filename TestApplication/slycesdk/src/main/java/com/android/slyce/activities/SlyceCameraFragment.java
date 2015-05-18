@@ -1,10 +1,15 @@
 package com.android.slyce.activities;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +47,9 @@ import org.json.JSONObject;
  */
 public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListener, OnClickListener{
 
-    private final String TAG = SlyceCameraFragment.class.getSimpleName();
+    private static final String TAG = SlyceCameraFragment.class.getSimpleName();
+
+    private static final int RESULT_LOAD_IMG = 1;
 
     // the fragment initialization parameters
     private static final String ARG_CLIENT_ID = "arg_client_id";
@@ -94,6 +101,11 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     public SlyceCameraFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -238,6 +250,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         }
     }
 
+    private void close(){
+        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -245,10 +261,13 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         if(id == R.id.close_button){
 
+            close();
 
         }else if(id == R.id.scan_tips_button){
 
         }else if(id == R.id.gallery_button){
+
+            Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
 
         }else if(id == R.id.flash_button){
 
@@ -258,5 +277,41 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
             mSlyceCamera.snap();
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        // When an Image is picked
+        if (requestCode == RESULT_LOAD_IMG && resultCode == getActivity().RESULT_OK && null != data) {
+
+            // Extract Image String
+            String pickedImageString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
+
+            // Show ImageProcessFragment
+            startImageProcessFragment(pickedImageString);
+
+//                ImageView imgView = (ImageView) findViewById(R.id.imgView);
+//                // Set the Image in ImageView after decoding the String
+//                imgView.setImageBitmap(BitmapFactory
+//                        .decodeFile(imgDecodableString));
+
+        } else {
+            SlyceLog.i(TAG, "You haven't picked Image");
+        }
+    }
+
+    private void startImageProcessFragment(String imageString){
+        if(TextUtils.isEmpty(imageString)){
+            SlyceLog.i(TAG, "Invalid Image picked");
+            return;
+        }
+
+        ImageProcessFragment fragment = ImageProcessFragment.newInstance(imageString);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.image_process_fragment_container, fragment);
+        transaction.commitAllowingStateLoss();
     }
 }

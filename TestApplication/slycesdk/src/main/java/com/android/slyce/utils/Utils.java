@@ -1,13 +1,18 @@
 package com.android.slyce.utils;
 
+import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -415,6 +420,34 @@ public class Utils {
         animation.setStartOffset(0);
         animation.setFillAfter(true);
         view.startAnimation(animation);
+    }
+
+    public static void loadImageFromGallery(Fragment fragment, int result){
+
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // Start the Intent
+        fragment.startActivityForResult(galleryIntent, result);
+    }
+
+    public static String getImageDecodableString(Intent data, Context context){
+
+        // Get the Image from data
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+        // Get the cursor
+        Cursor cursor = context.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        // Move to first row
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String imgDecodableString = cursor.getString(columnIndex);
+        cursor.close();
+
+        return imgDecodableString;
     }
 }
 

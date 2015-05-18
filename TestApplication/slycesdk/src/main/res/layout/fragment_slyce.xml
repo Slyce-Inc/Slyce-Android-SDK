@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.android.slyce.activities.SlyceCameraFragment"
-    android:background="@android:color/holo_red_dark">
+    android:background="@android:color/holo_red_dark"
+    >
 
     <SurfaceView
         android:id="@+id/preview"
@@ -77,6 +78,12 @@
         android:layout_height="50dp"
         android:src="@drawable/slyce_scan_focus_on_tap"
         android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/image_process_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 
 </RelativeLayout>

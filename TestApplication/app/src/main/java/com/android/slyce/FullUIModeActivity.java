@@ -2,6 +2,7 @@ package com.android.slyce;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,14 +41,17 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     private void openSlyceCameraFragment(String clientID){
 
         // Add SlyceCameraFragment
         SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(clientID, null);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
         transaction.replace(R.id.slyce_fragment_container, slyceFragment);
-
         // Commit the transaction
         transaction.commit();
     }

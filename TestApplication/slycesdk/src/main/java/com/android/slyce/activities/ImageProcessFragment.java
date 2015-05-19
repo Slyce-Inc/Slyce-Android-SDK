@@ -2,14 +2,12 @@ package com.android.slyce.activities;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
+import android.widget.Toast;
 import com.android.slycesdk.R;
 
 /**
@@ -19,22 +17,16 @@ import com.android.slycesdk.R;
  */
 public class ImageProcessFragment extends Fragment implements SlyceCameraFragment.OnImageProcessListener{
 
-    private static final String ARG_IMAGE_STRING = "arg_image_string";
-
-    private String mImgDecodableString;
+    private String mImageDecodableString;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param imageString picked image String.
      * @return A new instance of fragment ImageProcessFragment.
      */
-    public static ImageProcessFragment newInstance(String imageString) {
+    public static ImageProcessFragment newInstance() {
         ImageProcessFragment fragment = new ImageProcessFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_IMAGE_STRING, imageString);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -45,9 +37,6 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mImgDecodableString = getArguments().getString(ARG_IMAGE_STRING);
-        }
     }
 
     @Override
@@ -72,17 +61,16 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 //        ImageView imgView = (ImageView) findViewById(R.id.imgView);
 //        // Set the Image in ImageView after decoding the String
 //        imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-
     }
 
     /** {@link SlyceCameraFragment.OnImageProcessListener} */
     @Override
     public void onSnap(Bitmap bitmap) {
-
+        Toast.makeText(getActivity(), "ImageProcessFragment: onSnap", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onProgress(long progress, String message) {
-
+        Toast.makeText(getActivity(), "ImageProcessFragment: onProgress", Toast.LENGTH_SHORT).show();
     }
 }

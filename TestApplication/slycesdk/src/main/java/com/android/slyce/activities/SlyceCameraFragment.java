@@ -3,38 +3,28 @@ package com.android.slyce.activities;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.android.slyce.Slyce;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceCameraListener;
-import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.android.slycesdk.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,7 +50,11 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     private String mClientID;
     private JSONObject mOptionsJson;
 
+    /* Listeners */
     private OnSlyceCameraFragmentListener mListener;
+
+    /* Notify the ImageProcessFragment on events */
+    private static OnImageProcessListener mOnImageProcessListener;
 
     /* Camera surface view */
     private SurfaceView mPreview;
@@ -80,8 +74,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     /* Slyce Camera object */
     private SlyceCamera mSlyceCamera;
 
-    /* Notify the ImageProcessFragment on events */
-    private OnImageProcessListener mImageProcessListener;
+    private ImageProcessFragment mImageProcessFragment;
 
     public interface OnImageProcessListener{
 
@@ -112,6 +105,12 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     public SlyceCameraFragment() {
         // Required empty public constructor
+
+        // Create ImageProcessFragment
+        mImageProcessFragment = ImageProcessFragment.newInstance();
+
+        // Set the listener so messages will be sent to ImageProcessFragment
+        mOnImageProcessListener = mImageProcessFragment;
     }
 
     @Override
@@ -170,27 +169,32 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onCamera3DRecognition(JSONArray products) {
+        // Notify the host application of found products
         mListener.onCameraFragment3DRecognition(products);
     }
 
     @Override
     public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
+        // Notify the host application of barcode recognition
         mListener.onCameraFragmentBarcodeRecognition(barcode);
     }
 
     @Override
     public void onCamera2DRecognition(String irId, String productInfo) {
+        // Notify the host application of MS recognition
         mListener.onCameraFragment2DRecognition(irId, productInfo);
     }
 
     @Override
     public void onCamera2DExtendedRecognition(JSONArray products) {
+        // Notify the host application of extra products details
         mListener.onCameraFragment2DExtendedRecognition(products);
     }
 
     @Override
     public void onCameraSlyceProgress(long progress, String message, String id) {
-        mListener.onCameraFragmentSlyceProgress(progress, message, id);
+        // Notify ImageProcessFragment for searching progress
+        mOnImageProcessListener.onProgress(progress, message);
     }
 
     @Override
@@ -210,7 +214,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onSnap(Bitmap bitmap) {
-        mListener.onSnap(bitmap);
+        // Notify ImageProcessFragment that bitmap is ready
+        mOnImageProcessListener.onSnap(bitmap);
     }
 
     @Override
@@ -286,6 +291,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         }else if(id == R.id.snap_button){
 
+            attachFragment(mImageProcessFragment);
+
+            // Take a picture using SlyceCamera object
             mSlyceCamera.snap();
         }
     }
@@ -294,28 +302,21 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         // When an Image is picked
         if (requestCode == RESULT_LOAD_IMG && resultCode == getActivity().RESULT_OK && null != data) {
 
             // Extract Image String
             String pickedImageString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
 
-            // Show ImageProcessFragment
-            startImageProcessFragment(pickedImageString);
-
         } else {
             SlyceLog.i(TAG, "You haven't picked Image");
         }
     }
 
-    private void startImageProcessFragment(String imageString){
-        if(TextUtils.isEmpty(imageString)){
-            SlyceLog.i(TAG, "Invalid Image picked");
-            return;
-        }
+    /** Displays ImageProcessFragment {@link ImageProcessFragment}
+     *  @param fragment to display */
+    private void attachFragment(Fragment fragment){
 
-        ImageProcessFragment fragment = ImageProcessFragment.newInstance(imageString);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.image_process_fragment_container, fragment);
         transaction.commitAllowingStateLoss();

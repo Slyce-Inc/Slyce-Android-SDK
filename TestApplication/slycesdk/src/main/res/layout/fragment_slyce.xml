@@ -90,11 +90,12 @@
         android:src="@drawable/slyce_scan_focus_on_tap"
         android:visibility="gone"/>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/image_process_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:gravity="center">
+    </RelativeLayout>
 
 
 </RelativeLayout>

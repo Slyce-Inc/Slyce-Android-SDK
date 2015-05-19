@@ -29,4 +29,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.3.0'
 //    compile(name:'slyce', ext:'aar')
     compile project(':slycesdk')
+    compile 'com.android.support:recyclerview-v7:+'
+
 }

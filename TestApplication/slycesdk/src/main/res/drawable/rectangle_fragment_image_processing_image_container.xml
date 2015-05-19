@@ -6,9 +6,9 @@
         android:color="@color/image_border_color"
         />
     <corners
-        android:bottomRightRadius="@dimen/fragment_image_process_image_rounded_corners_radius"
-        android:bottomLeftRadius="@dimen/fragment_image_process_image_rounded_corners_radius"
-        android:topLeftRadius="@dimen/fragment_image_process_image_rounded_corners_radius"
-        android:topRightRadius="@dimen/fragment_image_process_image_rounded_corners_radius" />
+        android:bottomRightRadius="@dimen/fragment_image_process_image_corners_radius"
+        android:bottomLeftRadius="@dimen/fragment_image_process_image_corners_radius"
+        android:topLeftRadius="@dimen/fragment_image_process_image_corners_radius"
+        android:topRightRadius="@dimen/fragment_image_process_image_corners_radius" />
 
 </shape>

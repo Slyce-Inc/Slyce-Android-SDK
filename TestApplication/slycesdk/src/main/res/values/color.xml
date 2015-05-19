@@ -10,4 +10,7 @@
     <color name="image_process_frag_bottom_background">#ffffff</color>
     <color name="slyce_blue_color">#00a4db</color>
     <color name="text_search_status">#737373</color>
+    <color name="image_analyse_pre_process">#80595a5a</color>
+    <color name="image_analyse_in_process">#000000</color>
+    <color name="image_analyse_post_process">#595a5a</color>
 </resources>

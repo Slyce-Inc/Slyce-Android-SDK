@@ -2,7 +2,8 @@
     <dimen name="camera_fragment_layout_padding">20dp</dimen>
 
     <!--Used in ImageProcessFragment-->
-    <dimen name="fragment_image_process_image_rounded_corners_radius">25dp</dimen>
+    <dimen name="fragment_image_process_image_corners_radius">25dp</dimen>
+    <dimen name="fragment_image_process_image_border_width">2dp</dimen>
     <dimen name="fragment_image_process_padding_horizontal_primary">10dp</dimen>
     <dimen name="fragment_image_process_padding_horizontal_secondary">20dp</dimen>
     <dimen name="fragment_image_process_padding_bottom">10dp</dimen>

@@ -62,6 +62,7 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
     @Override
     public void onCameraFragment3DRecognition(JSONArray products) {
         Toast.makeText(this, "onCameraFragment3DRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
+        // TODO create gridview of products
     }
 
     @Override

@@ -87,6 +87,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         /** Notify on search progress */
         void onProgress(long progress, String message);
 
+        /** Notify for found products */
+        void onCamera3DRecognition();
+
         /** Notify on error */
         void onError(String message);
     }
@@ -184,6 +187,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     public void onCamera3DRecognition(JSONArray products) {
         // Notify the host application of found products
         mListener.onCameraFragment3DRecognition(products);
+
+        // Notify ImageProcessFragment for found products
+        mOnImageProcessListener.onCamera3DRecognition();
     }
 
     @Override

@@ -10,19 +10,19 @@
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:background="@drawable/fragment_image_process_top_background"
         android:paddingLeft="@dimen/fragment_image_process_padding_horizontal_secondary"
         android:paddingRight="@dimen/fragment_image_process_padding_horizontal_secondary">
 
-        <RelativeLayout
-            android:id="@+id/image_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/rectangle_fragment_image_processing_image_container"
-            android:padding="2dp">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/image_layout"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:background="@drawable/rectangle_fragment_image_processing_image_container"-->
+            <!--android:padding="2dp">-->
 
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -31,14 +31,14 @@
 
             <com.android.slyce.roundedimage.RoundedImageView
                 android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:layout_centerInParent="true"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 />
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
     </RelativeLayout>
 
     <RelativeLayout
@@ -57,7 +57,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/fragment_image_process_bottom_layout_vertical_margins"
-            android:text="example"
             android:textSize="@dimen/fragment_image_process_progress_headline_text_size"
             android:textStyle="italic"
 
@@ -72,7 +71,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/fragment_image_process_bottom_layout_vertical_margins"
             android:max="100"
-            android:progress="30"
             android:progressDrawable="@drawable/progress_drawable"
             android:visibility="visible" />
 
@@ -118,12 +116,14 @@
                 </FrameLayout>
 
                 <TextView
+                    android:id="@+id/text_sending_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/fragment_image_process_bottom_layout_progress_image_text_margin"
                     android:layout_toRightOf="@id/progress_first_text_secondary_layout"
                     android:text="@string/fragment_image_process_first_progress_text"
+                    android:textColor="@color/image_analyse_pre_process"
                     android:textSize="@dimen/fragment_image_process_progress_text_size" />
 
 
@@ -162,18 +162,20 @@
                 </FrameLayout>
 
                 <TextView
+                    android:id="@+id/text_analyzing_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/fragment_image_process_bottom_layout_progress_image_text_margin"
                     android:layout_toRightOf="@id/progress_second_text_secondary_layout"
                     android:text="@string/fragment_image_process_second_progress_text"
+                    android:textColor="@color/image_analyse_pre_process"
                     android:textSize="@dimen/fragment_image_process_progress_text_size" />
 
 
             </RelativeLayout>
 
             <Button
-
+android:id="@+id/cancel_button"
                 android:layout_width="68dp"
                 android:layout_height="37dp"
                 android:layout_alignBottom="@id/progress_second_text_main_layout"

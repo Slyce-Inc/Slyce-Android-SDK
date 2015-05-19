@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/image_process_frag_bottom_background" />
+            <corners android:radius="100dp" />
+        </shape>
+
+
+
+    </item>
+
+
+
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <solid android:color="@color/progress_bar_full" />
+                <corners android:radius="100dp" />
+            </shape>
+        </clip>
+    </item>
+
+
+   <!-- <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/image_process_frag_bottom_background" />
+            <stroke
+                android:width="0.7dp"
+                android:color="#bfbebf"></stroke>
+            <corners android:radius="100dp" />
+        </shape>
+
+
+
+    </item>
+
+
+
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <solid android:color="@color/progress_bar_full" />
+                <corners android:radius="100dp" />
+            </shape>
+        </clip>
+    </item>-->
+
+    <!--<item>-->
+
+<!--<bitmap android:src="@drawable/scan_analyze_top_progressbar"></bitmap>-->
+
+    <!--</item>-->
+
+
+    <!--<item>-->
+
+
+        <!--&lt;!&ndash;Get a nine-patch of the vertical lines only without the frame&ndash;&gt;-->
+
+        <!--<nine-patch android:src="@drawable/ps_general_assets_empty_btn_normal"/>-->
+
+    <!--</item>-->
+
+</layer-list>

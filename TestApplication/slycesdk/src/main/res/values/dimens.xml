@@ -1,3 +1,19 @@
 <resources>
     <dimen name="camera_fragment_layout_padding">20dp</dimen>
+
+    <!--Used in ImageProcessFragment-->
+    <dimen name="fragment_image_process_image_rounded_corners_radius">25dp</dimen>
+    <dimen name="fragment_image_process_padding_horizontal_primary">10dp</dimen>
+    <dimen name="fragment_image_process_padding_horizontal_secondary">20dp</dimen>
+    <dimen name="fragment_image_process_padding_bottom">10dp</dimen>
+
+    <dimen name="fragment_image_process_bottom_layout_vertical_margins">8dp</dimen>
+    <dimen name="fragment_image_process_bottom_layout_progress_image_text_margin">6dp</dimen>
+
+
+    <dimen name="fragment_image_process_progress_headline_text_size">14dp</dimen>
+    <dimen name="fragment_image_process_progress_text_size">14dp</dimen>
+    <dimen name="fragment_image_process_button_text_size">12dp</dimen>
+
+
 </resources>

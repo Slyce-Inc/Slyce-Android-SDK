@@ -4,4 +4,10 @@
     <color name="fragment_slyce_top_background">#CC000000</color>
     <color name="fragment_slyce_bottom_background">#CC000000</color>
 
+    <!--Used in ImageProcessFragment-->
+    <color name="image_border_color">@android:color/white</color>
+    <color name="progress_bar_full">#00a4db</color>
+    <color name="image_process_frag_bottom_background">#ffffff</color>
+    <color name="slyce_blue_color">#00a4db</color>
+    <color name="text_search_status">#737373</color>
 </resources>

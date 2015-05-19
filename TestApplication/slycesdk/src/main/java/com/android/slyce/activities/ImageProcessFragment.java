@@ -23,6 +23,8 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
     private String mImgDecodableString;
 
+    private ImageView mImage;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -54,7 +56,12 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image_process, container, false);
+
+        View mView = inflater.inflate(R.layout.fragment_image_process, container, false);
+
+        mImage = (ImageView) mView.findViewById(R.id.image);
+
+        return mView;
     }
 
     @Override

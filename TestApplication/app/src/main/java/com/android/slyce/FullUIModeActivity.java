@@ -41,11 +41,6 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
     private void openSlyceCameraFragment(String clientID){
 
         // Add SlyceCameraFragment
@@ -66,51 +61,26 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
 
     @Override
     public void onCameraFragment3DRecognition(JSONArray products) {
-        Toast.makeText(this, "onCameraFragment3DRecognition", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onCameraFragment3DRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragmentBarcodeRecognition(SlyceBarcode barcode) {
-        Toast.makeText(this, "onCameraFragmentBarcodeRecognition", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onCameraFragmentBarcodeRecognition:" + "\n" + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragment2DRecognition(String irId, String productInfo) {
-        Toast.makeText(this, "onCameraFragment2DRecognition", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onCameraFragment2DRecognition:" + "\n" + irId + "\n" + productInfo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragment2DExtendedRecognition(JSONArray products) {
-        Toast.makeText(this, "onCameraFragment2DExtendedRecognition", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCameraFragmentSlyceProgress(long progress, String message, String id) {
-        Toast.makeText(this, "onCameraFragmentSlyceProgress", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCameraFragmentStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
-        Toast.makeText(this, "onCameraFragmentStageLevelFinish", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onCameraFragment2DExtendedRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSlyceCameraFragmentError(String message) {
-        Toast.makeText(this, "onSlyceCameraFragmentError", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onImageStartRequest(Bitmap bitmap) {
-        Toast.makeText(this, "onImageStartRequest", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSnap(Bitmap bitmap) {
-        Toast.makeText(this, "onSnap", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onTap(float x, float y) {
-        Toast.makeText(this, "onTap", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onSlyceCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
     }
 }

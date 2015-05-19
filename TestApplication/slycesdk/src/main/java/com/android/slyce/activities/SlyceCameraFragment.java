@@ -86,6 +86,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         /** Notify on search progress */
         void onProgress(long progress, String message);
+
+        /** Notify on error */
+        void onError(String message);
     }
 
     /**
@@ -214,7 +217,11 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onSlyceCameraError(String message) {
+        // Notify host application
         mListener.onSlyceCameraFragmentError(message);
+
+        // Notify ImageProcessFragment
+        mOnImageProcessListener.onError(message);
     }
 
     @Override

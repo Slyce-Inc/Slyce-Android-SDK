@@ -2,6 +2,7 @@ package com.android.slyce.activities;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.android.slyce.roundedimage.RoundedImageView;
 import com.android.slycesdk.R;
 
 /**
@@ -20,7 +23,7 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
     private String mImageDecodableString;
 
-    private ImageView mImage;
+    private RoundedImageView mImage;
 
     /**
      * Use this factory method to create a new instance of
@@ -37,6 +40,10 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         // Required empty public constructor
     }
 
+    public void setImageDecodableString(String value){
+        mImageDecodableString = value;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +56,10 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
         View mView = inflater.inflate(R.layout.fragment_image_process, container, false);
 
-        mImage = (ImageView) mView.findViewById(R.id.image);
+        mImage = (RoundedImageView) mView.findViewById(R.id.image);
+
+        // Set the Image in ImageView after decoding the String
+        mImage.setImageBitmap(BitmapFactory.decodeFile(mImageDecodableString));
 
         return mView;
     }

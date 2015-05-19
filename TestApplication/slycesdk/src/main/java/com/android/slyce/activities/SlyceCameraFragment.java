@@ -325,6 +325,16 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             // Extract Image String
             String pickedImageString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
 
+            if(TextUtils.isEmpty(pickedImageString)){
+
+                SlyceLog.i(TAG, "Error occurred while picking an Image");
+
+            }else{
+
+                mImageProcessFragment.setImageDecodableString(pickedImageString);
+                attachFragment(mImageProcessFragment);
+            }
+
         } else {
             SlyceLog.i(TAG, "You haven't picked Image");
         }

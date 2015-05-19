@@ -220,8 +220,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onTap(float x, float y) {
-        mListener.onTap(x, y);
-
+        // Displays the touch point 
         Utils.performAlphaAnimation(mOnTapView, x, y);
     }
 

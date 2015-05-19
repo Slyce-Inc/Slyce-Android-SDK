@@ -80,17 +80,7 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
     }
 
     @Override
-    public void onCameraFragmentStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
-        Toast.makeText(this, "onCameraFragmentStageLevelFinish", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onSlyceCameraFragmentError(String message) {
         Toast.makeText(this, "onSlyceCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onImageStartRequest(Bitmap bitmap) {
-        Toast.makeText(this, "onImageStartRequest", Toast.LENGTH_SHORT).show();
     }
 }

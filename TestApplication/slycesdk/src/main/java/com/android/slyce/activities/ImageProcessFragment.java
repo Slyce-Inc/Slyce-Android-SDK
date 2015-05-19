@@ -70,7 +70,12 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     }
 
     @Override
+    public void onImageStartRequest() {
+        Toast.makeText(getActivity(), "ImageProcessFragment: onImageStartRequest", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onProgress(long progress, String message) {
-        Toast.makeText(getActivity(), "ImageProcessFragment: onProgress", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "ImageProcessFragment: onProgress" + "\n" + progress + "\n" + message, Toast.LENGTH_SHORT).show();
     }
 }

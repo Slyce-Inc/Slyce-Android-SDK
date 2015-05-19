@@ -78,7 +78,13 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     public interface OnImageProcessListener{
 
+        /** Bitmap is ready from {@link OnSlyceCameraListener}*/
         void onSnap(Bitmap bitmap);
+
+        /** Bitmap uploaded to the server */
+        void onImageStartRequest();
+
+        /** Notify on search progress */
         void onProgress(long progress, String message);
     }
 
@@ -111,6 +117,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         // Set the listener so messages will be sent to ImageProcessFragment
         mOnImageProcessListener = mImageProcessFragment;
+    }
+
+    public void setContinuousRecognition(boolean value){
+        mSlyceCamera.setContinuousRecognition(value);
     }
 
     @Override
@@ -199,7 +209,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onCameraStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
-        mListener.onCameraFragmentStageLevelFinish(message);
+
     }
 
     @Override
@@ -209,7 +219,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onImageStartRequest(Bitmap bitmap) {
-        mListener.onImageStartRequest(bitmap);
+        // Notify ImageProcessFragment for bitmap was uploaded to server
+        mOnImageProcessListener.onImageStartRequest();
     }
 
     @Override
@@ -220,7 +231,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onTap(float x, float y) {
-        // Displays the touch point 
+        // Displays the touch point
         Utils.performAlphaAnimation(mOnTapView, x, y);
     }
 

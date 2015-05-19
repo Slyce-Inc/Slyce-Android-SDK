@@ -19,11 +19,6 @@ public interface OnSlyceCameraFragmentListener {
     void onCameraFragment2DRecognition(String irId, String productInfo);
     void onCameraFragment2DExtendedRecognition(JSONArray products);
 
-    void onCameraFragmentStageLevelFinish(OnSlyceRequestListener.StageMessage message);
-
     /* Error */
     void onSlyceCameraFragmentError(String message);
-
-    /* Miscellaneous */
-    void onImageStartRequest(Bitmap bitmap);
 }

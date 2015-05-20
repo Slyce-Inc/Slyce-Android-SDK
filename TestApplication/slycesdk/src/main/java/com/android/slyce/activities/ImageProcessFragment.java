@@ -105,6 +105,7 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     }
 
     public void setNoFoundLayout(){
+
         // TODO:
     }
 

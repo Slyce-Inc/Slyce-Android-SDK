@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/scan_hmm_popup_bg">
+
+        <com.pounce.android.ui.AccordMediumTextView
+            android:id="@+id/no_results_headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hmm..."
+            android:textSize="24dp"
+            android:textColor="@android:color/black"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_double_vertical_margin" />
+
+        <com.pounce.android.ui.AccordMediumTextView
+            android:id="@+id/no_results_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_products_found"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/no_results_headline"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_double_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_double_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_double_horizontal_margin" />
+
+
+        <com.pounce.android.ui.AccordMediumButton
+            android:id="@+id/dialog_button_done"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/height_button_topbar"
+            android:background="@drawable/ps_general_assets_full_btn_normal"
+            android:text="Sure!"
+            android:textSize="12dp"
+            android:textColor="@android:color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/no_results_body"
+            android:layout_marginTop="300dp"
+            android:layout_marginBottom="@dimen/activity_double_vertical_margin" />
+
+    </RelativeLayout>
+</RelativeLayout>

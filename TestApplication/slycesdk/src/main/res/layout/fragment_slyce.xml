@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/camera_fragment_layout_padding"
-        android:background="@color/fragment_slyce_top_background">
+        android:background="@color/fragment_slyce_background">
         <Button
             android:id="@+id/close_button"
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/camera_fragment_layout_padding"
-        android:background="@color/fragment_slyce_bottom_background"
+        android:background="@color/fragment_slyce_background"
         android:layout_alignParentBottom="true">
         <ImageButton
             android:id="@+id/snap_button"

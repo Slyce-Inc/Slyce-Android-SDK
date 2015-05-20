@@ -67,6 +67,7 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     private OnImageProcessFragmentListener mOnImageProcessFragmentListener;
 
     private View scanNotFoundLayout;
+    private Button scanNotFoundDismiss;
 
     public interface OnImageProcessFragmentListener{
 
@@ -109,7 +110,12 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     public void setNoFoundLayout(){
 
         scanNotFoundLayout.setVisibility(View.VISIBLE);
-
+        scanNotFoundDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close();
+            }
+        });
     }
 
     @Override
@@ -175,6 +181,7 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         }
 
         scanNotFoundLayout = mView.findViewById(R.id.scan_not_found_layout);
+        scanNotFoundDismiss = (Button) mView.findViewById(R.id.scan_not_found_button_done);
 
         return mView;
     }

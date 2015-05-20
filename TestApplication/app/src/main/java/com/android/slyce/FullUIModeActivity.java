@@ -47,6 +47,7 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
         SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(clientID, null);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.slyce_fragment_container, slyceFragment);
+        transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
     }

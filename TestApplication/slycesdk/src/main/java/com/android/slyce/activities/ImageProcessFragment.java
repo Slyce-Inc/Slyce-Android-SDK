@@ -3,6 +3,7 @@ package com.android.slyce.activities;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -14,17 +15,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.slyce.Slyce;
+import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.roundedimage.RoundedImageView;
 import com.android.slycesdk.R;
+
+import org.json.JSONArray;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ImageProcessFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ImageProcessFragment extends Fragment implements SlyceCameraFragment.OnImageProcessListener {
+public class ImageProcessFragment extends Fragment implements SlyceCameraFragment.OnSlyceCameraFragmentListener {
+
+    public static final int PROCESS_BITMAP_FROM_GALLERY = 001;
+    public static final int PROCESS_BITMAP_FROM_CAMERA = 002;
 
     private static final int UPLOAD_IMAGE_TOTAL_PROGRESS_TIME = 3000;
 
@@ -32,27 +41,41 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     private static final String BEGIN_ANALYZE_IMAGE = "begin_analyze_image";
     private static final String FINISH_ANALYZE_IMAGE = "finish_analyze_image";
 
+    public int mImageProcessType;
 
     private String mImageDecodableString = null;
+
+    private UpdateProgressBarAsyncTask task;
 
     private RoundedImageView mImage;
 
     private ProgressBar horizontalProgressBar;
-
-    private UpdateProgressBarAsyncTask task;
-
-    private TextView progressMsg;
-
     private ProgressBar progressSendingImage;
     private ProgressBar progressAnalyzeImage;
+
+    private TextView progressMsg;
+    private TextView sendImageText;
+    private TextView analyzeImageText;
 
     private ImageView sendDoneImage;
     private ImageView analyzeDoneImage;
 
-    private TextView sendImageText;
-    private TextView analyzeImageText;
-
     private Button cancelButton;
+
+    private SlyceProductsRequest mSlyceRequest;
+
+    private OnImageProcessFragmentListener mOnImageProcessFragmentListener;
+
+    public interface OnImageProcessFragmentListener{
+
+        void onImageProcessBarcodeRecognition(SlyceBarcode barcode);
+
+        void onImageProcess2DRecognition(String irid, String productInfo);
+
+        void onImageProcess2DExtendedRecognition(JSONArray products);
+
+        void onImageProcess3DRecognition(JSONArray products);
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -71,6 +94,10 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
     public void setImageDecodableString(String value) {
         mImageDecodableString = value;
+    }
+
+    public void setmOnImageProcessFragmentListener(OnImageProcessFragmentListener listener){
+        mOnImageProcessFragmentListener = listener;
     }
 
     @Override
@@ -107,25 +134,109 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         analyzeImageText = (TextView) mView.findViewById(R.id.text_analyzing_image);
 
         cancelButton = (Button) mView.findViewById(R.id.cancel_button);
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeFragment();
+                cancel();
             }
         });
 
         updateProgressInfo("");
 
         // Set the Image in ImageView after decoding the String
-//        mImage.setImageBitmap(BitmapFactory.decodeFile(mImageDecodableString));
+        if(mImageProcessType == PROCESS_BITMAP_FROM_GALLERY) {
+
+            Bitmap bitmap = BitmapFactory.decodeFile(mImageDecodableString);
+
+            performGalleryImageProcess(bitmap);
+        }
 
         return mView;
     }
 
-    private void removeFragment() {
+    private void cancel(){
+        // Cancel SlyceProductsRequest
+        if(mSlyceRequest != null){
+            mSlyceRequest.cancel();
+        }
+        // Remove fragment
+        close();
+    }
 
-        getFragmentManager().beginTransaction().remove(this).commit();
-        // TODO stop the calls to this OnImageProcessListener
+    private void close() {
+//        getFragmentManager().beginTransaction().remove(this).commit();
+        getFragmentManager().popBackStack();
+    }
+
+    private void performGalleryImageProcess(Bitmap bitmap){
+
+        mImage.setImageBitmap(bitmap);
+
+        mSlyceRequest = new SlyceProductsRequest(Slyce.get(), new OnSlyceRequestListener() {
+
+            @Override
+            public void onBarcodeRecognition(SlyceBarcode barcode) {
+
+                // Update progress bar
+                updateProgressInfo(FINISH_ANALYZE_IMAGE);
+
+                // Notify SlyceCameraFragment
+                mOnImageProcessFragmentListener.onImageProcessBarcodeRecognition(barcode);
+
+                // Close
+                close();
+            }
+
+            @Override
+            public void onSlyceProgress(long progress, String message, String id) {
+                horizontalProgressBar.setProgress(50 + (int) progress / 2);
+                progressMsg.setText(message);
+            }
+
+            @Override
+            public void on2DRecognition(String irid, String productInfo) {
+
+                // Notify SlyceCameraFragment
+                mOnImageProcessFragmentListener.onImageProcess2DRecognition(irid, productInfo);
+            }
+
+            @Override
+            public void on2DExtendedRecognition(JSONArray products) {
+
+                // Notify SlyceCameraFragment
+                mOnImageProcessFragmentListener.onImageProcess2DExtendedRecognition(products);
+            }
+
+            @Override
+            public void on3DRecognition(JSONArray products) {
+
+                // Update progress bar
+                updateProgressInfo(FINISH_ANALYZE_IMAGE);
+
+                // Notify SlyceCameraFragment
+                mOnImageProcessFragmentListener.onImageProcess3DRecognition(products);
+
+                // Close
+                close();
+            }
+
+            @Override
+            public void onStageLevelFinish(StageMessage message) {
+                updateProgressInfo(BEGIN_ANALYZE_IMAGE);
+            }
+
+            @Override
+            public void onError(String message) {
+                updateProgressInfo("");
+            }
+
+        }, bitmap);
+
+        // Execute Request
+        mSlyceRequest.execute();
+
+        updateProgressInfo(BEGIN_SENDING_IMAGE);
     }
 
     @Override
@@ -136,13 +247,6 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    private void createBitmapFromString(String imgDecodableString) {
-
-//        ImageView imgView = (ImageView) findViewById(R.id.imgView);
-//        // Set the Image in ImageView after decoding the String
-//        imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
     }
 
     private void updateProgressInfo(String progress) {
@@ -189,8 +293,6 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
                 sendImageText.setTextColor(resources.getColor(R.color.image_analyse_post_process));
                 analyzeImageText.setTextColor(resources.getColor(R.color.image_analyse_post_process));
 
-                //removeFragment();
-
                 break;
 
             default:
@@ -206,32 +308,29 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
                 sendImageText.setTextColor(resources.getColor(R.color.image_analyse_pre_process));
                 analyzeImageText.setTextColor(resources.getColor(R.color.image_analyse_pre_process));
-
         }
     }
 
     /**
-     * {@link SlyceCameraFragment.OnImageProcessListener}
+     * {@link SlyceCameraFragment.OnSlyceCameraFragmentListener}
      */
     @Override
     public void onSnap(Bitmap bitmap) {
-//        Toast.makeText(getActivity(), "ImageProcessFragment: onSnap", Toast.LENGTH_SHORT).show();
-        mImage.setImageBitmap(bitmap);
+
+        if(mImageProcessType == PROCESS_BITMAP_FROM_CAMERA){
+            mImage.setImageBitmap(bitmap);
+        }
+
         updateProgressInfo(BEGIN_SENDING_IMAGE);
-
-
     }
 
     @Override
     public void onImageStartRequest() {
-//        Toast.makeText(getActivity(), "ImageProcessFragment: onImageStartRequest", Toast.LENGTH_SHORT).show();
-
         updateProgressInfo(BEGIN_ANALYZE_IMAGE);
     }
 
     @Override
     public void onProgress(long progress, String message) {
-//        Toast.makeText(getActivity(), "ImageProcessFragment: onProgress" + "\n" + progress + "\n" + message, Toast.LENGTH_SHORT).show();
         horizontalProgressBar.setProgress(50 + (int) progress / 2);
         progressMsg.setText(message);
     }
@@ -243,9 +342,9 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
     @Override
     public void onError(String message) {
-        Toast.makeText(getActivity(), "ImageProcessFragment: onError" + "\n" + message, Toast.LENGTH_SHORT).show();
         updateProgressInfo("");
     }
+    /** End */
 
     private class UpdateProgressBarAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -265,5 +364,9 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
             }
             return null;
         }
+    }
+
+    public void setProcessType(int processtype){
+        mImageProcessType = processtype;
     }
 }

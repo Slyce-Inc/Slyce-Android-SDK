@@ -100,6 +100,24 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         mOnImageProcessFragmentListener = listener;
     }
 
+    public void setProcessType(int processtype){
+        mImageProcessType = processtype;
+    }
+
+    public void setNoFoundLayout(){
+        // TODO:
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,9 +201,6 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessFragmentListener.onImageProcessBarcodeRecognition(barcode);
-
-                // Close
-                close();
             }
 
             @Override
@@ -216,9 +231,6 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessFragmentListener.onImageProcess3DRecognition(products);
-
-                // Close
-                close();
             }
 
             @Override
@@ -228,7 +240,12 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
             @Override
             public void onError(String message) {
+
+                // Update progress bar
                 updateProgressInfo("");
+
+                // Set the not found layout
+                setNoFoundLayout();
             }
 
         }, bitmap);
@@ -237,16 +254,6 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         mSlyceRequest.execute();
 
         updateProgressInfo(BEGIN_SENDING_IMAGE);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     private void updateProgressInfo(String progress) {
@@ -311,6 +318,26 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         }
     }
 
+    private class UpdateProgressBarAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            int i = 0;
+            int updateJump = 5;
+            while (i <= 50) {
+                if (!isCancelled()) {
+                    i = i + updateJump;
+                    horizontalProgressBar.setProgress(i);
+                    SystemClock.sleep(UPLOAD_IMAGE_TOTAL_PROGRESS_TIME / (50 / updateJump));
+
+                } else {
+                    return null;
+                }
+            }
+            return null;
+        }
+    }
+
     /**
      * {@link SlyceCameraFragment.OnSlyceCameraFragmentListener}
      */
@@ -345,28 +372,4 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         updateProgressInfo("");
     }
     /** End */
-
-    private class UpdateProgressBarAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            int i = 0;
-            int updateJump = 5;
-            while (i <= 50) {
-                if (!isCancelled()) {
-                    i = i + updateJump;
-                    horizontalProgressBar.setProgress(i);
-                    SystemClock.sleep(UPLOAD_IMAGE_TOTAL_PROGRESS_TIME / (50 / updateJump));
-
-                } else {
-                    return null;
-                }
-            }
-            return null;
-        }
-    }
-
-    public void setProcessType(int processtype){
-        mImageProcessType = processtype;
-    }
 }

@@ -50,6 +50,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     private String mClientID;
     private JSONObject mOptionsJson;
 
+    private boolean isAttached;
+
     /* Listeners */
     private com.android.slyce.listeners.OnSlyceCameraFragmentListener mListener;
 
@@ -128,6 +130,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
                     // Notify the host application of barcode recognition
                     mListener.onCameraFragmentBarcodeRecognition(barcode);
                 }
+
+                // Close SDK
+                close();
             }
 
             @Override
@@ -151,6 +156,13 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
                 if(mListener != null){
                     // Notify the host application of found products
                     mListener.onCameraFragment3DRecognition(products);
+                }
+
+                if(products.length() > 0){
+                    // Close SDK
+                    close();
+                }else{
+                    mImageProcessFragment.setNoFoundLayout();
                 }
             }
         });
@@ -200,6 +212,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        isAttached = true;
         try {
             mListener = (com.android.slyce.listeners.OnSlyceCameraFragmentListener) activity;
         } catch (ClassCastException e) {
@@ -214,18 +227,18 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     @Override
     public void onDetach() {
         super.onDetach();
+        isAttached = false;
         mListener = null;
         mOnSlyceCameraFragmentListener = null;
     }
 
     @Override
     public void onCamera3DRecognition(JSONArray products) {
-        if(mListener != null){
+
+        if(isAttached){
             // Notify the host application of found products
             mListener.onCameraFragment3DRecognition(products);
-        }
 
-        if(mOnSlyceCameraFragmentListener != null){
             // Notify ImageProcessFragment for found products
             mOnSlyceCameraFragmentListener.onCamera3DRecognition();
         }
@@ -236,7 +249,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
-        if(mListener != null){
+        if(isAttached){
             // Notify the host application of barcode recognition
             mListener.onCameraFragmentBarcodeRecognition(barcode);
         }
@@ -244,7 +257,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onCamera2DRecognition(String irId, String productInfo) {
-        if(mListener != null){
+        if(isAttached){
             // Notify the host application of MS recognition
             mListener.onCameraFragment2DRecognition(irId, productInfo);
         }
@@ -252,7 +265,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onCamera2DExtendedRecognition(JSONArray products) {
-        if(mListener != null){
+        if(isAttached){
             // Notify the host application of extra products details
             mListener.onCameraFragment2DExtendedRecognition(products);
         }
@@ -260,7 +273,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onCameraSlyceProgress(long progress, String message, String id) {
-        if(mOnSlyceCameraFragmentListener != null){
+        if(isAttached){
             // Notify ImageProcessFragment for searching progress
             mOnSlyceCameraFragmentListener.onProgress(progress, message);
         }
@@ -271,12 +284,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onSlyceCameraError(String message) {
-        if(mListener != null){
+        if(isAttached){
             // Notify host application
             mListener.onSlyceCameraFragmentError(message);
-        }
 
-        if(mOnSlyceCameraFragmentListener != null){
             // Notify ImageProcessFragment
             mOnSlyceCameraFragmentListener.onError(message);
         }
@@ -284,7 +295,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onImageStartRequest(Bitmap bitmap) {
-        if(mOnSlyceCameraFragmentListener != null){
+        if(isAttached){
             // Notify ImageProcessFragment for bitmap was uploaded to server
             mOnSlyceCameraFragmentListener.onImageStartRequest();
         }
@@ -292,7 +303,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     @Override
     public void onSnap(Bitmap bitmap) {
-        if(mOnSlyceCameraFragmentListener != null){
+        if(isAttached) {
             // Notify ImageProcessFragment that bitmap is ready
             mOnSlyceCameraFragmentListener.onSnap(bitmap);
         }
@@ -346,8 +357,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     }
 
     private void close(){
-//        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-        getActivity().getFragmentManager().popBackStack();
+        if(isAttached){
+            // getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            getActivity().getFragmentManager().popBackStack();
+        }
     }
 
     @Override

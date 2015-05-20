@@ -15,7 +15,7 @@
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/camera_fragment_layout_padding"
+        android:padding="@dimen/fragment_slyce_padding"
         android:background="@color/fragment_slyce_background">
         <Button
             android:id="@+id/close_button"
@@ -38,7 +38,7 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/camera_fragment_layout_padding"
+        android:padding="@dimen/fragment_slyce_padding"
         android:background="@color/fragment_slyce_background"
         android:layout_alignParentBottom="true">
         <ImageButton
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/top_layout"
         android:layout_above="@id/bottom_layout"
-        android:padding="@dimen/camera_fragment_layout_padding"
+        android:padding="@dimen/fragment_slyce_padding"
         >
 
         <ImageButton

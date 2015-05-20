@@ -175,7 +175,7 @@
             </RelativeLayout>
 
             <Button
-android:id="@+id/cancel_button"
+                android:id="@+id/cancel_button"
                 android:layout_width="68dp"
                 android:layout_height="37dp"
                 android:layout_alignBottom="@id/progress_second_text_main_layout"
@@ -188,5 +188,14 @@ android:id="@+id/cancel_button"
         </RelativeLayout>
     </RelativeLayout>
 
+    <FrameLayout
+        android:id="@+id/scan_not_found_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+        <include layout="@layout/scan_not_found"/>
+
+    </FrameLayout>
 
 </RelativeLayout>

@@ -7,14 +7,23 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.android.slyce.activities.SlyceCameraFragment;
 import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
-import org.json.JSONArray;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmentListener{
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.util.ArrayList;
+
+public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmentListener {
 
     private final String TAG = FullUIModeActivity.class.getSimpleName();
 
@@ -41,7 +50,7 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
         });
     }
 
-    private void openSlyceCameraFragment(String clientID){
+    private void openSlyceCameraFragment(String clientID) {
 
         // Add SlyceCameraFragment
         SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(clientID, null);
@@ -54,7 +63,7 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(slyce != null){
+        if (slyce != null) {
             slyce.close();
         }
     }
@@ -62,7 +71,13 @@ public class FullUIModeActivity extends Activity implements OnSlyceCameraFragmen
     @Override
     public void onCameraFragment3DRecognition(JSONArray products) {
         Toast.makeText(this, "onCameraFragment3DRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
-        // TODO create gridview of products
+
+        // TODO check why being called twice
+
+
+        Intent intent = new Intent(this, ProductsGridActivity.class);
+        intent.putExtra(ProductsGridActivity.PRODUCTS_KEY,products.toString());
+        FullUIModeActivity.this.startActivity(intent);
     }
 
     @Override

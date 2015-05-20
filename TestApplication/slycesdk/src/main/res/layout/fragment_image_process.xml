@@ -7,6 +7,7 @@
     android:clickable="true">
 
     <RelativeLayout
+        android:id="@+id/processing_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/fragment_image_process_padding_horizontal_primary"

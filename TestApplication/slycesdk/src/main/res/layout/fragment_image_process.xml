@@ -180,9 +180,18 @@
                     android:textColor="@color/slyce_blue_color"
                     android:textSize="12dp" />
             </RelativeLayout>
+
         </RelativeLayout>
 
     </RelativeLayout>
 
+    <FrameLayout
+        android:id="@+id/scan_not_found_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+        <include layout="@layout/scan_not_found"/>
+    </FrameLayout>
 
 </RelativeLayout>

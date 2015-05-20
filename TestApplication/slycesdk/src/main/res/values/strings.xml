@@ -14,5 +14,9 @@
     <string name="fragment_image_process_first_progress_text">Sending image...</string>
     <string name="fragment_image_process_second_progress_text">Analyzing image...</string>
 
+    <!--Used in scan_not_found layout-->
+    <string name="scan_not_found_body">No products were matched with this item.\nShall we try again?</string>
+    <string name="scan_not_found_headline">Hmm&#x2026;</string>
+    <string name="scan_not_found_button">Sure!</string>
 
 </resources>

@@ -66,6 +66,8 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
     private OnImageProcessFragmentListener mOnImageProcessFragmentListener;
 
+    private View scanNotFoundLayout;
+
     public interface OnImageProcessFragmentListener{
 
         void onImageProcessBarcodeRecognition(SlyceBarcode barcode);
@@ -105,7 +107,9 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     }
 
     public void setNoFoundLayout(){
-        // TODO:
+
+        scanNotFoundLayout.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -169,6 +173,8 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
 
             performGalleryImageProcess(bitmap);
         }
+
+        scanNotFoundLayout = mView.findViewById(R.id.scan_not_found_layout);
 
         return mView;
     }

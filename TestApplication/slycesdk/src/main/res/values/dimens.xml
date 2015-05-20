@@ -16,5 +16,12 @@
     <dimen name="fragment_image_process_progress_text_size">14dp</dimen>
     <dimen name="fragment_image_process_button_text_size">12dp</dimen>
 
+    <dimen name="fragment_scanning_tips_text_size">16dp</dimen>
+    <dimen name="fragment_scanning_tips_vertical_margins">16dp</dimen>
+    <dimen name="fragment_scanning_tips_left_margins">26dp</dimen>
+    <dimen name="fragment_scanning_tips_right_margins">26dp</dimen>
+    <dimen name="fragment_scanning_tips_drawable_padding">12dp</dimen>
+
+
 
 </resources>

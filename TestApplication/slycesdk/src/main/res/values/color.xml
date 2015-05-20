@@ -12,4 +12,8 @@
     <color name="image_analyse_pre_process">#80595a5a</color>
     <color name="image_analyse_in_process">#000000</color>
     <color name="image_analyse_post_process">#595a5a</color>
+
+    <color name="scanning_tips_text_headline">#2b2b2c</color>
+    <color name="scanning_tips_text_body">#616161</color>
+    <color name="scanning_tips_dialog_background">#cc000000</color>
 </resources>

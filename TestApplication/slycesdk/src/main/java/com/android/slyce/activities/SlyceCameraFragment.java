@@ -243,8 +243,12 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             mOnSlyceCameraFragmentListener.onCamera3DRecognition();
         }
 
-        // Close SDK
-        close();
+        if(products.length() > 0){
+            // Close SDK
+            close();
+        }else{
+            mImageProcessFragment.setNoFoundLayout();
+        }
     }
 
     @Override
@@ -373,6 +377,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             close();
 
         }else if(id == R.id.scan_tips_button){
+
+            ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
+            dialogFragment.show(getFragmentManager(), null);
 
         }else if(id == R.id.gallery_button){
 

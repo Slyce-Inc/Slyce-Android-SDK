@@ -1,5 +1,5 @@
 <resources>
-    <dimen name="camera_fragment_layout_padding">20dp</dimen>
+    <dimen name="fragment_slyce_padding">15dp</dimen>
 
     <!--Used in ImageProcessFragment-->
     <dimen name="fragment_image_process_image_corners_radius">25dp</dimen>

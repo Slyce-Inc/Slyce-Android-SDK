@@ -19,16 +19,18 @@ import android.widget.ImageView;
 
 import com.android.slyce.Slyce;
 import com.android.slyce.camera.SlyceCamera;
+import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.utils.SlyceLog;
+import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.Utils;
 import com.android.slycesdk.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -393,10 +395,14 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         }else if(id == R.id.flash_button){
 
             mSlyceCamera.turnFlash();
+            
+            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, true, true);
 
         }else if(id == R.id.snap_button){
 
             showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessCallbacks());
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, true, true);
 
             // Take a picture using SlyceCamera object
             mSlyceCamera.snap();

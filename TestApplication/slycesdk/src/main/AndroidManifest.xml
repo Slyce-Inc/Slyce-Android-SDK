@@ -4,6 +4,7 @@
 
     <!-- Required by Slyce SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <!-- required by MS and ZBar -->
     <uses-permission android:name="android.permission.CAMERA" />

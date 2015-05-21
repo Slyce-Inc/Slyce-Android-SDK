@@ -46,6 +46,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     // the fragment initialization parameters
     private static final String ARG_OPTION_JSON = "arg_option_json";
+    private static final String ARG_SOUND_ON = "arg_sound_on";
+    private static final String ARG_VIBRATE_ON = "arg_vibrate_on";
 
     private static final int RESULT_LOAD_IMG = 1;
 
@@ -53,6 +55,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     private JSONObject mOptionsJson;
 
     private boolean isAttached;
+    private boolean isSoundOn;
+    private boolean isVibrateOn;
 
     /* Listeners */
     private com.android.slyce.listeners.OnSlyceCameraFragmentListener mListener;
@@ -85,7 +89,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
      * @param options  Parameter 1.
      * @return A new instance of fragment SlyceCameraFragment.
      */
-    public static SlyceCameraFragment newInstance(JSONObject options) {
+    public static SlyceCameraFragment newInstance(JSONObject options, boolean soundOn, boolean vibrateOn) {
         SlyceCameraFragment fragment = new SlyceCameraFragment();
         Bundle args = new Bundle();
 
@@ -93,12 +97,17 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             args.putString(ARG_OPTION_JSON, options.toString());
         }
 
+        args.putBoolean(ARG_SOUND_ON, soundOn);
+        args.putBoolean(ARG_VIBRATE_ON, vibrateOn);
+
         fragment.setArguments(args);
         return fragment;
     }
 
     public SlyceCameraFragment() {
-        // Required empty public constructor
+
+        // Create the Buzzer object for playing sound and vibrate
+
     }
 
     public void setContinuousRecognition(boolean value){

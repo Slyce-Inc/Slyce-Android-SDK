@@ -182,22 +182,22 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     @Override
     public void onCameraFragmentBarcodeRecognition(SlyceBarcode barcode) {
-        Toast.makeText(this, "onCameraFragmentBarcodeRecognition:" + "\n" + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "onCameraFragmentBarcodeRecognition:" + "\n" + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragment2DRecognition(String irId, String productInfo) {
-        Toast.makeText(this, "onCameraFragment2DRecognition:" + "\n" + irId + "\n" + productInfo, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "onCameraFragment2DRecognition:" + "\n" + irId + "\n" + productInfo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragment2DExtendedRecognition(JSONArray products) {
-        Toast.makeText(this, "onCameraFragment2DExtendedRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "onCameraFragment2DExtendedRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragmentError(String message) {
-        Toast.makeText(this, "onCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "onCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
     }
     // OnSlyceCameraFragmentListener callbacks END
 
@@ -368,7 +368,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     private void startSlyceCameraFragment(){
 
         // Add SlyceCameraFragment
-        SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(null);
+        SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(null, true, true);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.slyce_camera_fragment_container, slyceFragment);
         transaction.addToBackStack(null);

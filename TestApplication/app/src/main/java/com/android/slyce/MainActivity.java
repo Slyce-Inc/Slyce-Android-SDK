@@ -172,8 +172,9 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     // OnSlyceCameraFragmentListener callbacks (Full UI Mode)
     @Override
     public void onCameraFragment3DRecognition(JSONArray products) {
-        Toast.makeText(this, "onCameraFragment3DRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
-        // TODO create gridview of products
+        Intent intent = new Intent(this, ProductsGridActivity.class);
+        intent.putExtra(ProductsGridActivity.PRODUCTS_KEY,products.toString());
+        startActivity(intent);
     }
 
     @Override

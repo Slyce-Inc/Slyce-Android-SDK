@@ -395,7 +395,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         }else if(id == R.id.flash_button){
 
             mSlyceCamera.turnFlash();
-            
+
             Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, true, true);
 
         }else if(id == R.id.snap_button){

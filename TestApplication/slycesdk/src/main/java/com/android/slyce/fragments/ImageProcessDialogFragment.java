@@ -234,6 +234,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
     public void onError(String message) {
         updateProgressInfo("");
+
+        showDialogFragment();
     }
     /* End */
 

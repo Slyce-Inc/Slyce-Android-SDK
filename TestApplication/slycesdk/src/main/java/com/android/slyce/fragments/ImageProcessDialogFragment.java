@@ -1,4 +1,4 @@
-package com.android.slyce.activities;
+package com.android.slyce.fragments;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -72,6 +72,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
     private OnImageProcessDialogFragmentListener mOnImageProcessDialogFragmentListener;
 
+    /** Handles {@link OnSlyceRequestListener} callbacks and sends them to {@link SlyceCameraFragment} */
     public interface OnImageProcessDialogFragmentListener {
 
         void onImageProcessBarcodeRecognition(SlyceBarcode barcode);
@@ -82,7 +83,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         void onImageProcess3DRecognition(JSONArray products);
 
-        void onImageProcessDismiss();
+        void onImageProcessDialogFragmentDismiss();
     }
 
     /**
@@ -186,8 +187,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             mSlyceRequest.cancel();
         }
 
-        // Notify SlyceCameraFragment to cancel SlyceCamera
-        mOnImageProcessDialogFragmentListener.onImageProcessDismiss();
+        // Notify SlyceCameraFragment to cancel SlyceCamera cause ImageProcessDialogFragment dismissed
+        mOnImageProcessDialogFragmentListener.onImageProcessDialogFragmentDismiss();
 
         super.onDismiss(dialog);
     }
@@ -246,6 +247,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         mImage.setOval(false);
     }
 
+    /* Invoke this method after an Image was picked from Gallery */
     private void performSlyceProductsRequest(Bitmap bitmap){
 
         mSlyceRequest = new SlyceProductsRequest(Slyce.get(), new OnSlyceRequestListener() {
@@ -258,6 +260,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessDialogFragmentListener.onImageProcessBarcodeRecognition(barcode);
+
+                dismiss();
             }
 
             @Override

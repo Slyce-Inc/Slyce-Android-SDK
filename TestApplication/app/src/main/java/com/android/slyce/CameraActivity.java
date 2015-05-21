@@ -41,9 +41,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
         initViews();
 
-        Slyce slyce = Slyce.getInstance(this, "YOUR CLIENT ID");
-
-        slyceCamera = new SlyceCamera(this, slyce, preview, null, this);
+        slyceCamera = new SlyceCamera(this, Slyce.get(), preview, null, this);
     }
 
     @Override

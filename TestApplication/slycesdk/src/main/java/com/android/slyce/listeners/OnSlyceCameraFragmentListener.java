@@ -20,5 +20,5 @@ public interface OnSlyceCameraFragmentListener {
     void onCameraFragment2DExtendedRecognition(JSONArray products);
 
     /* Error */
-    void onSlyceCameraFragmentError(String message);
+    void onCameraFragmentError(String message);
 }

@@ -25,10 +25,6 @@
             android:configChanges="orientation|screenSize" >
         </activity>
         <activity
-            android:name=".FullUIModeActivity"
-            android:configChanges="orientation|screenSize|" >
-        </activity>
-        <activity
             android:name=".ProductsGridActivity"
             android:label="@string/title_activity_products_grid" >
         </activity>

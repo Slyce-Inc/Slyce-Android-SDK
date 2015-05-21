@@ -1,11 +1,10 @@
-package com.android.slyce.activities;
+package com.android.slyce.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,6 +16,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+
 import com.android.slyce.Slyce;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
@@ -28,7 +29,7 @@ import com.android.slycesdk.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.android.slyce.activities.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
+import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,13 +45,12 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     private static final String FRAGMENT_TAG = "ImageProcessDialogFragment";
 
-    private static final int RESULT_LOAD_IMG = 1;
-
     // the fragment initialization parameters
-    private static final String ARG_CLIENT_ID = "arg_client_id";
     private static final String ARG_OPTION_JSON = "arg_option_json";
 
-    private String mClientID;
+    private static final int RESULT_LOAD_IMG = 1;
+
+    /* Options Json from hosting application */
     private JSONObject mOptionsJson;
 
     private boolean isAttached;
@@ -67,7 +67,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     private ImageButton mGalleryButton;
     private CheckBox mFlashButton;
     private ImageButton mSnapButton;
-
     private ImageView mOnTapView;
 
     /* Slyce SDK object */
@@ -76,20 +75,20 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     /* Slyce Camera object */
     private SlyceCamera mSlyceCamera;
 
+    /*  */
     private ImageProcessDialogFragment mImageProcessDialogFragment;
 
+    // PUBLIC METHODS
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param clientID Parameter 1.
-     * @param options  Parameter 2.
+     * @param options  Parameter 1.
      * @return A new instance of fragment SlyceCameraFragment.
      */
-    public static SlyceCameraFragment newInstance(String clientID, JSONObject options) {
+    public static SlyceCameraFragment newInstance(JSONObject options) {
         SlyceCameraFragment fragment = new SlyceCameraFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_CLIENT_ID, clientID);
 
         if(options != null){
             args.putString(ARG_OPTION_JSON, options.toString());
@@ -110,6 +109,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     public void cancelSlyceProductsRequests(){
         mSlyceCamera.cancel();
     }
+    // PUBLIC METHODS END
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +130,11 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         createSlyceCamera();
 
         return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -167,6 +172,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         mListener = null;
     }
 
+    // OnSlyceCameraListener callbacks
     @Override
     public void onCamera3DRecognition(JSONArray products) {
 
@@ -225,7 +231,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     public void onSlyceCameraError(String message) {
         if(isAttached){
             // Notify host application
-            mListener.onSlyceCameraFragmentError(message);
+            mListener.onCameraFragmentError(message);
 
             // Notify ImageProcessDialogFragment
             mImageProcessDialogFragment.onError(message);
@@ -253,7 +259,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         // Displays the touch point
         Utils.performAlphaAnimation(mOnTapView, x, y);
     }
+    // OnSlyceCameraListener callbacks END
 
+
+    // PRIVATE METHODS
     private void createSlyceCamera(){
         mSlyceCamera = new SlyceCamera(getActivity(), Slyce.get(), mPreview, mOptionsJson, this);
     }
@@ -265,7 +274,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         mGalleryButton = (ImageButton) view.findViewById(R.id.gallery_button);
         mFlashButton = (CheckBox) view.findViewById(R.id.flash_button);
         mSnapButton = (ImageButton) view.findViewById(R.id.snap_button);
-
         mOnTapView = (ImageView) view.findViewById(R.id.on_tap_view);
 
         mCloseButton.setOnClickListener(this);
@@ -278,10 +286,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     private void getFragmentArguments(){
         if (getArguments() != null) {
 
-            // Parameter 1. Set Client ID
-            mClientID = getArguments().getString(ARG_CLIENT_ID);
-
-            // Parameter 2. Set Options Json
+            // Parameter 1. Set Options Json
             String options = getArguments().getString(ARG_OPTION_JSON);
             if(!TextUtils.isEmpty(options)){
                 try {
@@ -291,7 +296,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
                 }
             }
 
-            // Parameter 3.
+            // Parameter 2.
         }
     }
 
@@ -299,60 +304,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         if(isAttached){
             // getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             getActivity().getFragmentManager().popBackStack();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        int id = v.getId();
-
-        if(id == R.id.close_button){
-
-            close();
-
-        }else if(id == R.id.scan_tips_button){
-
-        }else if(id == R.id.gallery_button){
-
-            Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
-
-        }else if(id == R.id.flash_button){
-
-            mSlyceCamera.turnFlash();
-
-        }else if(id == R.id.snap_button){
-
-            showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessCallbacks());
-
-            // Take a picture using SlyceCamera object
-            mSlyceCamera.snap();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // When an Image is picked
-        if (requestCode == RESULT_LOAD_IMG && resultCode == getActivity().RESULT_OK && null != data) {
-
-            // Extract Image String
-            String imageDecodableString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
-
-            if(TextUtils.isEmpty(imageDecodableString)){
-
-                SlyceLog.i(TAG, "Error occurred while picking an Image");
-
-            }else{
-
-                Uri uri = Utils.getImageUri(data, getActivity().getApplicationContext());
-
-                showDialogFragment(ImageProcessDialogFragment.GALLERY_BITMAP, imageDecodableString, new ImageProcessCallbacks());
-            }
-
-        } else {
-            SlyceLog.i(TAG, "You haven't picked Image");
         }
     }
 
@@ -416,8 +367,64 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         }
 
         @Override
-        public void onImageProcessDismiss() {
+        public void onImageProcessDialogFragmentDismiss() {
             cancelSlyceProductsRequests();
+        }
+    }
+    // PRIVATE METHODS END
+
+    @Override
+    public void onClick(View v) {
+
+        int id = v.getId();
+
+        if(id == R.id.close_button){
+
+            close();
+
+        }else if(id == R.id.scan_tips_button){
+
+        }else if(id == R.id.gallery_button){
+
+            Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
+
+        }else if(id == R.id.flash_button){
+
+            mSlyceCamera.turnFlash();
+
+        }else if(id == R.id.snap_button){
+
+            showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessCallbacks());
+
+            // Take a picture using SlyceCamera object
+            mSlyceCamera.snap();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // When an Image is picked
+        if (requestCode == RESULT_LOAD_IMG && resultCode == getActivity().RESULT_OK && null != data) {
+
+            // Extract Image String
+            String imageDecodableString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
+
+            if(TextUtils.isEmpty(imageDecodableString)){
+
+                SlyceLog.i(TAG, "Error occurred while picking an Image");
+
+            }else{
+
+                //TODO: consider working with Uri
+//                Uri uri = Utils.getImageUri(data, getActivity().getApplicationContext());
+
+                showDialogFragment(ImageProcessDialogFragment.GALLERY_BITMAP, imageDecodableString, new ImageProcessCallbacks());
+            }
+
+        } else {
+            SlyceLog.i(TAG, "You haven't picked Image");
         }
     }
 }

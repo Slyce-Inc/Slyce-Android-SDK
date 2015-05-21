@@ -2,6 +2,7 @@ package com.android.slyce;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,13 +18,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.slyce.fragments.SlyceCameraFragment;
+import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
@@ -33,7 +35,7 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class MainActivity extends Activity implements View.OnClickListener, OnSlyceRequestListener, TextView.OnEditorActionListener {
+public class MainActivity extends Activity implements View.OnClickListener, OnSlyceRequestListener, OnSlyceCameraFragmentListener,TextView.OnEditorActionListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -165,7 +167,37 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
         Toast.makeText(MainActivity.this, "onStageLevelFinish:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
-    // OnSlyceRequestListener callbacks
+    // OnSlyceRequestListener callbacks END
+
+    // OnSlyceCameraFragmentListener callbacks (Full UI Mode)
+    @Override
+    public void onCameraFragment3DRecognition(JSONArray products) {
+        Toast.makeText(this, "onCameraFragment3DRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
+        // TODO create gridview of products
+    }
+
+    @Override
+    public void onCameraFragmentBarcodeRecognition(SlyceBarcode barcode) {
+        Toast.makeText(this, "onCameraFragmentBarcodeRecognition:" + "\n" + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCameraFragment2DRecognition(String irId, String productInfo) {
+        Toast.makeText(this, "onCameraFragment2DRecognition:" + "\n" + irId + "\n" + productInfo, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCameraFragment2DExtendedRecognition(JSONArray products) {
+        Toast.makeText(this, "onCameraFragment2DExtendedRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCameraFragmentError(String message) {
+        Toast.makeText(this, "onCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
+    }
+    // OnSlyceCameraFragmentListener callbacks END
+
+
 
     @Override
     public void onClick(View v) {
@@ -258,13 +290,23 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
             case R.id.camera_activity:
 
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
                 startActivity(new Intent(this, CameraActivity.class));
 
                 break;
 
             case R.id.full_ui_mode:
 
-                startActivity(new Intent(this, FullUIModeActivity.class));
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
+                startSlyceCameraFragment();
 
                 break;
         }
@@ -317,6 +359,17 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
             }
         }
+    }
+
+    private void startSlyceCameraFragment(){
+
+        // Add SlyceCameraFragment
+        SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(null);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.slyce_camera_fragment_container, slyceFragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
     }
 
     /**
@@ -416,4 +469,6 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
             slyce.close();
         }
     }
+
+
 }

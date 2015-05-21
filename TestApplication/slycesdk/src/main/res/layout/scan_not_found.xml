@@ -2,13 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center">
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/scan_not_found_background">
+    android:gravity="center"
+    android:background="@drawable/scan_not_found_background">
 
         <TextView
             android:id="@+id/no_results_headline"
@@ -46,5 +41,4 @@
             android:layout_marginTop="300dp"
             android:layout_marginBottom="32dp" />
 
-    </RelativeLayout>
 </RelativeLayout>

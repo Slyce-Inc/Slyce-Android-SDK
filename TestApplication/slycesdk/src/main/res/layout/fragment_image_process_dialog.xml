@@ -1,0 +1,176 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.android.slyce.activities.ImageProcessDialogFragment">
+
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/fragment_image_process_top_background"
+            >
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <com.android.slyce.roundedimage.RoundedImageView
+                android:id="@+id/image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/top_layout"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/fragment_image_process_bottom_background"
+            android:paddingLeft="@dimen/fragment_image_process_padding_horizontal_secondary"
+            android:paddingRight="@dimen/fragment_image_process_padding_horizontal_secondary">
+
+            <TextView
+                android:id="@+id/scan_status_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/fragment_image_process_bottom_layout_vertical_margins"
+                android:textSize="@dimen/fragment_image_process_progress_headline_text_size"
+                android:textStyle="italic"
+                android:textColor="@android:color/black"
+                />
+
+            <ProgressBar
+                android:id="@+id/horizontal_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="13dp"
+                android:layout_below="@id/scan_status_main"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/fragment_image_process_bottom_layout_vertical_margins"
+                android:max="100"
+                android:progressDrawable="@drawable/progress_drawable"
+                android:visibility="visible" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/horizontal_progress_bar"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                >
+
+
+                <RelativeLayout
+                    android:id="@+id/progress_first_text_main_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fragment_image_process_bottom_layout_vertical_margins">
+
+                    <!-- First Text-->
+                    <FrameLayout
+                        android:id="@+id/progress_first_text_secondary_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <ProgressBar
+                            android:id="@+id/progress_sending_image"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="visible" />
+
+                        <ImageView
+                            android:id="@+id/done_sending_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/fragment_image_process_small_chackmark"
+                            android:visibility="visible" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/text_sending_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/fragment_image_process_bottom_layout_progress_image_text_margin"
+                        android:layout_toRightOf="@id/progress_first_text_secondary_layout"
+                        android:text="@string/fragment_image_process_first_progress_text"
+                        android:textColor="@color/image_analyse_pre_process"
+                        android:textSize="@dimen/fragment_image_process_progress_text_size" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/progress_second_text_main_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/progress_first_text_main_layout"
+                    android:layout_marginTop="@dimen/fragment_image_process_bottom_layout_vertical_margins">
+
+                    <!-- Second Text-->
+                    <FrameLayout
+                        android:id="@+id/progress_second_text_secondary_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <ProgressBar
+                            android:id="@+id/progress_analyzing_image"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="visible" />
+
+                        <ImageView
+                            android:id="@+id/done_analyzing_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/fragment_image_process_small_chackmark"
+                            android:visibility="visible" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/text_analyzing_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/fragment_image_process_bottom_layout_progress_image_text_margin"
+                        android:layout_toRightOf="@id/progress_second_text_secondary_layout"
+                        android:text="@string/fragment_image_process_second_progress_text"
+                        android:textColor="@color/image_analyse_pre_process"
+                        android:textSize="@dimen/fragment_image_process_progress_text_size" />
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="68dp"
+                    android:layout_height="37dp"
+                    android:layout_alignBottom="@id/progress_second_text_main_layout"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/ps_general_assets_empty_btn_normal"
+                    android:text="Cancel"
+                    android:textAllCaps="false"
+                    android:textColor="@color/slyce_blue_color"
+                    android:textSize="12dp" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+</RelativeLayout>

@@ -19,9 +19,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -448,6 +445,11 @@ public class Utils {
         cursor.close();
 
         return imgDecodableString;
+    }
+
+    public static Uri getImageUri(Intent data, Context context){
+        Uri selectedImage = data.getData();
+        return selectedImage;
     }
 }
 

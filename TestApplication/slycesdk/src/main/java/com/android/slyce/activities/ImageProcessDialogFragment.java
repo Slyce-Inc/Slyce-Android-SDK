@@ -1,12 +1,15 @@
 package com.android.slyce.activities;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
@@ -26,28 +28,32 @@ import com.android.slycesdk.R;
 import org.json.JSONArray;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ImageProcessFragment#newInstance} factory method to
+ * Use the {@link ImageProcessDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ImageProcessFragment extends Fragment implements SlyceCameraFragment.OnSlyceCameraFragmentListener {
+public class ImageProcessDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    public static final int PROCESS_BITMAP_FROM_GALLERY = 001;
-    public static final int PROCESS_BITMAP_FROM_CAMERA = 002;
+    private static final String ARG_PROCESS_TYPE = "arg_process_type";
+    private static final String ARG_IMAGE_DECODABLE_STRING = "arg_image_decodable_string";
 
-    private static final int UPLOAD_IMAGE_TOTAL_PROGRESS_TIME = 3000;
+    public static final String GALLERY_BITMAP = "gallery_bitmap";
+    public static final String CAMERA_BITMAP = "camera_bitmap";
 
     private static final String BEGIN_SENDING_IMAGE = "begin_sending_image";
     private static final String BEGIN_ANALYZE_IMAGE = "begin_analyze_image";
     private static final String FINISH_ANALYZE_IMAGE = "finish_analyze_image";
 
-    public int mImageProcessType;
+    private static final int UPLOAD_IMAGE_TOTAL_PROGRESS_TIME = 3000;
 
-    private String mImageDecodableString = null;
+    private String mProcessType;
+    private String mImageDecodableString;
 
-    private UpdateProgressBarAsyncTask task;
+    /* views */
+    private Button cancelButton;
 
     private RoundedImageView mImage;
+    private ImageView sendDoneImage;
+    private ImageView analyzeDoneImage;
 
     private ProgressBar horizontalProgressBar;
     private ProgressBar progressSendingImage;
@@ -57,18 +63,16 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     private TextView sendImageText;
     private TextView analyzeImageText;
 
-    private ImageView sendDoneImage;
-    private ImageView analyzeDoneImage;
-
-    private Button cancelButton;
-
+    /* for searching products from gallery image */
     private SlyceProductsRequest mSlyceRequest;
 
-    private OnImageProcessFragmentListener mOnImageProcessFragmentListener;
+    private UpdateProgressBarAsyncTask task;
 
-    private View scanNotFoundLayout;
+    private Uri selecedGalleryImageUri;
 
-    public interface OnImageProcessFragmentListener{
+    private OnImageProcessDialogFragmentListener mOnImageProcessDialogFragmentListener;
+
+    public interface OnImageProcessDialogFragmentListener {
 
         void onImageProcessBarcodeRecognition(SlyceBarcode barcode);
 
@@ -77,39 +81,83 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
         void onImageProcess2DExtendedRecognition(JSONArray products);
 
         void onImageProcess3DRecognition(JSONArray products);
+
+        void onImageProcessDismiss();
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment ImageProcessFragment.
+     * @param processType Parameter 1.
+     * @param imageDecodableString Parameter 2.
+     * @return A new instance of fragment ImageProcessDialogFragment.
      */
-    public static ImageProcessFragment newInstance() {
-        ImageProcessFragment fragment = new ImageProcessFragment();
+    public static ImageProcessDialogFragment newInstance(String processType, String imageDecodableString) {
+        ImageProcessDialogFragment fragment = new ImageProcessDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PROCESS_TYPE, processType);
+        args.putString(ARG_IMAGE_DECODABLE_STRING, imageDecodableString);
+        fragment.setArguments(args);
         return fragment;
     }
 
-    public ImageProcessFragment() {
+    public ImageProcessDialogFragment() {
         // Required empty public constructor
     }
 
-    public void setImageDecodableString(String value) {
-        mImageDecodableString = value;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mProcessType = getArguments().getString(ARG_PROCESS_TYPE);
+            mImageDecodableString = getArguments().getString(ARG_IMAGE_DECODABLE_STRING);
+        }
+
+        setStyle(2, 0);
+        setCancelable(false);
     }
 
-    public void setmOnImageProcessFragmentListener(OnImageProcessFragmentListener listener){
-        mOnImageProcessFragmentListener = listener;
-    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_image_process_dialog, container, false);
 
-    public void setProcessType(int processtype){
-        mImageProcessType = processtype;
-    }
+        initRoundedImage(root);
 
-    public void setNoFoundLayout(){
+        horizontalProgressBar = (ProgressBar) root.findViewById(R.id.horizontal_progress_bar);
+        horizontalProgressBar.setIndeterminate(false);
 
-        scanNotFoundLayout.setVisibility(View.VISIBLE);
+        progressMsg = (TextView) root.findViewById(R.id.scan_status_main);
 
+        progressSendingImage = (ProgressBar) root.findViewById(R.id.progress_sending_image);
+        progressAnalyzeImage = (ProgressBar) root.findViewById(R.id.progress_analyzing_image);
+
+        sendDoneImage = (ImageView) root.findViewById(R.id.done_sending_image);
+        analyzeDoneImage = (ImageView) root.findViewById(R.id.done_analyzing_image);
+
+        sendImageText = (TextView) root.findViewById(R.id.text_sending_image);
+        analyzeImageText = (TextView) root.findViewById(R.id.text_analyzing_image);
+
+        cancelButton = (Button) root.findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(this);
+
+        updateProgressInfo("");
+
+        if(mProcessType == GALLERY_BITMAP){
+
+            Bitmap bitmap = BitmapFactory.decodeFile(mImageDecodableString);
+            mImage.setImageBitmap(bitmap);
+
+            performSlyceProductsRequest(bitmap);
+
+        }else{
+            // mProcessType = CAMERA_BITMAP
+            // Set the snapped bitmap to ImageView when its ready
+        }
+
+        return root;
     }
 
     @Override
@@ -123,79 +171,82 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onClick(View v) {
+        if(v.getId() == R.id.cancel_button){
+            dismiss();
+        }else if(v.getId() == R.id.scan_not_found_button_done){
+            dismiss();
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public void onDismiss(DialogInterface dialog) {
+        // Cancel SlyceProductsRequest
+        if(mSlyceRequest != null){
+            mSlyceRequest.cancel();
+        }
 
-        View mView = inflater.inflate(R.layout.fragment_image_process, container, false);
+        // Notify SlyceCameraFragment to cancel SlyceCamera
+        mOnImageProcessDialogFragmentListener.onImageProcessDismiss();
 
-        mImage = (RoundedImageView) mView.findViewById(R.id.image);
+        super.onDismiss(dialog);
+    }
+
+    /* PUBLIC METHODS */
+    public void setmOnImageProcessDialogFragmentListener(OnImageProcessDialogFragmentListener listener){
+        mOnImageProcessDialogFragmentListener = listener;
+    }
+
+    public void showDialogFragment(){
+        // Create and show the dialog.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        NotFoundDialogFragment newFragment = NotFoundDialogFragment.newInstance();
+        newFragment.show(ft, "NotFoundDialogFragment");
+
+        dismiss();
+    }
+
+    public void onSnap(Bitmap bitmap) {
+
+        mImage.setImageBitmap(bitmap);
+        updateProgressInfo(BEGIN_SENDING_IMAGE);
+    }
+
+    public void onImageStartRequest() {
+        updateProgressInfo(BEGIN_ANALYZE_IMAGE);
+    }
+
+    public void onProgress(long progress, String message) {
+        horizontalProgressBar.setProgress(50 + (int) progress / 2);
+        progressMsg.setText(message);
+    }
+
+    public void onCamera3DRecognition(JSONArray products) {
+        updateProgressInfo(FINISH_ANALYZE_IMAGE);
+
+        if(products.length() > 0){
+            dismiss();
+        }else{
+            showDialogFragment();
+        }
+    }
+
+    public void onError(String message) {
+        updateProgressInfo("");
+    }
+    /* End */
+
+    /* PRIVATE METHODS */
+    private void initRoundedImage(View root){
+        mImage = (RoundedImageView) root.findViewById(R.id.image);
         mImage.setCornerRadius(getResources().getDimension(R.dimen.fragment_image_process_image_corners_radius));
         mImage.setBorderColor(getResources().getColor(R.color.image_border_color));
         mImage.setBorderWidth(getResources().getDimension(R.dimen.fragment_image_process_image_border_width));
         mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mImage.setOval(false);
-
-        horizontalProgressBar = (ProgressBar) mView.findViewById(R.id.horizontal_progress_bar);
-        horizontalProgressBar.setIndeterminate(false);
-
-        progressMsg = (TextView) mView.findViewById(R.id.scan_status_main);
-
-        progressSendingImage = (ProgressBar) mView.findViewById(R.id.progress_sending_image);
-        progressAnalyzeImage = (ProgressBar) mView.findViewById(R.id.progress_analyzing_image);
-
-        sendDoneImage = (ImageView) mView.findViewById(R.id.done_sending_image);
-        analyzeDoneImage = (ImageView) mView.findViewById(R.id.done_analyzing_image);
-
-        sendImageText = (TextView) mView.findViewById(R.id.text_sending_image);
-        analyzeImageText = (TextView) mView.findViewById(R.id.text_analyzing_image);
-
-        cancelButton = (Button) mView.findViewById(R.id.cancel_button);
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
-
-        updateProgressInfo("");
-
-        // Set the Image in ImageView after decoding the String
-        if(mImageProcessType == PROCESS_BITMAP_FROM_GALLERY) {
-
-            Bitmap bitmap = BitmapFactory.decodeFile(mImageDecodableString);
-
-            performGalleryImageProcess(bitmap);
-        }
-
-        scanNotFoundLayout = mView.findViewById(R.id.scan_not_found_layout);
-
-        return mView;
     }
 
-    private void cancel(){
-        // Cancel SlyceProductsRequest
-        if(mSlyceRequest != null){
-            mSlyceRequest.cancel();
-        }
-        // Remove fragment
-        close();
-    }
-
-    private void close() {
-//        getFragmentManager().beginTransaction().remove(this).commit();
-        getFragmentManager().popBackStack();
-    }
-
-    private void performGalleryImageProcess(Bitmap bitmap){
-
-        mImage.setImageBitmap(bitmap);
+    private void performSlyceProductsRequest(Bitmap bitmap){
 
         mSlyceRequest = new SlyceProductsRequest(Slyce.get(), new OnSlyceRequestListener() {
 
@@ -206,7 +257,7 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
                 updateProgressInfo(FINISH_ANALYZE_IMAGE);
 
                 // Notify SlyceCameraFragment
-                mOnImageProcessFragmentListener.onImageProcessBarcodeRecognition(barcode);
+                mOnImageProcessDialogFragmentListener.onImageProcessBarcodeRecognition(barcode);
             }
 
             @Override
@@ -219,14 +270,14 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
             public void on2DRecognition(String irid, String productInfo) {
 
                 // Notify SlyceCameraFragment
-                mOnImageProcessFragmentListener.onImageProcess2DRecognition(irid, productInfo);
+                mOnImageProcessDialogFragmentListener.onImageProcess2DRecognition(irid, productInfo);
             }
 
             @Override
             public void on2DExtendedRecognition(JSONArray products) {
 
                 // Notify SlyceCameraFragment
-                mOnImageProcessFragmentListener.onImageProcess2DExtendedRecognition(products);
+                mOnImageProcessDialogFragmentListener.onImageProcess2DExtendedRecognition(products);
             }
 
             @Override
@@ -236,7 +287,13 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
                 updateProgressInfo(FINISH_ANALYZE_IMAGE);
 
                 // Notify SlyceCameraFragment
-                mOnImageProcessFragmentListener.onImageProcess3DRecognition(products);
+                mOnImageProcessDialogFragmentListener.onImageProcess3DRecognition(products);
+
+                if(products.length() > 0){
+                    dismiss();
+                }else{
+                    showDialogFragment();
+                }
             }
 
             @Override
@@ -251,12 +308,11 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
                 updateProgressInfo("");
 
                 // Set the not found layout
-                setNoFoundLayout();
+                showDialogFragment();
             }
 
         }, bitmap);
 
-        // Execute Request
         mSlyceRequest.execute();
 
         updateProgressInfo(BEGIN_SENDING_IMAGE);
@@ -343,39 +399,6 @@ public class ImageProcessFragment extends Fragment implements SlyceCameraFragmen
             return null;
         }
     }
+    /* End */
 
-    /**
-     * {@link SlyceCameraFragment.OnSlyceCameraFragmentListener}
-     */
-    @Override
-    public void onSnap(Bitmap bitmap) {
-
-        if(mImageProcessType == PROCESS_BITMAP_FROM_CAMERA){
-            mImage.setImageBitmap(bitmap);
-        }
-
-        updateProgressInfo(BEGIN_SENDING_IMAGE);
-    }
-
-    @Override
-    public void onImageStartRequest() {
-        updateProgressInfo(BEGIN_ANALYZE_IMAGE);
-    }
-
-    @Override
-    public void onProgress(long progress, String message) {
-        horizontalProgressBar.setProgress(50 + (int) progress / 2);
-        progressMsg.setText(message);
-    }
-
-    @Override
-    public void onCamera3DRecognition() {
-        updateProgressInfo(FINISH_ANALYZE_IMAGE);
-    }
-
-    @Override
-    public void onError(String message) {
-        updateProgressInfo("");
-    }
-    /** End */
 }

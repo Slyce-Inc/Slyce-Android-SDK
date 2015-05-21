@@ -1,11 +1,12 @@
 package com.android.slyce.activities;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -16,7 +17,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
 import com.android.slyce.Slyce;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
@@ -28,6 +28,7 @@ import com.android.slycesdk.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.android.slyce.activities.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +41,8 @@ import org.json.JSONObject;
 public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListener, OnClickListener{
 
     private static final String TAG = SlyceCameraFragment.class.getSimpleName();
+
+    private static final String FRAGMENT_TAG = "ImageProcessDialogFragment";
 
     private static final int RESULT_LOAD_IMG = 1;
 
@@ -54,9 +57,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     /* Listeners */
     private com.android.slyce.listeners.OnSlyceCameraFragmentListener mListener;
-
-    /* Notify the ImageProcessFragment on events */
-    private static OnSlyceCameraFragmentListener mOnSlyceCameraFragmentListener;
 
     /* Camera surface view */
     private SurfaceView mPreview;
@@ -76,25 +76,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     /* Slyce Camera object */
     private SlyceCamera mSlyceCamera;
 
-    private ImageProcessFragment mImageProcessFragment;
-
-    public interface OnSlyceCameraFragmentListener {
-
-        /** Bitmap is ready from {@link OnSlyceCameraListener}*/
-        void onSnap(Bitmap bitmap);
-
-        /** Bitmap uploaded to the server */
-        void onImageStartRequest();
-
-        /** Notify on search progress */
-        void onProgress(long progress, String message);
-
-        /** Notify for found products */
-        void onCamera3DRecognition();
-
-        /** Notify on error */
-        void onError(String message);
-    }
+    private ImageProcessDialogFragment mImageProcessDialogFragment;
 
     /**
      * Use this factory method to create a new instance of
@@ -119,57 +101,14 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     public SlyceCameraFragment() {
         // Required empty public constructor
-
-        // Create ImageProcessFragment
-        mImageProcessFragment = ImageProcessFragment.newInstance();
-        mImageProcessFragment.setmOnImageProcessFragmentListener(new ImageProcessFragment.OnImageProcessFragmentListener() {
-
-            @Override
-            public void onImageProcessBarcodeRecognition(SlyceBarcode barcode) {
-                if(mListener != null){
-                    // Notify the host application of barcode recognition
-                    mListener.onCameraFragmentBarcodeRecognition(barcode);
-                }
-
-                // Close SDK
-                close();
-            }
-
-            @Override
-            public void onImageProcess2DRecognition(String irid, String productInfo) {
-                if(mListener != null){
-                    // Notify the host application of MS recognition
-                    mListener.onCameraFragment2DRecognition(irid, productInfo);
-                }
-            }
-
-            @Override
-            public void onImageProcess2DExtendedRecognition(JSONArray products) {
-                if(mListener != null){
-                    // Notify the host application of extra products details
-                    mListener.onCameraFragment2DExtendedRecognition(products);
-                }
-            }
-
-            @Override
-            public void onImageProcess3DRecognition(JSONArray products) {
-                if(mListener != null){
-                    // Notify the host application of found products
-                    mListener.onCameraFragment3DRecognition(products);
-                }
-
-                if(products.length() > 0){
-                    // Close SDK
-                    close();
-                }else{
-                    mImageProcessFragment.setNoFoundLayout();
-                }
-            }
-        });
     }
 
     public void setContinuousRecognition(boolean value){
         mSlyceCamera.setContinuousRecognition(value);
+    }
+
+    public void cancelSlyceProductsRequests(){
+        mSlyceCamera.cancel();
     }
 
     @Override
@@ -179,8 +118,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_slyce, container, false);
 
@@ -219,9 +158,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             throw new ClassCastException(activity.toString()
                     + " must implement OnSlyceCameraFragmentListener");
         }
-
-        // Set the listener so messages will be sent to ImageProcessFragment
-        mOnSlyceCameraFragmentListener = mImageProcessFragment;
     }
 
     @Override
@@ -229,7 +165,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         super.onDetach();
         isAttached = false;
         mListener = null;
-        mOnSlyceCameraFragmentListener = null;
     }
 
     @Override
@@ -239,12 +174,16 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             // Notify the host application of found products
             mListener.onCameraFragment3DRecognition(products);
 
-            // Notify ImageProcessFragment for found products
-            mOnSlyceCameraFragmentListener.onCamera3DRecognition();
+            // Notify ImageProcessDialogFragment for found products
+            mImageProcessDialogFragment.onCamera3DRecognition(products);
         }
 
-        // Close SDK
-        close();
+        if(products.length() > 0){
+            // Close SDK
+            close();
+        }else{
+            // Do Nothing
+        }
     }
 
     @Override
@@ -274,8 +213,8 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     @Override
     public void onCameraSlyceProgress(long progress, String message, String id) {
         if(isAttached){
-            // Notify ImageProcessFragment for searching progress
-            mOnSlyceCameraFragmentListener.onProgress(progress, message);
+            // Notify ImageProcessDialogFragment for searching progress
+            mImageProcessDialogFragment.onProgress(progress, message);
         }
     }
 
@@ -288,24 +227,24 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             // Notify host application
             mListener.onSlyceCameraFragmentError(message);
 
-            // Notify ImageProcessFragment
-            mOnSlyceCameraFragmentListener.onError(message);
+            // Notify ImageProcessDialogFragment
+            mImageProcessDialogFragment.onError(message);
         }
     }
 
     @Override
     public void onImageStartRequest(Bitmap bitmap) {
         if(isAttached){
-            // Notify ImageProcessFragment for bitmap was uploaded to server
-            mOnSlyceCameraFragmentListener.onImageStartRequest();
+            // Notify ImageProcessDialogFragment for bitmap was uploaded to server
+            mImageProcessDialogFragment.onImageStartRequest();
         }
     }
 
     @Override
     public void onSnap(Bitmap bitmap) {
         if(isAttached) {
-            // Notify ImageProcessFragment that bitmap is ready
-            mOnSlyceCameraFragmentListener.onSnap(bitmap);
+            // Notify ImageProcessDialogFragment that bitmap is ready
+            mImageProcessDialogFragment.onSnap(bitmap);
         }
     }
 
@@ -384,7 +323,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         }else if(id == R.id.snap_button){
 
-            attachFragment(mImageProcessFragment, ImageProcessFragment.PROCESS_BITMAP_FROM_CAMERA);
+            showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessCallbacks());
 
             // Take a picture using SlyceCamera object
             mSlyceCamera.snap();
@@ -399,17 +338,17 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         if (requestCode == RESULT_LOAD_IMG && resultCode == getActivity().RESULT_OK && null != data) {
 
             // Extract Image String
-            String pickedImageString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
+            String imageDecodableString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
 
-            if(TextUtils.isEmpty(pickedImageString)){
+            if(TextUtils.isEmpty(imageDecodableString)){
 
                 SlyceLog.i(TAG, "Error occurred while picking an Image");
 
             }else{
 
-                mImageProcessFragment.setImageDecodableString(pickedImageString);
+                Uri uri = Utils.getImageUri(data, getActivity().getApplicationContext());
 
-                attachFragment(mImageProcessFragment, ImageProcessFragment.PROCESS_BITMAP_FROM_GALLERY);
+                showDialogFragment(ImageProcessDialogFragment.GALLERY_BITMAP, imageDecodableString, new ImageProcessCallbacks());
             }
 
         } else {
@@ -417,14 +356,68 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
         }
     }
 
-    /** Displays ImageProcessFragment {@link ImageProcessFragment}
-     *  @param fragment to display */
-    private void attachFragment(ImageProcessFragment fragment, int processType){
+    private ImageProcessDialogFragment showDialogFragment(
+            String processType,
+            String imageDecodableString,
+            OnImageProcessDialogFragmentListener listener){
 
-        fragment.setProcessType(processType);
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.image_process_fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commitAllowingStateLoss();
+        // Create and show the dialog.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ImageProcessDialogFragment newFragment = ImageProcessDialogFragment.newInstance(processType, imageDecodableString);
+        mImageProcessDialogFragment = newFragment;
+        newFragment.setmOnImageProcessDialogFragmentListener(listener);
+        newFragment.show(ft, FRAGMENT_TAG);
+
+        return newFragment;
+    }
+
+    private class ImageProcessCallbacks implements OnImageProcessDialogFragmentListener {
+
+        @Override
+        public void onImageProcessBarcodeRecognition(SlyceBarcode barcode) {
+            if(mListener != null){
+                // Notify the host application of barcode recognition
+                mListener.onCameraFragmentBarcodeRecognition(barcode);
+            }
+
+            // Close SDK
+            close();
+        }
+
+        @Override
+        public void onImageProcess2DRecognition(String irid, String productInfo) {
+            if(mListener != null){
+                // Notify the host application of MS recognition
+                mListener.onCameraFragment2DRecognition(irid, productInfo);
+            }
+        }
+
+        @Override
+        public void onImageProcess2DExtendedRecognition(JSONArray products) {
+            if(mListener != null){
+                // Notify the host application of extra products details
+                mListener.onCameraFragment2DExtendedRecognition(products);
+            }
+        }
+
+        @Override
+        public void onImageProcess3DRecognition(JSONArray products) {
+            if(mListener != null){
+                // Notify the host application of found products
+                mListener.onCameraFragment3DRecognition(products);
+            }
+
+            if(products.length() > 0){
+                // Close SDK
+                close();
+            }else{
+
+            }
+        }
+
+        @Override
+        public void onImageProcessDismiss() {
+            cancelSlyceProductsRequests();
+        }
     }
 }

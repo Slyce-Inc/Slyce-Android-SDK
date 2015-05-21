@@ -16,10 +16,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.android.slyce.Slyce;
-import com.android.slyce.activities.ScanningTipsDialogFragment;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;

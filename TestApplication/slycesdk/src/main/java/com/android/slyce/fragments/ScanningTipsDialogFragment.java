@@ -1,4 +1,4 @@
-package com.android.slyce.activities;
+package com.android.slyce.fragments;
 
 
 import android.app.DialogFragment;

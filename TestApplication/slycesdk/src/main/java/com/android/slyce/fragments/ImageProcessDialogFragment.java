@@ -23,9 +23,12 @@ import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.roundedimage.RoundedImageView;
+import com.android.slyce.utils.BitmapLoader;
 import com.android.slycesdk.R;
 
 import org.json.JSONArray;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Use the {@link ImageProcessDialogFragment#newInstance} factory method to
@@ -58,6 +61,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     private ProgressBar horizontalProgressBar;
     private ProgressBar progressSendingImage;
     private ProgressBar progressAnalyzeImage;
+    private ProgressBar imageProgressBar;
 
     private TextView progressMsg;
     private TextView sendImageText;
@@ -141,6 +145,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         sendImageText = (TextView) root.findViewById(R.id.text_sending_image);
         analyzeImageText = (TextView) root.findViewById(R.id.text_analyzing_image);
 
+        imageProgressBar = (ProgressBar) root.findViewById(R.id.image_progress_bar);
+
         cancelButton = (Button) root.findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(this);
 
@@ -148,10 +154,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         if(mProcessType == GALLERY_BITMAP){
 
-            Bitmap bitmap = BitmapFactory.decodeFile(mImageDecodableString);
-            mImage.setImageBitmap(bitmap);
-
-            performSlyceProductsRequest(bitmap);
+            BitmapWorkerTask loader = new BitmapWorkerTask(mImage, imageProgressBar);
+            loader.execute(mImageDecodableString);
 
         }else{
             // mProcessType = CAMERA_BITMAP
@@ -406,5 +410,46 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         }
     }
     /* End */
+
+    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+
+        private final WeakReference<ImageView> imageViewReference;
+        private final WeakReference<ProgressBar> progressBarReference;
+        private String data;
+
+        public BitmapWorkerTask(ImageView imageView, ProgressBar progress) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<ImageView>(imageView);
+            progressBarReference = new WeakReference<ProgressBar>(progress);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressBarReference.get().setVisibility(View.VISIBLE);
+        }
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            data = params[0];
+            return BitmapLoader.decodeSampledBitmapFromResource(data, 200, 200);
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+
+                performSlyceProductsRequest(bitmap);
+
+                progressBarReference.get().setVisibility(View.GONE);
+            }
+        }
+    }
+
 
 }

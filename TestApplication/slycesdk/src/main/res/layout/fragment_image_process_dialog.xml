@@ -12,11 +12,6 @@
             android:background="@drawable/fragment_image_process_top_background"
             >
 
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-
             <com.android.slyce.roundedimage.RoundedImageView
                 android:id="@+id/image"
                 android:layout_width="300dp"
@@ -25,6 +20,14 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 />
+
+            <ProgressBar
+                android:id="@+id/image_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
         <RelativeLayout

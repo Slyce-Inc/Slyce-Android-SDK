@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.android.slyce.Slyce;
+import com.android.slyce.activities.ScanningTipsDialogFragment;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
@@ -383,6 +384,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             close();
 
         }else if(id == R.id.scan_tips_button){
+
+            ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
+            dialogFragment.show(getFragmentManager(), null);
 
         }else if(id == R.id.gallery_button){
 

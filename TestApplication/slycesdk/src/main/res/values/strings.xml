@@ -19,4 +19,14 @@
     <string name="scan_not_found_headline">Hmm&#x2026;</string>
     <string name="scan_not_found_button">Sure!</string>
 
+    <!--Used in scanning tips dialog-->
+    <string name="scanning_tips_headline">Scanning Tips</string>
+    <string name="scanning_tips_tip_1">Hold still in vertical orientation</string>
+    <string name="scanning_tips_tip_2">Place item of interest in middle of the screen</string>
+    <string name="scanning_tips_tip_3">Tap screen to focus</string>
+    <string name="scanning_tips_tip_4">Have a good lighting, try to avoid using the flash</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

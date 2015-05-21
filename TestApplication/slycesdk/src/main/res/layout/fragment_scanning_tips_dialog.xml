@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/rectangle_dialog_round_corners"
+    tools:context="com.pounce.android.fragments.DialogsFragment"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/scanning_tips_headline"
+        android:textColor="@color/scanning_tips_text_headline"
+        android:textSize="18dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
+        />
+
+    <View
+        android:id="@+id/separating_line"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@id/top_layout"
+        android:layout_alignRight="@id/top_layout"
+        android:background="@android:color/black"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
+        />
+
+    <TextView
+        android:id="@+id/text_body_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
+        android:text="@string/scanning_tips_tip_1"
+        android:textColor="@color/scanning_tips_text_body"
+        android:textSize="@dimen/fragment_scanning_tips_text_size"
+        android:textStyle="italic"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
+        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
+        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        />
+
+    <TextView
+        android:id="@+id/text_body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
+        android:text="@string/scanning_tips_tip_2"
+        android:textStyle="italic"
+        android:textColor="@color/scanning_tips_text_body"
+        android:textSize="@dimen/fragment_scanning_tips_text_size"
+        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
+        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
+        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
+        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        />
+
+    <TextView
+        android:id="@+id/text_body_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
+        android:text="@string/scanning_tips_tip_3"
+        android:textStyle="italic"
+        android:textColor="@color/scanning_tips_text_body"
+        android:textSize="@dimen/fragment_scanning_tips_text_size"
+        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
+        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
+        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
+        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        />
+
+    <TextView
+        android:id="@+id/text_body_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
+        android:text="@string/scanning_tips_tip_4"
+        android:textStyle="italic"
+        android:textColor="@color/scanning_tips_text_body"
+        android:textSize="@dimen/fragment_scanning_tips_text_size"
+        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
+        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
+        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
+        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        />
+
+
+    <ImageButton
+        android:id="@+id/dialog_button_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/scanning_tips_got_it_btn"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="@dimen/fragment_scanning_tips_vertical_margins"
+        />
+
+
+</LinearLayout>
+
+

@@ -1,4 +1,4 @@
-package com.android.slyce;
+package models;
 
 import java.util.ArrayList;
 import java.util.List;

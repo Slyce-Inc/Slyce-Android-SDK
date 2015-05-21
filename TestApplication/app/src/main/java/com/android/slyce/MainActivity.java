@@ -172,9 +172,12 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     // OnSlyceCameraFragmentListener callbacks (Full UI Mode)
     @Override
     public void onCameraFragment3DRecognition(JSONArray products) {
-        Intent intent = new Intent(this, ProductsGridActivity.class);
-        intent.putExtra(ProductsGridActivity.PRODUCTS_KEY,products.toString());
-        startActivity(intent);
+
+        if(products.length() > 0){
+            Intent intent = new Intent(this, ProductsGridActivity.class);
+            intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, products.toString());
+            startActivity(intent);
+        }
     }
 
     @Override

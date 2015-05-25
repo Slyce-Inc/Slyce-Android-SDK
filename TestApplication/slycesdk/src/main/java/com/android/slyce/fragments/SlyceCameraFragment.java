@@ -212,7 +212,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
         if(isAttached){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.image_detection_sound, isSoundOn, isVibrateOn);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_image_detection_sound, isSoundOn, isVibrateOn);
 
             // Notify the host application of barcode recognition
             mListener.onCameraFragmentBarcodeRecognition(barcode);
@@ -225,7 +225,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
             if(!TextUtils.isEmpty(irId)){
                 // Play sound/vibrate only on detection
-                Buzzer.getInstance().buzz(getActivity(), R.raw.image_detection_sound, isSoundOn, isVibrateOn);
+                Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_image_detection_sound, isSoundOn, isVibrateOn);
             }
 
             // Notify the host application of MS recognition
@@ -413,32 +413,32 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         if(id == R.id.close_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, isSoundOn, false);
 
             close();
 
         }else if(id == R.id.scan_tips_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, isSoundOn, false);
 
             ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
             dialogFragment.show(getFragmentManager(), null);
 
         }else if(id == R.id.gallery_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, isSoundOn, false);
 
             Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
 
         }else if(id == R.id.flash_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.flash_sound, isSoundOn, false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_flash_sound, isSoundOn, false);
 
             mSlyceCamera.turnFlash();
 
         }else if(id == R.id.snap_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, isSoundOn, false);
 
             showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessCallbacks());
 

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="fragment_slyce_background">#CC000000</color>
-
-    <!--Used in ImageProcessFragment-->
     <color name="slyce_color_white">@android:color/white</color>
     <color name="slyce_color_blue">#00a4db</color>
 

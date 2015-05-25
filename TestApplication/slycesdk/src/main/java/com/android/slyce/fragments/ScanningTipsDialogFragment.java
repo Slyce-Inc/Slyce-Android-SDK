@@ -25,7 +25,7 @@ public class ScanningTipsDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.MyDialog);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.SlyceDialogTheme);
     }
 
     @Override

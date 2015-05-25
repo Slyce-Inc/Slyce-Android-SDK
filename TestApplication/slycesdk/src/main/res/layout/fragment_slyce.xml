@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/slyce_dimen_15dp"
-        android:background="@color/fragment_slyce_background">
+        android:background="@color/slyce_color_black_alpha_cc">
 
         <ImageButton
             android:id="@+id/close_button"
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/slyce_dimen_15dp"
-        android:background="@color/fragment_slyce_background"
+        android:background="@color/slyce_color_black_alpha_cc"
         android:layout_alignParentBottom="true">
         <ImageButton
             android:id="@+id/snap_button"

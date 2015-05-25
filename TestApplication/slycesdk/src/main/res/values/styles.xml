@@ -13,7 +13,7 @@
     <item name="android:windowAnimationStyle">@style/com_mixpanel_android_SurveyActivityAnimation</item>
   </style>
 
-  <style name="MyDialog" parent="@android:style/Theme.Dialog">
+  <style name="SlyceDialogTheme" parent="@android:style/Theme.Dialog">
     <item name="android:windowFrame">@null</item>
     <item name="android:windowBackground">@android:color/transparent</item>
     <item name="android:windowIsFloating">true</item>

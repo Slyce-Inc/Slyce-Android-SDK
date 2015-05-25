@@ -124,7 +124,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             mImageDecodableString = getArguments().getString(ARG_IMAGE_DECODABLE_STRING);
         }
 
-//        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.MyDialog);
+//        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.SlyceDialogTheme);
         setStyle(2, 0);
         setCancelable(false);
     }

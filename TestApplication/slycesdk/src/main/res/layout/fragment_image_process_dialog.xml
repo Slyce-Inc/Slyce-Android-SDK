@@ -17,6 +17,8 @@
                 android:layout_width="@dimen/slyce_dimen_300dp"
                 android:layout_height="@dimen/slyce_dimen_300dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/slyce_dimen_20dp"
+                android:layout_marginRight="@dimen/slyce_dimen_20dp"
                 android:layout_marginTop="@dimen/slyce_dimen_16dp"
                 android:layout_marginBottom="@dimen/slyce_dimen_16dp"
                 />

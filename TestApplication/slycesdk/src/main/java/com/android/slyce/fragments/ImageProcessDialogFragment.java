@@ -24,6 +24,7 @@ import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.roundedimage.RoundedImageView;
 import com.android.slyce.utils.BitmapLoader;
+import com.android.slyce.utils.SlyceLog;
 import com.android.slycesdk.R;
 
 import org.json.JSONArray;
@@ -35,6 +36,8 @@ import java.lang.ref.WeakReference;
  * create an instance of this fragment.
  */
 public class ImageProcessDialogFragment extends DialogFragment implements View.OnClickListener {
+
+    private static final String TAG = ImageProcessDialogFragment.class.getSimpleName();
 
     private static final String ARG_PROCESS_TYPE = "arg_process_type";
     private static final String ARG_IMAGE_DECODABLE_STRING = "arg_image_decodable_string";
@@ -50,6 +53,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
     private String mProcessType;
     private String mImageDecodableString;
+
+    private boolean isAttached;
 
     /* views */
     private Button cancelButton;
@@ -169,11 +174,13 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        isAttached = true;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        isAttached = false;
     }
 
     @Override
@@ -213,21 +220,37 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     }
 
     public void onSnap(Bitmap bitmap) {
-
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onSnap fragment is not attached");
+            return;
+        }
         mImage.setImageBitmap(bitmap);
         updateProgressInfo(BEGIN_SENDING_IMAGE);
     }
 
     public void onImageStartRequest() {
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onImageStartRequest fragment is not attached");
+            return;
+        }
         updateProgressInfo(BEGIN_ANALYZE_IMAGE);
     }
 
     public void onProgress(long progress, String message) {
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onProgress fragment is not attached");
+            return;
+        }
         horizontalProgressBar.setProgress(50 + (int) progress / 2);
         progressMsg.setText(message);
     }
 
     public void onCamera3DRecognition(JSONArray products) {
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onCamera3DRecognition fragment is not attached");
+            return;
+        }
+
         updateProgressInfo(FINISH_ANALYZE_IMAGE);
 
         if(products.length() > 0){
@@ -238,6 +261,11 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     }
 
     public void onError(String message) {
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onError fragment is not attached");
+            return;
+        }
+
         updateProgressInfo("");
 
         showDialogFragment();

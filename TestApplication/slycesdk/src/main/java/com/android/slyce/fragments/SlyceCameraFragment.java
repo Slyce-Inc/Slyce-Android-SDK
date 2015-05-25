@@ -393,8 +393,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             cancelSlyceProductsRequests();
 
             // Resume the automatic scan
-//            setContinuousRecognition(true);
-//            mSlyceCamera.resume();
+            setContinuousRecognition(true);
         }
     }
     // PRIVATE METHODS END
@@ -439,8 +438,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             mSlyceCamera.snap();
 
             // Pause the automatic scan
-//            setContinuousRecognition(false);
-//            mSlyceCamera.pause();
+            setContinuousRecognition(false);
         }
     }
 

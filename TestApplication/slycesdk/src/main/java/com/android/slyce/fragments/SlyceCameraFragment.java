@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -16,19 +17,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
 import com.android.slyce.Slyce;
 import com.android.slyce.camera.SlyceCamera;
+import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.utils.SlyceLog;
+import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.Utils;
 import com.android.slycesdk.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,7 +87,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param options  Parameter 1.
+     * @param options    Parameter 1.
+     * @param soundOn    Parameter 2.
+     * @param vibrateOn  Parameter 3.
      * @return A new instance of fragment SlyceCameraFragment.
      */
     public static SlyceCameraFragment newInstance(JSONObject options, boolean soundOn, boolean vibrateOn) {
@@ -105,9 +108,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     }
 
     public SlyceCameraFragment() {
-
-        // Create the Buzzer object for playing sound and vibrate
-
     }
 
     public void setContinuousRecognition(boolean value){
@@ -203,6 +203,9 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     @Override
     public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
         if(isAttached){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.image_detection_sound, isSoundOn, isVibrateOn);
+
             // Notify the host application of barcode recognition
             mListener.onCameraFragmentBarcodeRecognition(barcode);
         }
@@ -211,6 +214,12 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     @Override
     public void onCamera2DRecognition(String irId, String productInfo) {
         if(isAttached){
+
+            if(!TextUtils.isEmpty(irId)){
+                // Play sound/vibrate only on detection
+                Buzzer.getInstance().buzz(getActivity(), R.raw.image_detection_sound, isSoundOn, isVibrateOn);
+            }
+
             // Notify the host application of MS recognition
             mListener.onCameraFragment2DRecognition(irId, productInfo);
         }
@@ -305,6 +314,10 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
             }
 
             // Parameter 2.
+            isSoundOn = getArguments().getBoolean(ARG_SOUND_ON);
+
+            // Parameter 3.
+            isVibrateOn = getArguments().getBoolean(ARG_VIBRATE_ON);
         }
     }
 
@@ -376,7 +389,12 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         @Override
         public void onImageProcessDialogFragmentDismiss() {
+
             cancelSlyceProductsRequests();
+
+            // Resume the automatic scan
+//            setContinuousRecognition(true);
+//            mSlyceCamera.resume();
         }
     }
     // PRIVATE METHODS END
@@ -388,27 +406,41 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
         if(id == R.id.close_button){
 
+            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
+
             close();
 
         }else if(id == R.id.scan_tips_button){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
 
             ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
             dialogFragment.show(getFragmentManager(), null);
 
         }else if(id == R.id.gallery_button){
 
+            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
+
             Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
 
         }else if(id == R.id.flash_button){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.flash_sound, isSoundOn, false);
 
             mSlyceCamera.turnFlash();
 
         }else if(id == R.id.snap_button){
 
+            Buzzer.getInstance().buzz(getActivity(), R.raw.click_sound, isSoundOn, false);
+
             showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessCallbacks());
 
             // Take a picture using SlyceCamera object
             mSlyceCamera.snap();
+
+            // Pause the automatic scan
+//            setContinuousRecognition(false);
+//            mSlyceCamera.pause();
         }
     }
 
@@ -427,9 +459,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
                 SlyceLog.i(TAG, "Error occurred while picking an Image");
 
             }else{
-
-                //TODO: consider working with Uri
-//                Uri uri = Utils.getImageUri(data, getActivity().getApplicationContext());
 
                 showDialogFragment(ImageProcessDialogFragment.GALLERY_BITMAP, imageDecodableString, new ImageProcessCallbacks());
             }

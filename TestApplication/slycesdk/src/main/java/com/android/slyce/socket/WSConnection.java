@@ -3,6 +3,8 @@ package com.android.slyce.socket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.widget.Toast;
+
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.handler.RequestSynchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
@@ -64,7 +66,7 @@ public class WSConnection implements
 
     private long startDetectionTime = 0;
 
-    private boolean isCancelled = false;
+    private boolean isRequestCancelled = false;
     private boolean mIs2D;
     private boolean is2DSearchNotFound = false;
     private boolean is3DSearchNotFound = false;
@@ -108,13 +110,8 @@ public class WSConnection implements
                     StringBuilder error = new StringBuilder();
                     error.append("Message: ").append(ex.getMessage()).append(" Cause: ").append(ex.getCause());
 
-                    // 1. Report to MixPanel
-                    JSONObject searchError = new JSONObject();
-                    try {
-                        searchError.put(Constants.DETECTION_TYPE, Constants._3D);
-//                        searchError.put(Constants.ERROR_MESSAGE, error);
-                        mixpanel.track(Constants.SEARCH_ERROR, searchError);
-                    } catch (JSONException e){}
+                    // Report to MixPanel
+                    reportError(error.toString());
 
                     mRequestSynchronizer.onError(error.toString());
 
@@ -129,7 +126,7 @@ public class WSConnection implements
                     setMethodType(mRequestType);
 
                     // Check if the request has been cancelled before connection has been established
-                    if(isCancelled){
+                    if(isRequestCancelled){
                         mWebSocket.close();
                         return;
                     }
@@ -412,8 +409,10 @@ public class WSConnection implements
                                     // Report to MP
                                     mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
-                                    // Notify hosting application that bitmap was uploaded
-                                    mRequestSynchronizer.onStageLevelFinish(OnSlyceRequestListener.StageMessage.BitmapUploaded);
+                                    if(mWebSocket.isOpen()){
+                                        // Notify hosting application that bitmap was uploaded
+                                        mRequestSynchronizer.onStageLevelFinish(OnSlyceRequestListener.StageMessage.BitmapUploaded);
+                                    }
 
                                     mWebSocket.send(ticket);
                                     mWebSocket.send(new byte[10]);
@@ -619,16 +618,24 @@ public class WSConnection implements
         }).start();
     }
 
+    private void reportError(String error){
+        JSONObject searchError = new JSONObject();
+        try {
+            searchError.put(Constants.DETECTION_TYPE, Constants._3D);
+//            searchError.put(Constants.ERROR_MESSAGE, error);
+            mixpanel.track(Constants.SEARCH_ERROR, searchError);
+        } catch (JSONException e){}
+    }
+
     public void close(){
         if(mWebSocket != null){
             mWebSocket.close();
         }else{
-            isCancelled = true;
+            isRequestCancelled = true;
         }
     }
 
     public enum MethodType{
-
         SEND_IMAGE,
         SEND_IMAGE_URL
     }

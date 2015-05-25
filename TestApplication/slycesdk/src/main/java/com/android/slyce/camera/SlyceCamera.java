@@ -166,6 +166,27 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }
     }
 
+    public void pause(){
+        if(session != null){
+            session.pause();
+        }
+
+        if(barcodeSession != null){
+            barcodeSession.pause();
+        }
+    }
+
+    public void resume(){
+        if(session != null){
+            session.resume();
+        }
+
+        if(barcodeSession != null){
+            barcodeSession.resume();
+        }
+    }
+
+    // TODO: add it to the interface methods
     public void cancel(){
         for(SlyceProductsRequest request : mSlyceProductsRequestMap){
             request.cancel();
@@ -216,7 +237,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }, Constants.AUTO_SCAN_DELAY);
 
         if(isContinuousRecognition){
-
             // Handle barcode detection
             handleBarcodeResult(type, result, ScannerType._3D);
         }
@@ -239,9 +259,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
     @Override
     public void onResult(Result result) {
 
-        String value = result.getValue();
-
-        // Resume the automatic scan after 2 seconds
+        // Resume the automatic scan after 3 seconds
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -250,6 +268,8 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }, Constants.AUTO_SCAN_DELAY);
 
         if(isContinuousRecognition){
+
+            String value = result.getValue();
 
             int type = result.getType();
 
@@ -281,12 +301,15 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
                 // Handle barcode detection
                 handleBarcodeResult(type, value, ScannerType._2D);
             }
+
+        }else{
+            // Do Nothing
         }
     }
 
     @Override
     public void onWarning(String s) {
-        Log.i(TAG, "onWarning: "+ s);
+        Log.i(TAG, "onWarning: " + s);
     }
 
     @Override
@@ -300,14 +323,14 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
     /* Private methods */
     private void handleSnap(Bitmap bitmap){
 
-        // Report to MP on image snapped
-        mixpanel.track(Constants.IMAGE_SNAPPED, null);
-
         // Notify the host application on snaped image
         mCameraSynchronizer.onSnap(bitmap);
 
         // Start search Slyce + MoodStock (if 2D enabled)
         obtainMessage(SlyceCameraMessage.SEARCH, bitmap).sendToTarget();
+
+        // Report to MP on image snapped
+        mixpanel.track(Constants.IMAGE_SNAPPED, null);
     }
 
     private void handleBarcodeResult(int type, String result, ScannerType scannerType){

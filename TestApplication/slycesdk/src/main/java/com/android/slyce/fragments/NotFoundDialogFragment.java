@@ -12,8 +12,6 @@ import com.android.slycesdk.R;
 
 public class NotFoundDialogFragment extends DialogFragment {
 
-
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.

@@ -447,7 +447,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
                 performSlyceProductsRequest(bitmap);
 
-                progressBarReference.get().setVisibility(View.GONE);
+                progressBarReference.get().setVisibility(View.INVISIBLE);
             }
         }
     }

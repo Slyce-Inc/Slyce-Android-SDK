@@ -184,8 +184,10 @@ public class CameraManager extends Handler implements CameraInstance.Listener,
    */
   @Override
   public void onNewFrame(byte[] data, Size size, int orientation) {
-    if (!this.listener.isListening() || this.busy)
+    if (!this.listener.isListening() || this.busy){
       return;
+    }
+
     this.busy = true;
     CameraFrame f = new CameraFrame(this, data, size, orientation);
     this.thread.sendFrameToBackground(f);
@@ -274,10 +276,11 @@ public class CameraManager extends Handler implements CameraInstance.Listener,
      * @param f the {@link CameraFrame}.
      */
     private void frameIsInBackground(CameraFrame f) {
-      if (this.listener.isListening())
+      if (this.listener.isListening()){
         this.listener.onNewFrameInBackground(f);
-      else
+      } else{
         f.release();
+      }
     }
 
      /**

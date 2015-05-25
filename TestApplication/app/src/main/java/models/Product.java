@@ -1,9 +1,9 @@
 package models;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.annotations.Expose;
 
 /**
  * Created by didiuzan on 5/20/15.
@@ -18,7 +18,7 @@ public class Product {
     @Expose
     private String name;
     @Expose
-    private Integer originalPrice;
+    private String originalPrice;
     @Expose
     private String productDescription;
     @Expose
@@ -30,9 +30,9 @@ public class Product {
     @Expose
     private String productURL;
     @Expose
-    private Double rating;
+    private String rating;
     @Expose
-    private Double salePrice;
+    private String salePrice;
     @Expose
     private List<Swatch> swatches = new ArrayList<Swatch>();
     @Expose
@@ -98,18 +98,18 @@ public class Product {
     /**
      * @return The originalPrice
      */
-    public Integer getOriginalPrice() {
+    public String getOriginalPrice() {
         return originalPrice;
     }
 
     /**
      * @param originalPrice The originalPrice
      */
-    public void setOriginalPrice(Integer originalPrice) {
+    public void setOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
     }
 
-    public Product withOriginalPrice(Integer originalPrice) {
+    public Product withOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
         return this;
     }
@@ -212,18 +212,18 @@ public class Product {
     /**
      * @return The rating
      */
-    public Double getRating() {
+    public String getRating() {
         return rating;
     }
 
     /**
      * @param rating The rating
      */
-    public void setRating(Double rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
-    public Product withRating(Double rating) {
+    public Product withRating(String rating) {
         this.rating = rating;
         return this;
     }
@@ -231,18 +231,18 @@ public class Product {
     /**
      * @return The salePrice
      */
-    public Double getSalePrice() {
+    public String getSalePrice() {
         return salePrice;
     }
 
     /**
      * @param salePrice The salePrice
      */
-    public void setSalePrice(Double salePrice) {
+    public void setSalePrice(String salePrice) {
         this.salePrice = salePrice;
     }
 
-    public Product withSalePrice(Double salePrice) {
+    public Product withSalePrice(String salePrice) {
         this.salePrice = salePrice;
         return this;
     }

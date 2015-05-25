@@ -108,6 +108,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/slyce_logo"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         />
 
     <ScrollView

@@ -4,16 +4,17 @@
     <color name="fragment_slyce_background">#CC000000</color>
 
     <!--Used in ImageProcessFragment-->
-    <color name="image_border_color">@android:color/white</color>
-    <color name="progress_bar_full">#00a4db</color>
-    <color name="image_process_frag_bottom_background">#ffffff</color>
-    <color name="slyce_blue_color">#00a4db</color>
-    <color name="text_search_status">#737373</color>
-    <color name="image_analyse_pre_process">#80595a5a</color>
-    <color name="image_analyse_in_process">#000000</color>
-    <color name="image_analyse_post_process">#595a5a</color>
+    <color name="slyce_color_white">@android:color/white</color>
+    <color name="slyce_color_blue">#00a4db</color>
 
-    <color name="scanning_tips_text_headline">#2b2b2c</color>
-    <color name="scanning_tips_text_body">#616161</color>
-    <color name="scanning_tips_dialog_background">#cc000000</color>
+    <color name="slyce_color_light_grey">#737373</color>
+    <color name="slyce_color_grey">#616161</color>
+    <color name="slyce_color_grey_2_alpha_80">#80595a5a</color>
+    <color name="slyce_color_grey_2">#595a5a</color>
+    <color name="slyce_color_dark_grey">#2b2b2c</color>
+
+
+    <color name="slyce_color_black">#000000</color>
+    <color name="slyce_color_black_alpha_cc">#cc000000</color>
+
 </resources>

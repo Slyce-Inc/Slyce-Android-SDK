@@ -14,13 +14,15 @@
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/fragment_slyce_padding"
+        android:padding="@dimen/slyce_dimen_15dp"
         android:background="@color/fragment_slyce_background">
-        <Button
+
+        <ImageButton
             android:id="@+id/close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="close"
+            android:src="@drawable/slyce_close"
             android:soundEffectsEnabled="false"
             />
 
@@ -39,7 +41,7 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/fragment_slyce_padding"
+        android:padding="@dimen/slyce_dimen_15dp"
         android:background="@color/fragment_slyce_background"
         android:layout_alignParentBottom="true">
         <ImageButton
@@ -58,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/top_layout"
         android:layout_above="@id/bottom_layout"
-        android:padding="@dimen/fragment_slyce_padding"
+        android:padding="@dimen/slyce_dimen_15dp"
         >
 
         <ImageButton
@@ -80,16 +82,16 @@
             />
 
         <View
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/slyce_dimen_50dp"
+            android:layout_height="@dimen/slyce_dimen_50dp"
             android:layout_centerInParent="true" />
 
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/on_tap_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/slyce_dimen_50dp"
+        android:layout_height="@dimen/slyce_dimen_50dp"
         android:src="@drawable/slyce_scan_focus_on_tap"
         android:visibility="gone"/>
 

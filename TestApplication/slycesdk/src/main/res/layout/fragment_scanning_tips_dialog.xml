@@ -14,10 +14,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/scanning_tips_headline"
-        android:textColor="@color/scanning_tips_text_headline"
-        android:textSize="18dp"
+        android:textColor="@color/slyce_color_dark_grey"
+        android:textSize="@dimen/slyce_dimen_18dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
+        android:layout_marginTop="@dimen/slyce_dimen_16dp"
         />
 
     <View
@@ -27,9 +27,9 @@
         android:layout_alignLeft="@id/top_layout"
         android:layout_alignRight="@id/top_layout"
         android:background="@android:color/black"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
+        android:paddingLeft="@dimen/slyce_dimen_1dp"
+        android:paddingRight="@dimen/slyce_dimen_1dp"
+        android:layout_marginTop="@dimen/slyce_dimen_16dp"
         />
 
     <TextView
@@ -38,13 +38,13 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
         android:text="@string/scanning_tips_tip_1"
-        android:textColor="@color/scanning_tips_text_body"
-        android:textSize="@dimen/fragment_scanning_tips_text_size"
+        android:textColor="@color/slyce_color_grey"
+        android:textSize="@dimen/slyce_dimen_16dp"
         android:textStyle="italic"
-        android:layout_marginTop="32dp"
-        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
-        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
-        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        android:layout_marginTop="@dimen/slyce_dimen_32dp"
+        android:layout_marginLeft="@dimen/slyce_dimen_26dp"
+        android:layout_marginRight="@dimen/slyce_dimen_26dp"
+        android:drawablePadding="@dimen/slyce_dimen_12dp"
         />
 
     <TextView
@@ -54,12 +54,12 @@
         android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
         android:text="@string/scanning_tips_tip_2"
         android:textStyle="italic"
-        android:textColor="@color/scanning_tips_text_body"
-        android:textSize="@dimen/fragment_scanning_tips_text_size"
-        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
-        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
-        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
-        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        android:textColor="@color/slyce_color_grey"
+        android:textSize="@dimen/slyce_dimen_16dp"
+        android:layout_marginTop="@dimen/slyce_dimen_16dp"
+        android:layout_marginLeft="@dimen/slyce_dimen_26dp"
+        android:layout_marginRight="@dimen/slyce_dimen_26dp"
+        android:drawablePadding="@dimen/slyce_dimen_12dp"
         />
 
     <TextView
@@ -69,12 +69,12 @@
         android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
         android:text="@string/scanning_tips_tip_3"
         android:textStyle="italic"
-        android:textColor="@color/scanning_tips_text_body"
-        android:textSize="@dimen/fragment_scanning_tips_text_size"
-        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
-        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
-        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
-        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        android:textColor="@color/slyce_color_grey"
+        android:textSize="@dimen/slyce_dimen_16dp"
+        android:layout_marginTop="@dimen/slyce_dimen_16dp"
+        android:layout_marginLeft="@dimen/slyce_dimen_26dp"
+        android:layout_marginRight="@dimen/slyce_dimen_26dp"
+        android:drawablePadding="@dimen/slyce_dimen_12dp"
         />
 
     <TextView
@@ -84,12 +84,12 @@
         android:drawableLeft="@drawable/scanning_tips_dialog_bullet"
         android:text="@string/scanning_tips_tip_4"
         android:textStyle="italic"
-        android:textColor="@color/scanning_tips_text_body"
-        android:textSize="@dimen/fragment_scanning_tips_text_size"
-        android:layout_marginTop="@dimen/fragment_scanning_tips_vertical_margins"
-        android:layout_marginLeft="@dimen/fragment_scanning_tips_left_margins"
-        android:layout_marginRight="@dimen/fragment_scanning_tips_right_margins"
-        android:drawablePadding="@dimen/fragment_scanning_tips_drawable_padding"
+        android:textColor="@color/slyce_color_grey"
+        android:textSize="@dimen/slyce_dimen_16dp"
+        android:layout_marginTop="@dimen/slyce_dimen_16dp"
+        android:layout_marginLeft="@dimen/slyce_dimen_26dp"
+        android:layout_marginRight="@dimen/slyce_dimen_26dp"
+        android:drawablePadding="@dimen/slyce_dimen_12dp"
         />
 
 
@@ -101,8 +101,8 @@
         android:background="@android:color/transparent"
         android:src="@drawable/scanning_tips_got_it_btn"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="@dimen/fragment_scanning_tips_vertical_margins"
+        android:layout_marginTop="@dimen/slyce_dimen_32dp"
+        android:layout_marginBottom="@dimen/slyce_dimen_16dp"
         />
 
 

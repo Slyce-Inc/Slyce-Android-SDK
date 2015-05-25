@@ -2,8 +2,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="@color/image_process_frag_bottom_background" />
-            <corners android:radius="100dp" />
+            <solid android:color="@color/slyce_color_white" />
+            <corners android:radius="@dimen/slyce_dimen_100dp" />
         </shape>
 
 
@@ -15,8 +15,8 @@
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <solid android:color="@color/progress_bar_full" />
-                <corners android:radius="100dp" />
+                <solid android:color="@color/slyce_color_blue" />
+                <corners android:radius="@dimen/slyce_dimen_100dp" />
             </shape>
         </clip>
     </item>

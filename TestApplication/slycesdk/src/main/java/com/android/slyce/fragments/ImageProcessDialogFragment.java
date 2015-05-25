@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
@@ -275,9 +275,9 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     /* PRIVATE METHODS */
     private void initRoundedImage(View root){
         mImage = (RoundedImageView) root.findViewById(R.id.image);
-        mImage.setCornerRadius(getResources().getDimension(R.dimen.fragment_image_process_image_corners_radius));
-        mImage.setBorderColor(getResources().getColor(R.color.image_border_color));
-        mImage.setBorderWidth(getResources().getDimension(R.dimen.fragment_image_process_image_border_width));
+        mImage.setCornerRadius(getResources().getDimension(R.dimen.slyce_dimen_25dp));
+        mImage.setBorderColor(getResources().getColor(R.color.slyce_color_white));
+        mImage.setBorderWidth(getResources().getDimension(R.dimen.slyce_dimen_2dp));
         mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mImage.setOval(false);
     }
@@ -371,8 +371,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 progressAnalyzeImage.setVisibility(View.INVISIBLE);
                 analyzeDoneImage.setVisibility(View.INVISIBLE);
 
-                sendImageText.setTextColor(resources.getColor(R.color.image_analyse_in_process));
-                analyzeImageText.setTextColor(resources.getColor(R.color.image_analyse_pre_process));
+                sendImageText.setTextColor(resources.getColor(R.color.slyce_color_black));
+                analyzeImageText.setTextColor(resources.getColor(R.color.slyce_color_grey_2_alpha_80));
 
                 break;
 
@@ -384,8 +384,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 progressAnalyzeImage.setVisibility(View.VISIBLE);
                 analyzeDoneImage.setVisibility(View.INVISIBLE);
 
-                sendImageText.setTextColor(resources.getColor(R.color.image_analyse_post_process));
-                analyzeImageText.setTextColor(resources.getColor(R.color.image_analyse_in_process));
+                sendImageText.setTextColor(resources.getColor(R.color.slyce_color_grey_2));
+                analyzeImageText.setTextColor(resources.getColor(R.color.slyce_color_black));
 
                 break;
 
@@ -398,8 +398,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 progressAnalyzeImage.setVisibility(View.INVISIBLE);
                 analyzeDoneImage.setVisibility(View.VISIBLE);
 
-                sendImageText.setTextColor(resources.getColor(R.color.image_analyse_post_process));
-                analyzeImageText.setTextColor(resources.getColor(R.color.image_analyse_post_process));
+                sendImageText.setTextColor(resources.getColor(R.color.slyce_color_grey_2));
+                analyzeImageText.setTextColor(resources.getColor(R.color.slyce_color_grey_2));
 
                 break;
 
@@ -414,8 +414,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 progressAnalyzeImage.setVisibility(View.INVISIBLE);
                 analyzeDoneImage.setVisibility(View.INVISIBLE);
 
-                sendImageText.setTextColor(resources.getColor(R.color.image_analyse_pre_process));
-                analyzeImageText.setTextColor(resources.getColor(R.color.image_analyse_pre_process));
+                sendImageText.setTextColor(resources.getColor(R.color.slyce_color_grey_2_alpha_80));
+                analyzeImageText.setTextColor(resources.getColor(R.color.slyce_color_grey_2_alpha_80));
         }
     }
 

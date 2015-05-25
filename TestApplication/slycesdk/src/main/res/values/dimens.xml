@@ -1,27 +1,46 @@
 <resources>
-    <dimen name="fragment_slyce_padding">15dp</dimen>
 
-    <!--Used in ImageProcessFragment-->
-    <dimen name="fragment_image_process_image_corners_radius">25dp</dimen>
-    <dimen name="fragment_image_process_image_border_width">2dp</dimen>
-    <dimen name="fragment_image_process_padding_horizontal_primary">10dp</dimen>
-    <dimen name="fragment_image_process_padding_horizontal_secondary">20dp</dimen>
-    <dimen name="fragment_image_process_padding_bottom">10dp</dimen>
+    <dimen name="slyce_dimen_1dp">1dp</dimen>
 
-    <dimen name="fragment_image_process_bottom_layout_vertical_margins">8dp</dimen>
-    <dimen name="fragment_image_process_bottom_layout_progress_image_text_margin">6dp</dimen>
+    <dimen name="slyce_dimen_2dp">2dp</dimen>
+
+    <dimen name="slyce_dimen_6dp">6dp</dimen>
+
+    <dimen name="slyce_dimen_8dp">8dp</dimen>
 
 
-    <dimen name="fragment_image_process_progress_headline_text_size">14dp</dimen>
-    <dimen name="fragment_image_process_progress_text_size">14dp</dimen>
-    <dimen name="fragment_image_process_button_text_size">12dp</dimen>
+    <dimen name="slyce_dimen_10dp">10dp</dimen>
 
-    <dimen name="fragment_scanning_tips_text_size">16dp</dimen>
-    <dimen name="fragment_scanning_tips_vertical_margins">16dp</dimen>
-    <dimen name="fragment_scanning_tips_left_margins">26dp</dimen>
-    <dimen name="fragment_scanning_tips_right_margins">26dp</dimen>
-    <dimen name="fragment_scanning_tips_drawable_padding">12dp</dimen>
+    <dimen name="slyce_dimen_12dp">12dp</dimen>
 
+    <dimen name="slyce_dimen_14dp">14dp</dimen>
 
+    <dimen name="slyce_dimen_15dp">15dp</dimen>
+
+    <dimen name="slyce_dimen_16dp">16dp</dimen>
+
+    <dimen name="slyce_dimen_18dp">18dp</dimen>
+
+    <dimen name="slyce_dimen_20dp">20dp</dimen>
+
+    <dimen name="slyce_dimen_24dp">24dp</dimen>
+
+    <dimen name="slyce_dimen_25dp">25dp</dimen>
+
+    <dimen name="slyce_dimen_26dp">26dp</dimen>
+
+    <dimen name="slyce_dimen_30dp">30dp</dimen>
+
+    <dimen name="slyce_dimen_32dp">32dp</dimen>
+
+    <dimen name="slyce_dimen_37dp">37dp</dimen>
+
+    <dimen name="slyce_dimen_50dp">50dp</dimen>
+
+    <dimen name="slyce_dimen_68dp">68dp</dimen>
+
+    <dimen name="slyce_dimen_100dp">100dp</dimen>
+
+    <dimen name="slyce_dimen_300dp">300dp</dimen>
 
 </resources>

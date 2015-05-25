@@ -3,6 +3,6 @@
     <item android:state_pressed="true"
         android:drawable="@drawable/slyce_snap_pressed" /> <!-- pressed -->
     <item android:state_pressed="false"
-        android:drawable="@drawable/slyce_snap" /> <!-- unpressed-->
+        android:drawable="@drawable/slyce_snap_unpressed" /> <!-- unpressed-->
 </selector>
 

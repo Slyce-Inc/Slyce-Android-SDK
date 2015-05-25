@@ -3,12 +3,12 @@
     <solid android:color="@android:color/black" />
     <stroke
         android:width="2dp"
-        android:color="@color/image_border_color"
+        android:color="@color/slyce_color_white"
         />
     <corners
-        android:bottomRightRadius="@dimen/fragment_image_process_image_corners_radius"
-        android:bottomLeftRadius="@dimen/fragment_image_process_image_corners_radius"
-        android:topLeftRadius="@dimen/fragment_image_process_image_corners_radius"
-        android:topRightRadius="@dimen/fragment_image_process_image_corners_radius" />
+        android:bottomRightRadius="@dimen/slyce_dimen_25dp"
+        android:bottomLeftRadius="@dimen/slyce_dimen_25dp"
+        android:topLeftRadius="@dimen/slyce_dimen_25dp"
+        android:topRightRadius="@dimen/slyce_dimen_25dp" />
 
 </shape>

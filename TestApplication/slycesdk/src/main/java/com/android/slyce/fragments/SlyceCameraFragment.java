@@ -7,26 +7,26 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import com.android.slyce.Slyce;
 import com.android.slyce.camera.SlyceCamera;
 import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
-import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Buzzer;
+import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.android.slycesdk.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,7 +66,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     private SurfaceView mPreview;
 
     /* Views */
-    private Button mCloseButton;
+    private ImageButton mCloseButton;
     private ImageButton mScanTipsButton;
     private ImageButton mGalleryButton;
     private CheckBox mFlashButton;
@@ -294,7 +294,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
     private void initViews(View view){
         mPreview = (SurfaceView) view.findViewById(R.id.preview);
-        mCloseButton = (Button) view.findViewById(R.id.close_button);
+        mCloseButton = (ImageButton) view.findViewById(R.id.close_button);
         mScanTipsButton = (ImageButton) view.findViewById(R.id.scan_tips_button);
         mGalleryButton = (ImageButton) view.findViewById(R.id.gallery_button);
         mFlashButton = (CheckBox) view.findViewById(R.id.flash_button);

@@ -117,6 +117,14 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     public void cancelSlyceProductsRequests(){
         mSlyceCamera.cancel();
     }
+
+    public void setSound(boolean value){
+        isSoundOn = value;
+    }
+
+    public void setVibrate(boolean value){
+        isVibrateOn = value;
+    }
     // PUBLIC METHODS END
 
     @Override

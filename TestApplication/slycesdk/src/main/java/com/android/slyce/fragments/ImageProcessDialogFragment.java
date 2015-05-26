@@ -47,9 +47,10 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     public static final String GALLERY_BITMAP = "gallery_bitmap";
     public static final String CAMERA_BITMAP = "camera_bitmap";
 
-    private static final String BEGIN_SENDING_IMAGE = "begin_sending_image";
-    private static final String BEGIN_ANALYZE_IMAGE = "begin_analyze_image";
-    private static final String FINISH_ANALYZE_IMAGE = "finish_analyze_image";
+    private static final String STARTING_REQUEST = "starting_request";
+    private static final String SENDING_IMAGE = "sending_image";
+    private static final String ANALYZING_IMAGE = "analyzing_image";
+    private static final String FINISH_ANALYZING_IMAGE = "finish_analyzing_image";
 
     private static final int UPLOAD_IMAGE_TOTAL_PROGRESS_TIME = 3000;
 
@@ -227,7 +228,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             return;
         }
         mImage.setImageBitmap(bitmap);
-        updateProgressInfo(BEGIN_SENDING_IMAGE);
+
     }
 
     public void onRequestStage(SlyceRequestStage message) {
@@ -235,7 +236,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onRequestStage fragment is not attached");
             return;
         }
-        updateProgressInfo(BEGIN_ANALYZE_IMAGE);
+
+        handleStageMessage(message);
     }
 
     public void onProgress(long progress, String message) {
@@ -253,7 +255,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             return;
         }
 
-        updateProgressInfo(FINISH_ANALYZE_IMAGE);
+        updateProgressInfo(FINISH_ANALYZING_IMAGE);
 
         if(products.length() > 0){
             dismiss();
@@ -293,7 +295,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             public void onBarcodeRecognition(SlyceBarcode barcode) {
 
                 // Update progress bar
-                updateProgressInfo(FINISH_ANALYZE_IMAGE);
+                updateProgressInfo(FINISH_ANALYZING_IMAGE);
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessDialogFragmentListener.onImageProcessBarcodeRecognition(barcode);
@@ -325,7 +327,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             public void on3DRecognition(JSONArray products) {
 
                 // Update progress bar
-                updateProgressInfo(FINISH_ANALYZE_IMAGE);
+                updateProgressInfo(FINISH_ANALYZING_IMAGE);
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessDialogFragmentListener.onImageProcess3DRecognition(products);
@@ -339,7 +341,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
             @Override
             public void onSlyceRequestStage(SlyceRequestStage message) {
-                updateProgressInfo(BEGIN_ANALYZE_IMAGE);
+
+                handleStageMessage(message);
             }
 
             @Override
@@ -355,8 +358,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         }, bitmap);
 
         mSlyceProductsRequest.execute();
-
-        updateProgressInfo(BEGIN_SENDING_IMAGE);
     }
 
     private void updateProgressInfo(String progress) {
@@ -364,7 +365,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         Resources resources = getResources();
 
         switch (progress) {
-            case BEGIN_SENDING_IMAGE:
+            case STARTING_REQUEST:
                 task = new UpdateProgressBarAsyncTask();
                 task.execute();
 
@@ -378,7 +379,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
                 break;
 
-            case BEGIN_ANALYZE_IMAGE:
+            case ANALYZING_IMAGE:
                 task.cancel(true);
 
                 progressSendingImage.setVisibility(View.INVISIBLE);
@@ -391,7 +392,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
                 break;
 
-            case FINISH_ANALYZE_IMAGE:
+            case FINISH_ANALYZING_IMAGE:
 
                 horizontalProgressBar.setProgress(100);
 
@@ -482,5 +483,26 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         }
     }
 
+    private void handleStageMessage(SlyceRequestStage message){
 
+        switch (message){
+
+            case StageStartingRequest:
+
+                updateProgressInfo(STARTING_REQUEST);
+
+                break;
+
+            case StageSendingImage:
+
+
+                break;
+
+            case StageAnalyzingImage:
+
+                updateProgressInfo(ANALYZING_IMAGE);
+
+                break;
+        }
+    }
 }

@@ -2,7 +2,7 @@ package com.android.slyce.enums;
 
 public enum SlyceRequestStage {
 
-    StageSendingRequest,
+    StageStartingRequest,
     StageSendingImage,
     StageAnalyzingImage,
 }

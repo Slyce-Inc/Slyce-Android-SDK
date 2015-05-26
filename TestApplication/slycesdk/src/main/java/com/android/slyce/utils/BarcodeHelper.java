@@ -1,7 +1,7 @@
 package com.android.slyce.utils;
 
 import com.android.slyce.enums.SlyceBarcodeType;
-import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.SlyceBarcode;
 
 /**
  * Created by davidsvilem on 5/6/15.

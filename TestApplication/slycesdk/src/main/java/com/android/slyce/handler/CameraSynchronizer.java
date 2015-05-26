@@ -1,21 +1,18 @@
 package com.android.slyce.handler;
 
 import android.graphics.Bitmap;
-import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.android.slyce.Slyce;
+import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.Search2DProgress;
-import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
-
-import java.util.Objects;
 
 /**
  * Created by davidsvilem on 4/21/15.
@@ -49,10 +46,6 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(4, message).sendToTarget();
     }
 
-    public void onImageStartRequest(Bitmap bitmap){
-        obtainMessage(5, bitmap).sendToTarget();
-    }
-
     public void onTap(float x, float y){
         Object[] point = new Object[2];
         point[0] = x;
@@ -69,7 +62,7 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(8, products).sendToTarget();
     }
 
-    public void onStageLevelFinish(OnSlyceRequestListener.StageMessage message){
+    public void onSlyceRequestStage(SlyceRequestStage message){
         obtainMessage(9, message).sendToTarget();
     }
 
@@ -121,14 +114,6 @@ public class CameraSynchronizer extends Handler {
 
                 break;
 
-            case 5:
-
-                mCameraListener.onImageStartRequest((Bitmap) msg.obj);
-
-                SlyceLog.i(TAG, "onImageStartRequest()");
-
-                break;
-
             case 6:
 
                 Object[] point = (Object[]) msg.obj;
@@ -163,11 +148,11 @@ public class CameraSynchronizer extends Handler {
 
             case 9:
 
-                OnSlyceRequestListener.StageMessage stageMsg = (OnSlyceRequestListener.StageMessage) msg.obj;
+                SlyceRequestStage stageMsg = (SlyceRequestStage) msg.obj;
 
-                mCameraListener.onCameraStageLevelFinish(stageMsg);
+                mCameraListener.onCameraSlyceRequestStage(stageMsg);
 
-                SlyceLog.i(TAG, "onCameraStageLevelFinish(" + stageMsg + ")");
+                SlyceLog.i(TAG, "onCameraSlyceRequestStage(" + stageMsg + ")");
 
                 break;
 

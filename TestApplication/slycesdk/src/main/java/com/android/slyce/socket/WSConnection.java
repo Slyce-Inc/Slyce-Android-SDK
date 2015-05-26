@@ -3,13 +3,13 @@ package com.android.slyce.socket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.android.slyce.communication.ComManager;
+import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.handler.RequestSynchronizer;
 import com.android.slyce.listeners.OnImageUploadListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.SlyceBarcode;
 import com.android.slyce.utils.BarcodeHelper;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.models.Ticket;
@@ -116,6 +116,8 @@ public class WSConnection implements
                     mRequestSynchronizer.onError(error.toString());
 
                 }else{
+
+                    mRequestSynchronizer.onSlyceRequestStage(SlyceRequestStage.StageSendingRequest);
 
                     mWebSocket = webSocket;
 
@@ -379,6 +381,9 @@ public class WSConnection implements
 
                     mTokenListener.onTokenReceived(token);
 
+                    // Notifying the host application for sending the image
+                    mRequestSynchronizer.onSlyceRequestStage(SlyceRequestStage.StageSendingImage);
+
                     // Report Foundation ticket (super property)
                     JSONObject props = new JSONObject();
                     props.put(Constants.FOUNDATION_TOKEN, token);
@@ -410,8 +415,8 @@ public class WSConnection implements
                                     mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
                                     if(mWebSocket.isOpen()){
-                                        // Notify hosting application that bitmap was uploaded
-                                        mRequestSynchronizer.onStageLevelFinish(OnSlyceRequestListener.StageMessage.BitmapUploaded);
+                                        // Notify hosting application that bitmap was uploaded and starting analyze stage
+                                        mRequestSynchronizer.onSlyceRequestStage(SlyceRequestStage.StageAnalyzingImage);
                                     }
 
                                     mWebSocket.send(ticket);
@@ -424,13 +429,15 @@ public class WSConnection implements
                             }
                         });
 
-                    }else{
+                    }else{ // MethodType.SEND_IMAGE_URL
 
                         // Report to MP
                         mixpanel.track(Constants.IMAGE_SENT, imageSentReport);
 
                         mWebSocket.send(ticket);
                         mWebSocket.send(new byte[10]);
+
+                        mRequestSynchronizer.onSlyceRequestStage(SlyceRequestStage.StageAnalyzingImage);
                     }
 
                     break;

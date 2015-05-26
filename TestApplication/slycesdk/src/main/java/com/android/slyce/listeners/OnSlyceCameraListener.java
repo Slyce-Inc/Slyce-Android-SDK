@@ -2,7 +2,8 @@ package com.android.slyce.listeners;
 
 import android.graphics.Bitmap;
 
-import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.SlyceBarcode;
+import com.android.slyce.enums.SlyceRequestStage;
 
 import org.json.JSONArray;
 
@@ -21,13 +22,12 @@ public interface OnSlyceCameraListener {
 
     /* Progress Reporting */
     void onCameraSlyceProgress(long progress, String message, String id);
-    void onCameraStageLevelFinish(OnSlyceRequestListener.StageMessage message);
+    void onCameraSlyceRequestStage(SlyceRequestStage message);
 
     /* Error */
     void onSlyceCameraError(String message);
 
     /* Miscellaneous */
-    void onImageStartRequest(Bitmap bitmap);
     void onSnap(Bitmap bitmap);
     void onTap(float x, float y);
 }

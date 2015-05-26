@@ -1,4 +1,4 @@
-package com.android.slyce.fragments;
+package com.android.slyce;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -15,12 +15,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import com.android.slyce.Slyce;
-import com.android.slyce.SlyceCamera;
+
+import com.android.slyce.enums.SlyceRequestStage;
+import com.android.slyce.fragments.ImageProcessDialogFragment;
 import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
+import com.android.slyce.fragments.ScanningTipsDialogFragment;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
@@ -248,7 +249,12 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     }
 
     @Override
-    public void onCameraStageLevelFinish(OnSlyceRequestListener.StageMessage message) {}
+    public void onCameraSlyceRequestStage(SlyceRequestStage message) {
+        if(isAttached){
+            // Notify ImageProcessDialogFragment for request stage
+            mImageProcessDialogFragment.onRequestStage(message);
+        }
+    }
 
     @Override
     public void onSlyceCameraError(String message) {
@@ -258,14 +264,6 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
             // Notify ImageProcessDialogFragment
             mImageProcessDialogFragment.onError(message);
-        }
-    }
-
-    @Override
-    public void onImageStartRequest(Bitmap bitmap) {
-        if(isAttached){
-            // Notify ImageProcessDialogFragment for bitmap was uploaded to server
-            mImageProcessDialogFragment.onImageStartRequest();
         }
     }
 

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.slyce.fragments.SlyceCameraFragment"
+    tools:context="com.android.slyce.SlyceCameraFragment"
     android:background="@android:color/black">
 
     <SurfaceView
@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/slyce_dimen_15dp"
-        android:background="@color/slyce_color_black_alpha_cc">
+        android:background="@color/slyce_color_black_alpha_cc"
+        >
 
         <ImageButton
             android:id="@+id/close_button"
@@ -24,6 +25,7 @@
             android:text="close"
             android:src="@drawable/slyce_close"
             android:soundEffectsEnabled="false"
+            android:background="@android:color/transparent"
             />
 
         <ImageButton

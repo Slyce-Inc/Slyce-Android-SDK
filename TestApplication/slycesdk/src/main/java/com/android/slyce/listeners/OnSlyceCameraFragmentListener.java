@@ -1,8 +1,6 @@
 package com.android.slyce.listeners;
 
-import android.graphics.Bitmap;
-
-import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.SlyceBarcode;
 
 import org.json.JSONArray;
 

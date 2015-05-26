@@ -3,9 +3,11 @@ package com.android.slyce.handler;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+
+import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.Search2DProgress;
-import com.android.slyce.models.SlyceBarcode;
+import com.android.slyce.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
 
@@ -44,7 +46,7 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(4, message).sendToTarget();
     }
 
-    public void onStageLevelFinish(OnSlyceRequestListener.StageMessage message){
+    public void onSlyceRequestStage(SlyceRequestStage message){
         obtainMessage(5, message).sendToTarget();
     }
 
@@ -113,11 +115,11 @@ public class RequestSynchronizer extends Handler {
 
             case 5:
 
-                OnSlyceRequestListener.StageMessage stageMsg = (OnSlyceRequestListener.StageMessage) msg.obj;
+                SlyceRequestStage stageMsg = (SlyceRequestStage) msg.obj;
 
-                mRequestListener.onStageLevelFinish(stageMsg);
+                mRequestListener.onSlyceRequestStage(stageMsg);
 
-                SlyceLog.i(TAG, "onStageLevelFinish(" + stageMsg + ")");
+                SlyceLog.i(TAG, "onSlyceRequestStage(" + stageMsg + ")");
 
                 break;
 

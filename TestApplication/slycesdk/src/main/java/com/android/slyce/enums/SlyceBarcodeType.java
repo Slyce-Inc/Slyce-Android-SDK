@@ -1,12 +1,9 @@
 package com.android.slyce.enums;
 
-/**
- * Created by davidsvilem on 5/6/15.
- */
 public enum SlyceBarcodeType {
 
     SFBarcodeTypeNone,
-    SFBarcodeTypeAztec,// not in use
+    SFBarcodeTypeAztec,
     SFBarcodeTypeCodabar,
     SFBarcodeTypeCode39,
     SFBarcodeTypeCode93,
@@ -14,14 +11,13 @@ public enum SlyceBarcodeType {
     SFBarcodeTypeDataMatrix,
     SFBarcodeTypeEan8,
     SFBarcodeTypeEan13,
-    SFBarcodeTypeITF,// not in use
+    SFBarcodeTypeITF,
     SFBarcodeTypeMaxiCode,
     SFBarcodeTypePDF417,
     SFBarcodeTypeQRCode,
-    SFBarcodeTypeRSS14,// not in use
-    SFBarcodeTypeRSSExpanded,// not in use
+    SFBarcodeTypeRSS14,
+    SFBarcodeTypeRSSExpanded,
     SFBarcodeTypeUPCA,
     SFBarcodeTypeUPCE,
-    SFBarcodeTypeUPCEANExtension,// not in use
-
+    SFBarcodeTypeUPCEANExtension,
 }

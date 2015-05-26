@@ -19,9 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.slyce.Slyce;
+import com.android.slyce.SlyceCameraFragment;
+import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.models.SlyceBarcode;
-import com.android.slyce.SlyceRequest;
+import com.android.slyce.SlyceBarcode;
+import com.android.slyce.SlyceProductsRequest;
 import com.android.slyce.roundedimage.RoundedImageView;
 import com.android.slyce.utils.BitmapLoader;
 import com.android.slyce.utils.SlyceLog;
@@ -73,7 +75,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     private TextView analyzeImageText;
 
     /* for searching products from gallery image */
-    private SlyceRequest mSlyceRequest;
+    private SlyceProductsRequest mSlyceProductsRequest;
 
     private UpdateProgressBarAsyncTask task;
 
@@ -195,8 +197,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     @Override
     public void onDismiss(DialogInterface dialog) {
         // Cancel SlyceProductsRequest
-        if(mSlyceRequest != null){
-            mSlyceRequest.cancel();
+        if(mSlyceProductsRequest != null){
+            mSlyceProductsRequest.cancel();
         }
 
         // Notify SlyceCameraFragment to cancel SlyceCamera cause ImageProcessDialogFragment dismissed
@@ -228,9 +230,9 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         updateProgressInfo(BEGIN_SENDING_IMAGE);
     }
 
-    public void onImageStartRequest() {
+    public void onRequestStage(SlyceRequestStage message) {
         if(!isAttached){
-            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onImageStartRequest fragment is not attached");
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onRequestStage fragment is not attached");
             return;
         }
         updateProgressInfo(BEGIN_ANALYZE_IMAGE);
@@ -285,7 +287,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     /* Invoke this method after an Image was picked from Gallery */
     private void performSlyceProductsRequest(Bitmap bitmap){
 
-        mSlyceRequest = new SlyceRequest(Slyce.get(), new OnSlyceRequestListener() {
+        mSlyceProductsRequest = new SlyceProductsRequest(Slyce.get(), new OnSlyceRequestListener() {
 
             @Override
             public void onBarcodeRecognition(SlyceBarcode barcode) {
@@ -336,7 +338,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void onStageLevelFinish(StageMessage message) {
+            public void onSlyceRequestStage(SlyceRequestStage message) {
                 updateProgressInfo(BEGIN_ANALYZE_IMAGE);
             }
 
@@ -352,7 +354,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         }, bitmap);
 
-        mSlyceRequest.execute();
+        mSlyceProductsRequest.execute();
 
         updateProgressInfo(BEGIN_SENDING_IMAGE);
     }

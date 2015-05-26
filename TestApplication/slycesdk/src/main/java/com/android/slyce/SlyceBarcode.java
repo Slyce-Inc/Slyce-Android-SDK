@@ -1,4 +1,4 @@
-package com.android.slyce.models;
+package com.android.slyce;
 
 import com.android.slyce.enums.SlyceBarcodeType;
 

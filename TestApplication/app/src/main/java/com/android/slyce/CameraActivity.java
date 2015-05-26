@@ -9,9 +9,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.models.SlyceBarcode;
+
 import org.json.JSONArray;
 
 public class CameraActivity extends Activity implements OnSlyceCameraListener, View.OnClickListener {
@@ -101,30 +102,23 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
+    public void onCameraSlyceRequestStage(SlyceRequestStage message) {
+
+        Toast.makeText(this, "onCameraSlyceRequestStage:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onCamera3DRecognition(JSONArray products) {
 
         Toast.makeText(this, "onCamera3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onCameraStageLevelFinish(OnSlyceRequestListener.StageMessage message) {
-
-        Toast.makeText(this, "onCameraStageLevelFinish:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onSlyceCameraError(String message) {
-
-        Toast.makeText(this, "onSlyceCameraError: " + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onImageStartRequest(Bitmap bitmap) {
 
         snapProgress.setVisibility(View.INVISIBLE);
 
-        Toast.makeText(this,
-                "onImageStartRequest: " + "\n" + "Bitmap Size: " + bitmap.getWidth() + " X " + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onSlyceCameraError: " + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

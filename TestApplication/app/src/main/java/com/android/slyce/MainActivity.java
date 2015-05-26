@@ -24,11 +24,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.slyce.fragments.SlyceCameraFragment;
+import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.models.SlyceBarcode;
 
 import org.json.JSONArray;
 import java.io.FileDescriptor;
@@ -56,8 +55,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     private Slyce slyce;
 
-    private SlyceRequest slyceRequestImageUrl;
-    private SlyceRequest slyceRequestImage;
+    private SlyceProductsRequest slyceProductsRequestImageUrl;
+    private SlyceProductsRequest slyceProductsRequestImage;
 
     private ProgressBar progressBar;
 
@@ -163,9 +162,9 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void onStageLevelFinish(StageMessage message) {
+    public void onSlyceRequestStage(SlyceRequestStage message) {
 
-        Toast.makeText(MainActivity.this, "onStageLevelFinish:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "onSlyceRequestStage:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
     // OnSlyceRequestListener callbacks END
 
@@ -282,12 +281,12 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
                 progressBar.setVisibility(View.INVISIBLE);
 
-                if(slyceRequestImage != null){
-                    slyceRequestImage.cancel();
+                if(slyceProductsRequestImage != null){
+                    slyceProductsRequestImage.cancel();
                 }
 
-                if(slyceRequestImageUrl != null){
-                    slyceRequestImageUrl.cancel();
+                if(slyceProductsRequestImageUrl != null){
+                    slyceProductsRequestImageUrl.cancel();
                 }
 
                 break;
@@ -358,8 +357,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                slyceRequestImage = new SlyceRequest(slyce, this, selectedBitmap);
-                slyceRequestImage.execute();
+                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
+                slyceProductsRequestImage.execute();
 
             }
         }
@@ -432,8 +431,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
                     return;
                 }
 
-                slyceRequestImageUrl = new SlyceRequest(slyce, MainActivity.this, imageUrl);
-                slyceRequestImageUrl.execute();
+                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl);
+                slyceProductsRequestImageUrl.execute();
 
                 progressBar.setVisibility(View.VISIBLE);
             }

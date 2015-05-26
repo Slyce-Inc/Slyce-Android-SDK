@@ -1,16 +1,11 @@
 package com.android.slyce;
 
 import android.graphics.Bitmap;
-
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.requests.SlyceBaseRequest;
 import com.android.slyce.socket.WSConnection;
-
 import org.json.JSONObject;
 
-/**
- * Created by davidsvilem on 3/31/15.
- */
 public final class SlyceProductsRequest extends SlyceBaseRequest {
 
     private final String TAG = SlyceProductsRequest.class.getSimpleName();

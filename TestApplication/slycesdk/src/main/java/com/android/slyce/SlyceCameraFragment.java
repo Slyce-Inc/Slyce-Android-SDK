@@ -15,13 +15,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.fragments.ImageProcessDialogFragment;
 import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 import com.android.slyce.fragments.ScanningTipsDialogFragment;
 import com.android.slyce.listeners.OnSlyceCameraListener;
-import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;

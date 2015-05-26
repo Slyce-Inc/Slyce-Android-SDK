@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.handler.CameraSynchronizer;
@@ -30,7 +29,6 @@ import com.android.slyce.moodstocks.AutoScannerSession.Listener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 

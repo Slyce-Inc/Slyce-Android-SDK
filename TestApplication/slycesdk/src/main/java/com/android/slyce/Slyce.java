@@ -17,9 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Created by davidsvilem on 3/25/15.
- */
+
 public final class Slyce implements Scanner.SyncListener{
 
     private static final String TAG = Slyce.class.getSimpleName();

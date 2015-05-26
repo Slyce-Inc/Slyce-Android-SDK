@@ -2,9 +2,6 @@ package com.android.slyce.utils;
 
 import android.util.Log;
 
-/**
- * Created by davidsvilem on 4/7/15.
- */
 public class SlyceLog {
 
     public static void i(String tag, String message){

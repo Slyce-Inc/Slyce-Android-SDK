@@ -2,9 +2,6 @@ package com.android.slyce;
 
 import com.android.slyce.enums.SlyceBarcodeType;
 
-/**
- * Created by davidsvilem on 5/6/15.
- */
 public class SlyceBarcode {
 
     /* Barcode result type */

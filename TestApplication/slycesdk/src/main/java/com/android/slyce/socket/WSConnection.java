@@ -117,7 +117,7 @@ public class WSConnection implements
 
                 }else{
 
-                    mRequestSynchronizer.onSlyceRequestStage(SlyceRequestStage.StageSendingRequest);
+                    mRequestSynchronizer.onSlyceRequestStage(SlyceRequestStage.StageStartingRequest);
 
                     mWebSocket = webSocket;
 

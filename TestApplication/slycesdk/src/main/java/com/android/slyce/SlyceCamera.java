@@ -1,4 +1,4 @@
-package com.android.slyce.camera;
+package com.android.slyce;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -9,16 +9,14 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import com.android.slyce.Slyce;
+
 import com.android.slyce.communication.ComManager;
-import com.android.slyce.communication.utils.Cache;
 import com.android.slyce.handler.CameraSynchronizer;
 import com.android.slyce.interfaces.SlyceCameraInterface;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
-import com.android.slyce.requests.SlyceProductsRequest;
 import com.android.slyce.utils.BarcodeHelper;
 import com.android.slyce.utils.BarcodeHelper.ScannerType;
 import com.android.slyce.utils.Constants;
@@ -34,9 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SlyceCamera extends Handler implements SlyceCameraInterface, Listener, BarcodeSession.OnBarcodeListener{
 
@@ -65,9 +61,9 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
     private MixpanelAPI mixpanel;
 
-    private List<SlyceProductsRequest> mSlyceProductsRequestMap;
+    private List<SlyceRequest> mSlyceRequestMap;
 
-    private SlyceProductsRequest mSlyceRequest;
+    private SlyceRequest mSlyceRequest;
 
     private static final class SlyceCameraMessage{
 
@@ -76,7 +72,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
     public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, JSONObject options, OnSlyceCameraListener listener){
 
-        mSlyceProductsRequestMap = new ArrayList<SlyceProductsRequest>();
+        mSlyceRequestMap = new ArrayList<SlyceRequest>();
 
         mActivity = activity;
 
@@ -188,7 +184,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
     // TODO: add it to the interface methods
     public void cancel(){
-        for(SlyceProductsRequest request : mSlyceProductsRequestMap){
+        for(SlyceRequest request : mSlyceRequestMap){
             request.cancel();
         }
     }
@@ -379,7 +375,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
                 final Bitmap bitmap = (Bitmap) msg.obj;
 
                 // Slyce + 2D search
-                mSlyceRequest = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
+                mSlyceRequest = new SlyceRequest(mSlyce, new OnSlyceRequestListener() {
                     @Override
                     public void onBarcodeRecognition(SlyceBarcode barcode) {
                         mCameraSynchronizer.onBarcodeRecognition(barcode);
@@ -423,7 +419,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
                 }, (Bitmap) msg.obj, mOptions);
 
-                mSlyceProductsRequestMap.add(mSlyceRequest);
+                mSlyceRequestMap.add(mSlyceRequest);
 
                 mSlyceRequest.execute();
 

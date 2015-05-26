@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.android.slyce.Slyce;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
-import com.android.slyce.requests.SlyceProductsRequest;
+import com.android.slyce.SlyceRequest;
 import com.android.slyce.roundedimage.RoundedImageView;
 import com.android.slyce.utils.BitmapLoader;
 import com.android.slyce.utils.SlyceLog;
@@ -73,7 +73,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     private TextView analyzeImageText;
 
     /* for searching products from gallery image */
-    private SlyceProductsRequest mSlyceRequest;
+    private SlyceRequest mSlyceRequest;
 
     private UpdateProgressBarAsyncTask task;
 
@@ -285,7 +285,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     /* Invoke this method after an Image was picked from Gallery */
     private void performSlyceProductsRequest(Bitmap bitmap){
 
-        mSlyceRequest = new SlyceProductsRequest(Slyce.get(), new OnSlyceRequestListener() {
+        mSlyceRequest = new SlyceRequest(Slyce.get(), new OnSlyceRequestListener() {
 
             @Override
             public void onBarcodeRecognition(SlyceBarcode barcode) {

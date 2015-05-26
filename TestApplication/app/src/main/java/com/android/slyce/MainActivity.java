@@ -29,7 +29,7 @@ import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.SlyceBarcode;
-import com.android.slyce.requests.SlyceProductsRequest;
+
 import org.json.JSONArray;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -56,8 +56,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     private Slyce slyce;
 
-    private SlyceProductsRequest slyceProductsRequestImageUrl;
-    private SlyceProductsRequest slyceProductsRequestImage;
+    private SlyceRequest slyceRequestImageUrl;
+    private SlyceRequest slyceRequestImage;
 
     private ProgressBar progressBar;
 
@@ -282,12 +282,12 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
                 progressBar.setVisibility(View.INVISIBLE);
 
-                if(slyceProductsRequestImage != null){
-                    slyceProductsRequestImage.cancel();
+                if(slyceRequestImage != null){
+                    slyceRequestImage.cancel();
                 }
 
-                if(slyceProductsRequestImageUrl != null){
-                    slyceProductsRequestImageUrl.cancel();
+                if(slyceRequestImageUrl != null){
+                    slyceRequestImageUrl.cancel();
                 }
 
                 break;
@@ -358,8 +358,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
-                slyceProductsRequestImage.execute();
+                slyceRequestImage = new SlyceRequest(slyce, this, selectedBitmap);
+                slyceRequestImage.execute();
 
             }
         }
@@ -432,8 +432,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
                     return;
                 }
 
-                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl);
-                slyceProductsRequestImageUrl.execute();
+                slyceRequestImageUrl = new SlyceRequest(slyce, MainActivity.this, imageUrl);
+                slyceRequestImageUrl.execute();
 
                 progressBar.setVisibility(View.VISIBLE);
             }

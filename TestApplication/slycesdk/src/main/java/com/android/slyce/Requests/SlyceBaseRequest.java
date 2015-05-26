@@ -11,9 +11,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by davidsvilem on 3/23/15.
  */
-public class SlyceRequest implements SlyceRequestInterface ,WSConnection.OnTokenListener{
+public class SlyceBaseRequest implements SlyceRequestInterface ,WSConnection.OnTokenListener{
 
-    private static String TAG = SlyceRequest.class.getSimpleName();
+    private static String TAG = SlyceBaseRequest.class.getSimpleName();
 
     protected WSConnection wsConnection;
 
@@ -23,12 +23,7 @@ public class SlyceRequest implements SlyceRequestInterface ,WSConnection.OnToken
 
     private AtomicBoolean oneShotexecution = new AtomicBoolean(false);
 
-    public SlyceRequest(Slyce slyce, OnSlyceRequestListener listener, WSConnection.MethodType type){
-
-//        if(slyce == null){
-//            Log.e(TAG,"Slyce object is null");
-//            return;
-//        }
+    public SlyceBaseRequest(Slyce slyce, OnSlyceRequestListener listener, WSConnection.MethodType type){
 
         this.slyce = slyce;
 

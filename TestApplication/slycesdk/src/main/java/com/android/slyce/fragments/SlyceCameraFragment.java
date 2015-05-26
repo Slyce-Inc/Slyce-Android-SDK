@@ -15,9 +15,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
 import com.android.slyce.Slyce;
-import com.android.slyce.camera.SlyceCamera;
+import com.android.slyce.SlyceCamera;
 import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
@@ -26,7 +25,6 @@ import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.android.slycesdk.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

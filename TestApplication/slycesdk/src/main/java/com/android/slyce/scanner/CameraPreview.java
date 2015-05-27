@@ -21,15 +21,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.android.slyce.moodstocks;
+package com.android.slyce.scanner;
 
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-
-import com.android.slyce.moodstocks.*;
 
 /** Wrapper around a {@link SurfaceView} used for previewing the camera */
 public class CameraPreview implements SurfaceHolder.Callback {

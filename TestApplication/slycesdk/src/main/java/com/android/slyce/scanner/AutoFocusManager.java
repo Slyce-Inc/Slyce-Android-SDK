@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.android.slyce.moodstocks;
+package com.android.slyce.scanner;
 
 import java.util.ArrayList;
 import java.util.List;

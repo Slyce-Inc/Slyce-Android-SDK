@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.android.slyce.moodstocks;
+package com.android.slyce.scanner;
 
 /** Simple class holding a frame as provided by the camera. */
 public class CameraFrame {

@@ -3,7 +3,7 @@
  * 
  * Created by lisah0 on 2012-02-24
  */
-package com.android.slyce.zbar;
+package com.android.slyce.barcode;
 
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;

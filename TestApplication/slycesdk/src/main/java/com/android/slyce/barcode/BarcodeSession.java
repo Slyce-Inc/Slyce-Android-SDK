@@ -4,26 +4,15 @@
  * 
  * Created by lisah0 on 2012-02-24
  */
-package com.android.slyce.zbar;
+package com.android.slyce.barcode;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.graphics.YuvImage;
-import android.hardware.Camera;
-import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.PreviewCallback;
-import android.hardware.Camera.Size;
-import android.os.Environment;
-import android.os.Handler;
-import android.util.Log;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
-import com.android.slyce.moodstocks.CameraFrame;
-import com.android.slyce.moodstocks.CameraManager;
-import com.android.slyce.utils.SlyceLog;
-import com.moodstocks.android.Result;
+import com.android.slyce.scanner.CameraFrame;
+import com.android.slyce.scanner.CameraManager;
 import com.moodstocks.android.advanced.Tools;
 import com.moodstocks.android.core.Loader;
 
@@ -32,10 +21,6 @@ import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 /* Import ZBar Class files */
 

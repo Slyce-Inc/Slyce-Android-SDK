@@ -271,7 +271,7 @@ public final class Slyce implements Scanner.SyncListener{
     /**
      * Do Not call this method
      */
-    public void release(){
+    protected void release(){
         mInstance = null;
     }
 

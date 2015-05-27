@@ -7,12 +7,12 @@ import org.json.JSONArray;
 
 public interface OnSlyceRequestListener {
 
+    /** */
+    void on3DRecognition(JSONArray products);
     void onBarcodeRecognition(SlyceBarcode barcode);
 
     void on2DRecognition(String irid, String productInfo);
     void on2DExtendedRecognition(JSONArray products);
-
-    void on3DRecognition(JSONArray products);
 
     void onSlyceRequestStage(SlyceRequestStage message);
     void onSlyceProgress(long progress, String message, String id);

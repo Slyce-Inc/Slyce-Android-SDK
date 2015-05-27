@@ -209,7 +209,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
     public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
         if(isAttached){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_image_detection_sound, isSoundOn, isVibrateOn);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_detection_sound, isSoundOn, isVibrateOn);
 
             // Notify the host application of barcode recognition
             mListener.onCameraFragmentBarcodeRecognition(barcode);
@@ -222,7 +222,7 @@ public class SlyceCameraFragment extends Fragment implements OnSlyceCameraListen
 
             if(!TextUtils.isEmpty(irId)){
                 // Play sound/vibrate only on detection
-                Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_image_detection_sound, isSoundOn, isVibrateOn);
+                Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_detection_sound, isSoundOn, isVibrateOn);
             }
 
             // Notify the host application of MS recognition

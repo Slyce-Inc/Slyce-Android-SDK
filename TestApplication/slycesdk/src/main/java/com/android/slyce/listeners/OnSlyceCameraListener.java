@@ -1,10 +1,8 @@
 package com.android.slyce.listeners;
 
 import android.graphics.Bitmap;
-
 import com.android.slyce.SlyceBarcode;
 import com.android.slyce.enums.SlyceRequestStage;
-
 import org.json.JSONArray;
 
 /**
@@ -12,22 +10,52 @@ import org.json.JSONArray;
  */
 public interface OnSlyceCameraListener {
 
-    /* Standart/Premium */
+    /** Called when 3D products are found
+     *  @param products a JsonArray of products. Can be empty in case no match was found.
+     *  */
     void onCamera3DRecognition(JSONArray products);
+
+    /** Called when barcode is found
+     * @param barcode a barcode object.
+     * */
     void onCameraBarcodeRecognition(SlyceBarcode barcode);
 
-    /* Premium */
+    /** Called when 2D products are found
+     *  @param irId representing the recognized 2D products in base64 format. Can be en empty string in case no match has been found.
+     *  @param productInfo representing a short info about the matched 2D products. Can be empty in case no match has been found.
+     *  */
     void onCamera2DRecognition(String irId, String productInfo);
+
+    /** Called when additional info for the previously recognized 2D products is found.
+     *  @param products a JsonArray of additional info.
+     *  */
     void onCamera2DExtendedRecognition(JSONArray products);
 
-    /* Progress Reporting */
-    void onCameraSlyceProgress(long progress, String message, String id);
+    /** Reporting the stage currently being processed.
+     *  @param message current stage.
+     *  */
     void onCameraSlyceRequestStage(SlyceRequestStage message);
 
-    /* Error */
+    /** Reporting a numeric value and informative message.
+     *  @param progress a value from 0-100
+     *  @param message a short description of the current search stage.
+     *  @param id a unique request id
+     *  */
+    void onCameraSlyceProgress(long progress, String message, String id);
+
+    /** Called when an error occured
+     *  @param message the error description
+     *  */
     void onSlyceCameraError(String message);
 
-    /* Miscellaneous */
+    /** Called when the snapped bitmap is ready after SlyceCamera.snap() was invoked
+     *  @param bitmap the error description
+     *  */
     void onSnap(Bitmap bitmap);
+
+    /** Called when the camera was touched in a specific point.
+     *  @param x axis point
+     *  @param y axis point
+     *  */
     void onTap(float x, float y);
 }

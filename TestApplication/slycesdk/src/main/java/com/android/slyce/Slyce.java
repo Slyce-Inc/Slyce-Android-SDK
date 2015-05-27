@@ -17,8 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
-public final class Slyce implements Scanner.SyncListener{
+public final class Slyce {
 
     private static final String TAG = Slyce.class.getSimpleName();
 
@@ -34,7 +33,7 @@ public final class Slyce implements Scanner.SyncListener{
 
     private AtomicBoolean isOpened = new AtomicBoolean(false);
 
-    /* Moodstocks */
+    /* MS */
     private Scanner scanner;
     private boolean compatible;
 
@@ -190,7 +189,7 @@ public final class Slyce implements Scanner.SyncListener{
                                             scanner = Scanner.get();
                                             String path = Scanner.pathFromFilesDir(mContext, "scanner.db");
                                             scanner.open(path, key, secret);
-                                            scanner.setSyncListener(Slyce.this);
+                                            scanner.setSyncListener(new AutoScannerSynceListener());
                                             scanner.sync();
                                         } catch (MoodstocksError e) {
                                             SlyceLog.e(TAG, e.getMessage());
@@ -275,31 +274,33 @@ public final class Slyce implements Scanner.SyncListener{
         mInstance = null;
     }
 
-    /*
-     * 2D Scanner.SyncListener
-     */
-    @Override
-    public void onSyncStart() {
-        SlyceLog.d(TAG, "MS Sync will start.");
-    }
-
-    @Override
-    public void onSyncComplete() {
-        try {
-            SlyceLog.d(TAG, "MS Sync succeeded (" + scanner.count() + " images)");
-        } catch (MoodstocksError e) {
-            e.printStackTrace();
+    private class AutoScannerSynceListener implements Scanner.SyncListener{
+        /*
+         * 2D Scanner.SyncListener
+         */
+        @Override
+        public void onSyncStart() {
+            SlyceLog.d(TAG, "MS Sync will start.");
         }
-    }
 
-    @Override
-    public void onSyncFailed(MoodstocksError e) {
-        SlyceLog.d(TAG, "MS Sync error #" + e.getErrorCode() + ": " + e.getMessage());
-    }
+        @Override
+        public void onSyncComplete() {
+            try {
+                SlyceLog.d(TAG, "MS Sync succeeded (" + scanner.count() + " images)");
+            } catch (MoodstocksError e) {
+                e.printStackTrace();
+            }
+        }
 
-    @Override
-    public void onSyncProgress(int total, int current) {
-        int percent = (int) ((float) current / (float) total * 100);
-        SlyceLog.d(TAG, "MS Sync progressing: " + percent + "%");
+        @Override
+        public void onSyncFailed(MoodstocksError e) {
+            SlyceLog.d(TAG, "MS Sync error #" + e.getErrorCode() + ": " + e.getMessage());
+        }
+
+        @Override
+        public void onSyncProgress(int total, int current) {
+            int percent = (int) ((float) current / (float) total * 100);
+            SlyceLog.d(TAG, "MS Sync progressing: " + percent + "%");
+        }
     }
 }

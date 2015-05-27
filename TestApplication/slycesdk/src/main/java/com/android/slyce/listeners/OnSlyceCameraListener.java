@@ -26,7 +26,7 @@ public interface OnSlyceCameraListener {
      *  */
     void onCamera2DRecognition(String irId, String productInfo);
 
-    /** Called when additional info for the previously recognized 2D products is found.
+    /** Called when additional info for the previously recognized 2D product is found.
      *  @param products a JsonArray of additional info.
      *  */
     void onCamera2DExtendedRecognition(JSONArray products);

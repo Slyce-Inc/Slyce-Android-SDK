@@ -37,6 +37,16 @@ public final class Slyce {
     private Scanner scanner;
     private boolean compatible;
 
+    /**
+     * Get and create a new instance of Slyce SDK if one does not exist
+     *
+     * @param context The application context
+     * @param clientID Your client id
+     * @return an instance of Slyce SDK
+     *
+     * <p>The best practice is to call getInstance, and use the returned Slyce,
+     * object from a single thread</p>
+     */
     public static Slyce getInstance(Context context, String clientID) {
 
         if(mInstance == null){
@@ -49,17 +59,13 @@ public final class Slyce {
         return mInstance;
     }
 
-    public static Slyce get(){
-        return mInstance;
-    }
-
     private Slyce(Context context, String clientID) {
 
         // Get Mixpanel object
         mixpanel = MixpanelAPI.getInstance(context.getApplicationContext(), Constants.MIXPANEL_TOKEN);
 
-        // Context
-        mContext = context;
+        // Application Context
+        mContext = context.getApplicationContext();
 
         // Client Id
         mClientID = clientID;
@@ -118,6 +124,18 @@ public final class Slyce {
         } catch (JSONException e) {}
     }
 
+    /**
+     * @return the current shared instance of Slyce SDK
+     */
+    public static Slyce get(){
+        return mInstance;
+    }
+
+    /**
+      * Opens the Slyce object, making it available for use.
+     *
+      * @param listener notify when the Slyce object opened.
+     */
     public void open(final OnSlyceOpenListener listener){
 
         if(listener == null){
@@ -234,14 +252,27 @@ public final class Slyce {
         });
     }
 
+    /**
+     * Indicates whether the user can use premium features of the SDK.
+     *
+     * @return boolean value
+     */
     public boolean isPremiumUser() {
         return mSharedPrefHelper.isPremium();
     }
 
+    /**
+     * Indicates whether the user can ask the SDK to perform 2D searches.
+     *
+     * @return boolean value
+     */
     public boolean is2DSearchEnabled() {
         return mSharedPrefHelper.isMSEnbaled();
     }
 
+    /**
+     * @return Slyce client id
+     */
     public String getClientID(){
         return mSharedPrefHelper.getClientID();
     }
@@ -250,10 +281,18 @@ public final class Slyce {
         return mContext;
     }
 
+    /**
+     * Checks if Slyce SDK is open.
+     *
+     * @return true if open
+     */
     public boolean isOpen(){
         return isOpened.get();
     }
 
+    /**
+     * Closes the automatic scanner for premium user
+     */
     public void close(){
         // Required by MS
         if (compatible) {

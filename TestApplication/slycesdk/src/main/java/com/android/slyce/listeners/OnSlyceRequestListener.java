@@ -7,15 +7,42 @@ import org.json.JSONArray;
 
 public interface OnSlyceRequestListener {
 
-    /** */
+    /** Called when 3D products are found
+     *  @param products a JsonArray of products. Can be empty in case no match was found.
+     *  */
     void on3DRecognition(JSONArray products);
+
+    /** Called when barcode is found
+     * @param barcode a barcode object.
+     * */
     void onBarcodeRecognition(SlyceBarcode barcode);
 
+    /** Called when 2D products are found
+     *  @param irid representing the recognized 2D products in base64 format. Can be en empty string in case no match has been found.
+     *  @param productInfo representing a short info about the matched 2D products. Can be empty in case no match has been found.
+     *  */
     void on2DRecognition(String irid, String productInfo);
+
+
+    /** Called when additional info for the previously recognized 2D products is found.
+     *  @param products a JsonArray of additional info.
+     *  */
     void on2DExtendedRecognition(JSONArray products);
 
+    /** Reporting the stage currently being processed.
+     *  @param message current stage.
+     *  */
     void onSlyceRequestStage(SlyceRequestStage message);
+
+    /** Reporting a numeric value and informative message.
+     *  @param progress a value from 0-100
+     *  @param message a short description of the current search stage.
+     *  @param id a unique request id
+     *  */
     void onSlyceProgress(long progress, String message, String id);
 
+    /** Called when an error occured
+     *  @param message the error description
+     *  */
     void onError(String message);
 }

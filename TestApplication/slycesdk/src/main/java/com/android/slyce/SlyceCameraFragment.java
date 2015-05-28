@@ -68,9 +68,6 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
     private ImageButton mSnapButton;
     private ImageView mOnTapView;
 
-    /* Slyce SDK object */
-    private Slyce mSlyce;
-
     /* Slyce Camera object */
     private SlyceCamera mSlyceCamera;
 
@@ -379,32 +376,32 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
         if(id == R.id.close_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,  Slyce.get().isSoundOn(), false);
 
             close();
 
         }else if(id == R.id.scan_tips_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,  mSlyce.isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,   Slyce.get().isSoundOn(), false);
 
             ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
             dialogFragment.show(getFragmentManager(), null);
 
         }else if(id == R.id.gallery_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,  mSlyce.isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,   Slyce.get().isSoundOn(), false);
 
             Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
 
         }else if(id == R.id.flash_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_flash_sound,  mSlyce.isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_flash_sound,  Slyce.get().isSoundOn(), false);
 
             mSlyceCamera.turnFlash();
 
         }else if(id == R.id.snap_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,  mSlyce.isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,   Slyce.get().isSoundOn(), false);
 
             showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessDialogFragmentListener());
 

@@ -334,6 +334,11 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                         mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
                     } catch (JSONException e) {}
 
+                    if(!TextUtils.isEmpty(value)){
+                        // Play sound/vibrate only on detection
+                        Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
+                    }
+
                     // Notify the host application for basic result
                     mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
 
@@ -368,7 +373,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
             handleSnap(bitmap);
         }
-
     }
     /* */
 

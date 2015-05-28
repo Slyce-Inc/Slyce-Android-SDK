@@ -35,6 +35,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ *
+ * Provides an integral camera functionality
+ *
+ * Set of methods that allow developers to perform continuous barcode detection, continuous 2D visual recognition (Premium feature), taking a snap, turn flash on/off, performing focus etc.
+ */
 public class SlyceCamera extends Handler implements SlyceCameraInterface, Listener, BarcodeSession.OnBarcodeListener{
 
     private final String TAG = SlyceCamera.class.getSimpleName();
@@ -71,6 +78,14 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         private static final int SEARCH = 0;
     }
 
+    /**
+     *
+     * @param activity current Activity
+     * @param slyce Slyce SDK instance. It must be opened.
+     * @param preview the {@link SurfaceView} into which the camera preview will be displayed.
+     * @param options use this JSONObject to pass properties to Slyce servers. Can be null.
+     * @param listener the {@link OnSlyceCameraListener} to motify on results and errors.
+     */
     public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, JSONObject options, OnSlyceCameraListener listener){
 
         mSlyceProductsRequestMap = new ArrayList<SlyceProductsRequest>();
@@ -104,7 +119,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }
 
         // Detect touch point on camera preview
-        if(preview != null){
+        if (preview != null) {
             preview.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -128,6 +143,9 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
 
     /* Interface methods for host application */
+    /**
+     * Perform an image recognition for the current frame.
+     */
     @Override
     public void snap() {
         // If 2D Enabled snap via MS
@@ -141,17 +159,23 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }
     }
 
+    /**
+     * Starts the camera preview and starts processing the frames.
+     */
     @Override
     public void start() {
         if(session != null){
             session.start();
         }
 
-        if(barcodeSession != null){
+        if (barcodeSession != null){
             barcodeSession.start();
         }
     }
 
+    /**
+     * Stops processing the frames and stops camera preview.
+     */
     @Override
     public void stop() {
         if(session != null){
@@ -163,6 +187,10 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }
     }
 
+    /**
+     * Stops processing the frames, keeping the camera preview alive.
+     */
+    @Override
     public void pause(){
         if(session != null){
             session.pause();
@@ -173,6 +201,10 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }
     }
 
+    /**
+     * Resumes processing the frames after a call to pause().
+     */
+    @Override
     public void resume(){
         if(session != null){
             session.resume();
@@ -183,23 +215,41 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }
     }
 
-    // TODO: add it to the interface methods
+    /**
+     * Canceling all requests triggered by calling to {@link SlyceCameraInterface#snap()}
+     */
+    @Override
     public void cancel(){
         for(SlyceProductsRequest request : mSlyceProductsRequestMap){
             request.cancel();
         }
     }
 
+    /**
+     * Asks the scanner to focus the underlying camera to a specific point.
+     *
+     * @param x
+     * @param y
+     */
     @Override
     public void focusAtPoint(float x, float y) {
         focusAreas(true, x, y);
     }
 
+    /**
+     * Enable/Disable continuous recognition functionality.
+     * Setting this value to false will stop recognizing barcodes in a Regular mode and will stop recognizing 2D products and barcodes in Premium mode. Default is true.
+     *
+     * @param value boolean
+     */
     @Override
     public void setContinuousRecognition(boolean value) {
         isContinuousRecognition = value;
     }
 
+    /**
+     * Turns on/off the device flash.
+     */
     @Override
     public void turnFlash() {
         boolean flashNewState = false;

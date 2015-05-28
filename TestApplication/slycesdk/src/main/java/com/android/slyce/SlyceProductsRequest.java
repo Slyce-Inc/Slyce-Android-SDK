@@ -41,7 +41,7 @@ public final class SlyceProductsRequest extends SlyceBaseRequest {
     }
 
     /**
-     * @param options the options JSONObject
+     * @param options use this JSONObject to pass properties to Slyce servers. Can be null.
      */
     public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, String imageUrl, JSONObject options) {
         this(slyce, listener, imageUrl);
@@ -50,7 +50,7 @@ public final class SlyceProductsRequest extends SlyceBaseRequest {
     }
 
     /**
-     * @param options the options JSONObject
+     * @param options use this JSONObject to pass properties to Slyce servers. Can be null.
      */
     public SlyceProductsRequest(Slyce slyce, OnSlyceRequestListener listener, Bitmap image, JSONObject options) {
         this(slyce, listener, image);

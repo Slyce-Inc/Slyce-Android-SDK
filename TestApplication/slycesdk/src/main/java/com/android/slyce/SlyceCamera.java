@@ -42,7 +42,7 @@ import java.util.List;
  *
  * Set of methods that allow developers to perform continuous barcode detection, continuous 2D visual recognition (Premium feature), taking a snap, turn flash on/off, performing focus etc.
  */
-public class SlyceCamera extends Handler implements SlyceCameraInterface, Listener, BarcodeSession.OnBarcodeListener{
+public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
     private final String TAG = SlyceCamera.class.getSimpleName();
 
@@ -106,7 +106,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
 
             // Start MS detection
             try {
-                session = new AutoScannerSession(activity, Scanner.get(), this, preview);
+                session = new AutoScannerSession(activity, Scanner.get(), new AutoScannerSessionListener(), preview);
                 session.setResultTypes(TYPES);
             } catch (MoodstocksError moodstocksError) {
                 moodstocksError.printStackTrace();
@@ -115,7 +115,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         }else{
 
             // Start Barcode/QR scanner
-            barcodeSession = new BarcodeSession(activity, preview, this);
+            barcodeSession = new BarcodeSession(activity, preview, new BarcodeSessionListener());
         }
 
         // Detect touch point on camera preview
@@ -140,7 +140,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
             });
         }
     }
-
 
     /* Interface methods for host application */
     /**
@@ -270,100 +269,107 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
     }
     /* */
 
-    /* Barcode Engine Listener */
-    @Override
-    public void onBarcodeResult(int type, String result) {
-        Log.i(TAG, "onBarcodeResult");
+    /** {@link BarcodeSession.OnBarcodeListener} */
+    private class BarcodeSessionListener implements BarcodeSession.OnBarcodeListener{
 
-        // Resume the automatic scan after 2 seconds
-        new  Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                barcodeSession.resume();
+        @Override
+        public void onBarcodeResult(int type, String result) {
+            Log.i(TAG, "onBarcodeResult");
+
+            // Resume the automatic scan after 2 seconds
+            new  Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    barcodeSession.resume();
+                }
+            }, Constants.AUTO_SCAN_DELAY);
+
+            if(isContinuousRecognition){
+                // Handle barcode detection
+                handleBarcodeResult(type, result, ScannerType._3D);
             }
-        }, Constants.AUTO_SCAN_DELAY);
-
-        if(isContinuousRecognition){
-            // Handle barcode detection
-            handleBarcodeResult(type, result, ScannerType._3D);
         }
-    }
 
-    @Override
-    public void onBarcodeSnap(Bitmap bitmap) {
-        Log.i(TAG, "onBarcodeSnap");
+        @Override
+        public void onBarcodeSnap(Bitmap bitmap) {
+            Log.i(TAG, "onBarcodeSnap");
 
-        handleSnap(bitmap);
+            handleSnap(bitmap);
+        }
     }
     /* */
 
-    /* MS Listener */
-    @Override
-    public void onCameraOpenFailed(Exception e) {
-        Log.i(TAG, "onCameraOpenFailed");
-    }
+    /** {@link AutoScannerSession.Listener} */
+    private class AutoScannerSessionListener implements Listener{
 
-    @Override
-    public void onResult(Result result) {
+        @Override
+        public void onCameraOpenFailed(Exception e) {
+            Log.i(TAG, "onCameraOpenFailed");
+        }
 
-        // Resume the automatic scan after 3 seconds
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                session.resume();
-            }
-        }, Constants.AUTO_SCAN_DELAY);
+        @Override
+        public void onResult(Result result) {
 
-        if(isContinuousRecognition){
+            // Resume the automatic scan after 3 seconds
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    session.resume();
+                }
+            }, Constants.AUTO_SCAN_DELAY);
 
-            String value = result.getValue();
+            if(isContinuousRecognition){
 
-            int type = result.getType();
+                String value = result.getValue();
 
-            if(type == Result.Type.IMAGE){
-                // Image detection
+                int type = result.getType();
 
-                try {
-                    JSONObject imageDetectReport = new JSONObject();
-                    imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
-                    imageDetectReport.put(Constants.DATA_IRID, value);
-                    mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
-                    mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
-                } catch (JSONException e) {}
+                if(type == Result.Type.IMAGE){
+                    // Image detection
 
-                // Notify the host application for basic result
-                mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
+                    try {
+                        JSONObject imageDetectReport = new JSONObject();
+                        imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
+                        imageDetectReport.put(Constants.DATA_IRID, value);
+                        mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
+                        mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
+                    } catch (JSONException e) {}
 
-                // Get extended products results
-                ComManager.getInstance().getIRIDInfo(mSlyce.getClientID(), value, new ComManager.OnExtendedInfoListener() {
-                    @Override
-                    public void onExtendedInfo(JSONArray products) {
+                    // Notify the host application for basic result
+                    mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
 
-                        // Notify the host application for extended result
-                        mCameraSynchronizer.on2DExtendedRecognition(products);
-                    }
-                });
+                    // Get extended products results
+                    ComManager.getInstance().getIRIDInfo(mSlyce.getClientID(), value, new ComManager.OnExtendedInfoListener() {
+                        @Override
+                        public void onExtendedInfo(JSONArray products) {
+
+                            // Notify the host application for extended result
+                            mCameraSynchronizer.on2DExtendedRecognition(products);
+                        }
+                    });
+
+                }else{
+                    // Handle barcode detection
+                    handleBarcodeResult(type, value, ScannerType._2D);
+                }
 
             }else{
-                // Handle barcode detection
-                handleBarcodeResult(type, value, ScannerType._2D);
+                // Do Nothing
             }
-
-        }else{
-            // Do Nothing
         }
-    }
 
-    @Override
-    public void onWarning(String s) {
-        Log.i(TAG, "onWarning: " + s);
-    }
+        @Override
+        public void onWarning(String s) {
+            Log.i(TAG, "onWarning: " + s);
+        }
 
-    @Override
-    public void onSnap(Bitmap bitmap) {
-        Log.i(TAG, "onSnap");
+        @Override
+        public void onSnap(Bitmap bitmap) {
+            Log.i(TAG, "onSnap");
 
-        handleSnap(bitmap);
+            handleSnap(bitmap);
+        }
+
     }
     /* */
 

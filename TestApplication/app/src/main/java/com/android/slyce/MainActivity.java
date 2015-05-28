@@ -367,7 +367,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     private void startSlyceCameraFragment(){
 
         // Add SlyceCameraFragment
-        SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(null, true, true);
+        SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(null);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.slyce_camera_fragment_container, slyceFragment);
         transaction.addToBackStack(null);

@@ -5,13 +5,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.android.slyce.Slyce;
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.models.Search2DProgress;
 import com.android.slyce.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
+import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.SlyceLog;
+import com.android.slycesdk.R;
+
 import org.json.JSONArray;
 
 /**

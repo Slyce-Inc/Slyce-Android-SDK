@@ -228,7 +228,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             return;
         }
         mImage.setImageBitmap(bitmap);
-
     }
 
     public void onRequestStage(SlyceRequestStage message) {

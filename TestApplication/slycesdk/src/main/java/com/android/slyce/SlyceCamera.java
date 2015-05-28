@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -18,9 +19,11 @@ import com.android.slyce.listeners.OnSlyceRequestListener;
 import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import com.android.slyce.utils.BarcodeHelper;
 import com.android.slyce.utils.BarcodeHelper.ScannerType;
+import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.Utils;
 import com.android.slyce.barcode.BarcodeSession;
+import com.android.slycesdk.R;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
@@ -333,7 +336,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
         SlyceBarcode slyceBarcode = BarcodeHelper.createSlyceBarcode(type, scannerType, result);
 
         // Notify the host applicatin for barcode detection
-        mCameraSynchronizer.onBarcodeRecognition(slyceBarcode);
+        notifyOnBarcodeRecognition(slyceBarcode);
 
         try {
             JSONObject imageDetectReport = new JSONObject();
@@ -361,6 +364,15 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
             barcodeSession.requestFocus(focusAtPoint, touchRect);
         }
     }
+
+    private void notifyOnBarcodeRecognition(SlyceBarcode slyceBarcode){
+
+        // Play sound/vibrate
+        Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
+
+        // Notify the host application
+        mCameraSynchronizer.onBarcodeRecognition(slyceBarcode);
+    }
     /* */
 
     @Override
@@ -376,17 +388,21 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface, Listen
                 mSlyceProductsRequest = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
                     @Override
                     public void onBarcodeRecognition(SlyceBarcode barcode) {
-                        mCameraSynchronizer.onBarcodeRecognition(barcode);
+                        notifyOnBarcodeRecognition(barcode);
                     }
 
                     @Override
                     public void onSlyceProgress(long progress, String message, String id) {
-
                         mCameraSynchronizer.onSlyceProgress(progress, message, id);
                     }
 
                     @Override
                     public void on2DRecognition(String irid, String productInfo) {
+                        if(!TextUtils.isEmpty(irid)){
+                            // Play sound/vibrate only on detection
+                            Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
+                        }
+
                         mCameraSynchronizer.on2DRecognition(irid, productInfo);
                     }
 

@@ -21,17 +21,24 @@ public final class Slyce {
 
     private static final String TAG = Slyce.class.getSimpleName();
 
+    /* Slyce SDK object instance */
     private static Slyce mInstance;
+
+    private final MixpanelAPI mixpanel;
 
     private SharedPrefHelper mSharedPrefHelper;
 
     private final Context mContext;
 
-    private final MixpanelAPI mixpanel;
-
     private String mClientID;
 
     private AtomicBoolean isOpened = new AtomicBoolean(false);
+
+    /* Indicates if sound should on/off */
+    private boolean isSoundOn = true;
+
+    /* Indicates if vibrate should on/off */
+    private boolean isVibrateOn = true;
 
     /* MS */
     private Scanner scanner;
@@ -304,6 +311,30 @@ public final class Slyce {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * If set, the device will play a sound when the a barcode/2D item auto-matched.
+     * @param value
+     */
+    public void setSound(boolean value){
+        isSoundOn = value;
+    }
+
+    /**
+     * If set, the device will vibrate when the a barcode/2D item auto-matched.
+     * @param value
+     */
+    public void setVibrate(boolean value){
+        isSoundOn = value;
+    }
+
+    public boolean isSoundOn(){
+        return isSoundOn;
+    }
+
+    public boolean isVibrateOn(){
+        return isVibrateOn;
     }
 
     /**

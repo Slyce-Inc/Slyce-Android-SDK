@@ -2,8 +2,6 @@ package com.android.slyce.communication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.text.TextUtils;
-
 import com.android.slyce.communication.utils.BasicNetwork;
 import com.android.slyce.communication.utils.HttpHeaderParser;
 import com.android.slyce.communication.utils.HttpStack;

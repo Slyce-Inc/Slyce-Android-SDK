@@ -7,9 +7,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by davidsvilem on 4/16/15.
- */
 public class AuthRequest extends JsonObjectRequest {
 
     public AuthRequest(int method, String url, JSONObject jsonRequest,

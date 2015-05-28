@@ -80,12 +80,10 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param options    Parameter 1.
-     * @param soundOn    Parameter 2.
-     * @param vibrateOn  Parameter 3.
+     * @param options Parameter 1.
      * @return A new instance of fragment SlyceCameraFragment.
      */
-    public static SlyceCameraFragment newInstance(JSONObject options, boolean soundOn, boolean vibrateOn) {
+    public static SlyceCameraFragment newInstance(JSONObject options) {
         SlyceCameraFragment fragment = new SlyceCameraFragment();
         Bundle args = new Bundle();
 

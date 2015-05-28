@@ -35,6 +35,8 @@ import org.json.JSONObject;
  * to handle interaction events.
  * Use the {@link SlyceCameraFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * SlyceCameraFragment provides an integrated XML layout with all Slyce SDK functionalities.
  */
 public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
@@ -80,7 +82,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param options Parameter 1.
+     * @param options use this JSONObject to pass properties to Slyce servers. Can be null.
      * @return A new instance of fragment SlyceCameraFragment.
      */
     public static SlyceCameraFragment newInstance(JSONObject options) {

@@ -88,8 +88,8 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
      */
     public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, JSONObject options, OnSlyceCameraListener listener){
 
-        if(slyce != null){
-            SlyceLog.e(TAG, "Slyce object is null");
+        if(slyce == null){
+            SlyceLog.e(TAG, Constants.SLYCE_OBJECT_IS_NULL);
             return;
         }
 

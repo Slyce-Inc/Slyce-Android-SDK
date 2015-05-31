@@ -133,4 +133,6 @@ public class Constants {
 
     public static final int FOCUS_SQUARE_AREA = 100;
 
+    /* General error messages */
+    public static final String SLYCE_OBJECT_IS_NULL = "Slyce object is null";
 }

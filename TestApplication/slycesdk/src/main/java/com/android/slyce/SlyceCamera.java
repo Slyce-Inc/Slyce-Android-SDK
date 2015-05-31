@@ -21,6 +21,7 @@ import com.android.slyce.utils.BarcodeHelper;
 import com.android.slyce.utils.BarcodeHelper.ScannerType;
 import com.android.slyce.utils.Buzzer;
 import com.android.slyce.utils.Constants;
+import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
 import com.android.slyce.barcode.BarcodeSession;
 import com.android.slycesdk.R;
@@ -86,6 +87,11 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
      * @param listener the {@link OnSlyceCameraListener} to motify on results and errors.
      */
     public SlyceCamera(Activity activity, Slyce slyce, SurfaceView preview, JSONObject options, OnSlyceCameraListener listener){
+
+        if(slyce != null){
+            SlyceLog.e(TAG, "Slyce object is null");
+            return;
+        }
 
         mSlyceProductsRequestMap = new ArrayList<SlyceProductsRequest>();
 

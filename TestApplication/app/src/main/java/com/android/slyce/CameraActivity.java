@@ -9,11 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraListener;
-import com.android.slyce.listeners.OnSlyceRequestListener;
-
 import org.json.JSONArray;
 
 public class CameraActivity extends Activity implements OnSlyceCameraListener, View.OnClickListener {

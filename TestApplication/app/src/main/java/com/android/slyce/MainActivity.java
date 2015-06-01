@@ -222,9 +222,9 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Assigning it to null for re initiation (Do Not do this in real app)
-                if(slyce  != null){
-                    slyce.release();
-                }
+//                if(slyce  != null){
+//                    slyce.release();
+//                }
 
                 // Reset boolean
                 isSlyceSDKOpened = false;

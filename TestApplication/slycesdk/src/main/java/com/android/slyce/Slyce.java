@@ -341,12 +341,12 @@ public final class Slyce {
         return Constants.SDK_VERSION;
     }
 
-    /**
-     * Do Not call this method
-     */
-    protected void release(){
-        mInstance = null;
-    }
+//    /**
+//     * Do Not call this method
+//     */
+//    protected void release(){
+//        mInstance = null;
+//    }
 
     private class AutoScannerSynceListener implements Scanner.SyncListener{
         /*

@@ -223,17 +223,12 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
                 // Show progress bar
                 progressBar.setVisibility(View.VISIBLE);
 
-                // Assigning it to null for re initiation (Do Not do this in real app)
-//                if(slyce  != null){
-//                    slyce.release();
-//                }
-
                 // Reset boolean
                 isSlyceSDKOpened = false;
 
-                slyce = Slyce.getInstance(this, clientId);
+                slyce = Slyce.getInstance(this);
 
-                slyce.open(new OnSlyceOpenListener() {
+                slyce.open(clientId, new OnSlyceOpenListener() {
 
                     @Override
                     public void onOpenSuccess() {

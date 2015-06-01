@@ -22,9 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by davidsvilem on 3/25/15.
- */
 public class ComManager {
 
     private static final String TAG = ComManager.class.getSimpleName();

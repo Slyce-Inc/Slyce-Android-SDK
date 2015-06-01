@@ -74,6 +74,8 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
     /*  */
     private ImageProcessDialogFragment mImageProcessDialogFragment;
 
+    private Slyce mSlyce;
+
     // PUBLIC METHODS
     /**
      * Use this factory method to create a new instance of
@@ -120,6 +122,8 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
         // Initialize views
         initViews(root);
+
+        mSlyce = Slyce.getInstance(getActivity());
 
         // Create SlyceCamera object
         createSlyceCamera();
@@ -169,7 +173,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
     // PRIVATE METHODS
     private void createSlyceCamera(){
-        mSlyceCamera = new SlyceCamera(getActivity(), Slyce.get(), mPreview, mOptionsJson, new SlyceCameraListener());
+        mSlyceCamera = new SlyceCamera(getActivity(), mSlyce, mPreview, mOptionsJson, new SlyceCameraListener());
     }
 
     private void initViews(View view){
@@ -369,32 +373,32 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
         if(id == R.id.close_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,  Slyce.get().isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
 
             close();
 
         }else if(id == R.id.scan_tips_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,   Slyce.get().isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
 
             ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
             dialogFragment.show(getFragmentManager(), null);
 
         }else if(id == R.id.gallery_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,   Slyce.get().isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
 
             Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
 
         }else if(id == R.id.flash_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_flash_sound,  Slyce.get().isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_flash_sound, mSlyce.isSoundOn(), false);
 
             mSlyceCamera.turnFlash();
 
         }else if(id == R.id.snap_button){
 
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound,   Slyce.get().isSoundOn(), false);
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
 
             showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessDialogFragmentListener());
 

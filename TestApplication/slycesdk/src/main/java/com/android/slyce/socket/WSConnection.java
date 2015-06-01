@@ -584,6 +584,9 @@ public class WSConnection implements
                         if(products != null && products.length()>0){
                             mRequestSynchronizer.on3DRecognition(data);
                         }else{
+
+
+
                             mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
                         }
 

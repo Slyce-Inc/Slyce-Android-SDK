@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import com.android.slyce.SlyceBarcode;
 import com.android.slyce.enums.SlyceRequestStage;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by davidsvilem on 4/21/15.
@@ -27,9 +28,9 @@ public interface OnSlyceCameraListener {
     void onCamera2DRecognition(String irId, String productInfo);
 
     /** Called when additional info for the previously recognized 2D product is found.
-     *  @param products a JsonArray of additional info.
+     *  @param products a JSONObject of additional info.
      *  */
-    void onCamera2DExtendedRecognition(JSONArray products);
+    void onCamera2DExtendedRecognition(JSONObject products);
 
     /** Reporting the stage currently being processed.
      *  @param message current stage.

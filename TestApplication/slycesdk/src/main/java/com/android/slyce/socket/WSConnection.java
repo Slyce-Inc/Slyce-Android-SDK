@@ -237,7 +237,7 @@ public class WSConnection implements
             // Get extended products results
             ComManager.getInstance().getIRIDInfo(mClientId, irId, new ComManager.OnExtendedInfoListener() {
                 @Override
-                public void onExtendedInfo(JSONArray products) {
+                public void onExtendedInfo(JSONObject products) {
 
                     // 3. Notify the host application for 2D extended result
                     mRequestSynchronizer.on2DExtendedRecognition(products);

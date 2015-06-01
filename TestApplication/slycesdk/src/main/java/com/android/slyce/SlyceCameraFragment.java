@@ -247,7 +247,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         }
 
         @Override
-        public void onImageProcess2DExtendedRecognition(JSONArray products) {
+        public void onImageProcess2DExtendedRecognition(JSONObject products) {
             if(mListener != null){
                 // Notify the host application of extra products details
                 mListener.onCameraFragment2DExtendedRecognition(products);
@@ -318,7 +318,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         }
 
         @Override
-        public void onCamera2DExtendedRecognition(JSONArray products) {
+        public void onCamera2DExtendedRecognition(JSONObject products) {
             if(isAttached){
                 // Notify the host application of extra products details
                 mListener.onCameraFragment2DExtendedRecognition(products);

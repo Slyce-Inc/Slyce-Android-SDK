@@ -12,6 +12,7 @@ import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class RequestSynchronizer extends Handler {
 
@@ -50,7 +51,7 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(5, message).sendToTarget();
     }
 
-    public void on2DExtendedRecognition(JSONArray products){
+    public void on2DExtendedRecognition(JSONObject products){
         obtainMessage(6, products).sendToTarget();
     }
 
@@ -125,7 +126,7 @@ public class RequestSynchronizer extends Handler {
 
             case 6:
 
-                JSONArray extenedInfo = (JSONArray) msg.obj;
+                JSONObject extenedInfo = (JSONObject) msg.obj;
 
                 mRequestListener.on2DExtendedRecognition(extenedInfo);
 

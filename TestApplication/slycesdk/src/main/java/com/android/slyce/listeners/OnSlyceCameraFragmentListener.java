@@ -3,6 +3,7 @@ package com.android.slyce.listeners;
 import com.android.slyce.SlyceBarcode;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by davidsvilem on 5/17/15.
@@ -26,7 +27,7 @@ public interface OnSlyceCameraFragmentListener {
     /** Called when additional info for the previously recognized 2D product is found.
      *  @param products a JsonArray of additional info.
      *  */
-    void onCameraFragment2DExtendedRecognition(JSONArray products);
+    void onCameraFragment2DExtendedRecognition(JSONObject products);
 
     /** Called when 3D products are found
      *  @param products a JsonArray of products. Can be empty in case no match was found.

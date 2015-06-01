@@ -351,7 +351,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     // Get extended products results
                     ComManager.getInstance().getIRIDInfo(mSlyce.getClientID(), value, new ComManager.OnExtendedInfoListener() {
                         @Override
-                        public void onExtendedInfo(JSONArray products) {
+                        public void onExtendedInfo(JSONObject products) {
 
                             // Notify the host application for extended result
                             mCameraSynchronizer.on2DExtendedRecognition(products);
@@ -472,7 +472,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     }
 
                     @Override
-                    public void on2DExtendedRecognition(JSONArray products) {
+                    public void on2DExtendedRecognition(JSONObject products) {
                         mCameraSynchronizer.on2DExtendedRecognition(products);
                     }
 

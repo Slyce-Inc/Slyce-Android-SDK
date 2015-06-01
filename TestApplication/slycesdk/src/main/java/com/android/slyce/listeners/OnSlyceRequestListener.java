@@ -4,6 +4,7 @@ import com.android.slyce.SlyceBarcode;
 import com.android.slyce.enums.SlyceRequestStage;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public interface OnSlyceRequestListener {
 
@@ -24,9 +25,9 @@ public interface OnSlyceRequestListener {
     void on2DRecognition(String irId, String productInfo);
 
     /** Called when additional info for the previously recognized 2D product is found.
-     *  @param products a JsonArray of additional info.
+     *  @param products a JSONObject of additional info.
      *  */
-    void on2DExtendedRecognition(JSONArray products);
+    void on2DExtendedRecognition(JSONObject products);
 
     /** Reporting the stage currently being processed.
      *  @param message current stage.

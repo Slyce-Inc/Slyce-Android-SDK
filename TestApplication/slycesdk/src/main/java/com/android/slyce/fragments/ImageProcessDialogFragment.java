@@ -30,6 +30,7 @@ import com.android.slyce.utils.SlyceLog;
 import com.android.slycesdk.R;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 
@@ -91,7 +92,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         void onImageProcess2DRecognition(String irid, String productInfo);
 
-        void onImageProcess2DExtendedRecognition(JSONArray products);
+        void onImageProcess2DExtendedRecognition(JSONObject products);
 
         void onImageProcess3DRecognition(JSONArray products);
 
@@ -316,7 +317,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void on2DExtendedRecognition(JSONArray products) {
+            public void on2DExtendedRecognition(JSONObject products) {
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessDialogFragmentListener.onImageProcess2DExtendedRecognition(products);

@@ -103,24 +103,11 @@ public class ComManager {
                 // Perform request
                 JSONObject response = performRequest(request);
 
-                // Parse response
-                String status = response.optString(Constants.POUNCE_STATUS);
-                JSONArray sku = response.optJSONArray(Constants.POUNCE_SKU);
-
-                if(sku == null){
-                    sku = new JSONArray();
+                if(response == null){
+                    response = new JSONObject();
                 }
 
-                listener.onExtendedInfo(sku);
-
-                // Json response example
-//                {
-//                    status: "success",
-//                            sku: [
-//                    "'0471016'"
-//                    ]
-//                }
-
+                listener.onExtendedInfo(response);
             }
 
         }).start();
@@ -311,6 +298,6 @@ public class ComManager {
     }
 
     public interface OnExtendedInfoListener{
-        void onExtendedInfo(JSONArray products);
+        void onExtendedInfo(JSONObject result);
     }
 }

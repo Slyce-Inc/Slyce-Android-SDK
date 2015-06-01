@@ -17,6 +17,7 @@ import com.android.slyce.utils.SlyceLog;
 import com.android.slycesdk.R;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by davidsvilem on 4/21/15.
@@ -42,7 +43,7 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(2, search2DProgress).sendToTarget();
     }
 
-    public void on2DExtendedRecognition(JSONArray products){
+    public void on2DExtendedRecognition(JSONObject products){
         obtainMessage(3, products).sendToTarget();
     }
 
@@ -100,7 +101,7 @@ public class CameraSynchronizer extends Handler {
 
             case 3:
 
-                JSONArray extenedInfo = (JSONArray) msg.obj;
+                JSONObject extenedInfo = (JSONObject) msg.obj;
 
                 mCameraListener.onCamera2DExtendedRecognition(extenedInfo);
 

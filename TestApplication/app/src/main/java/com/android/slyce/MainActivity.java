@@ -30,6 +30,8 @@ import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -122,7 +124,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void on2DExtendedRecognition(JSONArray products) {
+    public void on2DExtendedRecognition(JSONObject products) {
         Toast.makeText(this,
                 "on2DExtendedRecognition:" +
                         "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
@@ -142,7 +144,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void on3DRecognition(final JSONArray products) {
+    public void on3DRecognition(final JSONObject products) {
 
         Toast.makeText(MainActivity.this, "on3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
 
@@ -170,9 +172,11 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     // OnSlyceCameraFragmentListener callbacks (Full UI Mode)
     @Override
-    public void onCameraFragment3DRecognition(JSONArray products) {
+    public void onCameraFragment3DRecognition(JSONObject results) {
 
-        if(products.length() > 0){
+        JSONArray products = results.optJSONArray("products");
+
+        if(products != null){
             Intent intent = new Intent(this, ProductsGridActivity.class);
             intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, products.toString());
             startActivity(intent);
@@ -190,7 +194,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void onCameraFragment2DExtendedRecognition(JSONArray products) {
+    public void onCameraFragment2DExtendedRecognition(JSONObject products) {
 //        Toast.makeText(this, "onCameraFragment2DExtendedRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
     }
 
@@ -199,8 +203,6 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 //        Toast.makeText(this, "onCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
     }
     // OnSlyceCameraFragmentListener callbacks END
-
-
 
     @Override
     public void onClick(View v) {

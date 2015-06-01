@@ -255,17 +255,14 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         }
 
         @Override
-        public void onImageProcess3DRecognition(JSONArray products) {
+        public void onImageProcess3DRecognition(JSONObject products) {
+
+            // Close SDK
+            close();
+
             if(mListener != null){
                 // Notify the host application of found products
                 mListener.onCameraFragment3DRecognition(products);
-            }
-
-            if(products.length() > 0){
-                // Close SDK
-                close();
-            }else{
-
             }
         }
 
@@ -283,14 +280,10 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
         // OnSlyceCameraListener callbacks
         @Override
-        public void onCamera3DRecognition(JSONArray products) {
+        public void onCamera3DRecognition(JSONObject products) {
 
-            if(products.length() > 0){
-                // Close SDK
-                close();
-            }else{
-                // Do Nothing
-            }
+            // Close SDK
+            close();
 
             if(isAttached){
                 // Notify the host application of found products

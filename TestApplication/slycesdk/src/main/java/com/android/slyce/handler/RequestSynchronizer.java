@@ -39,7 +39,7 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(2, search2DProgress).sendToTarget();
     }
 
-    public void on3DRecognition(JSONArray products){
+    public void on3DRecognition(JSONObject products){
         obtainMessage(3, products).sendToTarget();
     }
 
@@ -96,7 +96,7 @@ public class RequestSynchronizer extends Handler {
 
             case 3:
 
-                JSONArray products = (JSONArray) msg.obj;
+                JSONObject products = (JSONObject) msg.obj;
 
                 mRequestListener.on3DRecognition(products);
 

@@ -63,7 +63,7 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(7, slyceProgress).sendToTarget();
     }
 
-    public void on3DRecognition(JSONArray products){
+    public void on3DRecognition(JSONObject products){
         obtainMessage(8, products).sendToTarget();
     }
 
@@ -144,7 +144,7 @@ public class CameraSynchronizer extends Handler {
 
             case 8:
 
-                JSONArray products = (JSONArray) msg.obj;
+                JSONObject products = (JSONObject) msg.obj;
 
                 mCameraListener.onCamera3DRecognition(products);
 

@@ -477,7 +477,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     }
 
                     @Override
-                    public void on3DRecognition(JSONArray products) {
+                    public void on3DRecognition(JSONObject products) {
                         mCameraSynchronizer.on3DRecognition(products);
                     }
 

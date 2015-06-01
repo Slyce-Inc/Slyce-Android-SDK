@@ -94,7 +94,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         void onImageProcess2DExtendedRecognition(JSONObject products);
 
-        void onImageProcess3DRecognition(JSONArray products);
+        void onImageProcess3DRecognition(JSONObject products);
 
         void onImageProcessDialogFragmentDismiss();
     }
@@ -249,7 +249,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         progressMsg.setText(message);
     }
 
-    public void onCamera3DRecognition(JSONArray products) {
+    public void onCamera3DRecognition(JSONObject products) {
         if(!isAttached){
             SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onCamera3DRecognition fragment is not attached");
             return;
@@ -324,7 +324,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void on3DRecognition(JSONArray products) {
+            public void on3DRecognition(JSONObject products) {
 
                 // Update progress bar
                 updateProgressInfo(FINISH_ANALYZING_IMAGE);

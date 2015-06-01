@@ -12,9 +12,9 @@ import org.json.JSONObject;
 public interface OnSlyceCameraListener {
 
     /** Called when 3D products are found
-     *  @param products a JsonArray of products. Can be empty in case no match was found.
+     *  @param products a JSONObject of products. Can be empty in case no match was found.
      *  */
-    void onCamera3DRecognition(JSONArray products);
+    void onCamera3DRecognition(JSONObject products);
 
     /** Called when barcode is found
      * @param barcode a barcode object.

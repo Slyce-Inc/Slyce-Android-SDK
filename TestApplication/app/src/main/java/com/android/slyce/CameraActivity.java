@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraListener;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class CameraActivity extends Activity implements OnSlyceCameraListener, View.OnClickListener {
 
@@ -83,7 +84,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
-    public void onCamera2DExtendedRecognition(JSONArray products) {
+    public void onCamera2DExtendedRecognition(JSONObject products) {
 
         Toast.makeText(this,
                 "onCamera2DExtendedRecognition:" +
@@ -108,7 +109,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
-    public void onCamera3DRecognition(JSONArray products) {
+    public void onCamera3DRecognition(JSONObject products) {
 
         Toast.makeText(this, "onCamera3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
     }

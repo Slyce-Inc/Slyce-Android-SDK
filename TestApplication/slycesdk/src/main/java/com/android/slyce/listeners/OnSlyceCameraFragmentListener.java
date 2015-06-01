@@ -30,9 +30,9 @@ public interface OnSlyceCameraFragmentListener {
     void onCameraFragment2DExtendedRecognition(JSONObject products);
 
     /** Called when 3D products are found
-     *  @param products a JsonArray of products. Can be empty in case no match was found.
+     *  @param products a JSONObject of products. Can be empty in case no match was found.
      *  */
-    void onCameraFragment3DRecognition(JSONArray products);
+    void onCameraFragment3DRecognition(JSONObject products);
 
     /** Called when an error occured
      *  @param message the error description

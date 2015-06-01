@@ -33,6 +33,7 @@ public class ProductsGridActivity extends Activity {
 
         products = new ArrayList<Product>();
         String productsString = getIntent().getStringExtra(PRODUCTS_KEY);
+
         try {
             JSONArray productsJsonArray = new JSONArray(productsString);
             if (productsJsonArray != null) {

@@ -337,6 +337,10 @@ public final class Slyce {
         return isVibrateOn;
     }
 
+    public static String getVersion(){
+        return Constants.SDK_VERSION;
+    }
+
     /**
      * Do Not call this method
      */

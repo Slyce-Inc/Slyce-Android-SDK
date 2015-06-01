@@ -285,19 +285,19 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         @Override
         public void onCamera3DRecognition(JSONArray products) {
 
+            if(products.length() > 0){
+                // Close SDK
+                close();
+            }else{
+                // Do Nothing
+            }
+
             if(isAttached){
                 // Notify the host application of found products
                 mListener.onCameraFragment3DRecognition(products);
 
                 // Notify ImageProcessDialogFragment for found products
                 mImageProcessDialogFragment.onCamera3DRecognition(products);
-            }
-
-            if(products.length() > 0){
-                // Close SDK
-                close();
-            }else{
-                // Do Nothing
             }
         }
 

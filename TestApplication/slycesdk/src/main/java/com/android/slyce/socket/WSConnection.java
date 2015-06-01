@@ -496,8 +496,8 @@ public class WSConnection implements
                             mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
                         }
 
-                        // Send an empty products array
-                        mRequestSynchronizer.on3DRecognition(new JSONObject());
+                        // Send an error message to host application
+                        mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
                     }
 
                     break;
@@ -505,7 +505,6 @@ public class WSConnection implements
                 case Constants.RESULTS:
 
                     // Notify the app developer for the results
-//                    JSONArray products = data.optJSONArray(Constants.PRODUCTS);
                     JSONObject barcode = data.optJSONObject(Constants.BARCODE);
                     String errorReason = data.optString(Constants.ERROR_REASON);
 
@@ -525,8 +524,8 @@ public class WSConnection implements
                             mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
                         }
 
-                        // Send an empty products array
-                        mRequestSynchronizer.on3DRecognition(new JSONObject());
+                        // Send an error message to host application
+                        mRequestSynchronizer.onError(errorReason);
 
                         return;
                     }
@@ -580,7 +579,13 @@ public class WSConnection implements
 
                         mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
 
-                        mRequestSynchronizer.on3DRecognition(data);
+                        // Check if "products" array exist
+                        JSONArray products = data.optJSONArray(Constants.PRODUCTS);
+                        if(products != null && products.length()>0){
+                            mRequestSynchronizer.on3DRecognition(data);
+                        }else{
+                            mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+                        }
 
                         return;
                     }

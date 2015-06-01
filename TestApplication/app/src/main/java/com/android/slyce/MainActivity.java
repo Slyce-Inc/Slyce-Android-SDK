@@ -148,9 +148,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
         Toast.makeText(MainActivity.this, "on3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
 
-        if(products.length() > 0){
-            results.setText(products.toString());
-        }
+        results.setText(products.toString());
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -176,11 +174,9 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
         JSONArray products = results.optJSONArray("products");
 
-        if(products != null){
-            Intent intent = new Intent(this, ProductsGridActivity.class);
-            intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, products.toString());
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, ProductsGridActivity.class);
+        intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, products.toString());
+        startActivity(intent);
     }
 
     @Override

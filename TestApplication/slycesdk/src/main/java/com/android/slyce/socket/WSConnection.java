@@ -582,10 +582,9 @@ public class WSConnection implements
                         // Check if "products" array exist
                         JSONArray products = data.optJSONArray(Constants.PRODUCTS);
                         if(products != null && products.length()>0){
+
                             mRequestSynchronizer.on3DRecognition(data);
                         }else{
-
-
 
                             mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
                         }

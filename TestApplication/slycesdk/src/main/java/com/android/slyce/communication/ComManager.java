@@ -81,7 +81,8 @@ public class ComManager {
         }).start();
     }
 
-    public void getIRIDInfo(final String clientID, final String irid, final OnExtendedInfoListener listener){
+    /* Requesting for products related to the base64 irid */
+    public void getProductsFromIRID(final String irid, final OnExtendedInfoListener listener){
 
         new Thread(new Runnable() {
 
@@ -89,10 +90,10 @@ public class ComManager {
             public void run() {
 
                 StringBuilder requestURLBuilder = new StringBuilder();
-                requestURLBuilder.append(Constants.POUNCE_BASE_URL).append(Constants.POUNCE_IRID_API).
-                        append(Constants.POUNCE_CID).append("=").append(clientID).
-                        append("&").
-                        append(Constants.POUNCE_ID).append("=").append(irid);
+                requestURLBuilder.
+                        append(Constants.POUNCE_BASE_URL).
+                        append(Constants.POUNCE_PRODUCTS_API).
+                        append(irid);
 
                 // Create request
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());

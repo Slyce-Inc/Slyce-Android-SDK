@@ -30,7 +30,7 @@ import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
 import com.android.slyce.scanner.AutoScannerSession;
 import com.android.slyce.scanner.AutoScannerSession.Listener;
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -341,7 +341,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
 
                     // Get extended products results
-                    ComManager.getInstance().getIRIDInfo(mSlyce.getClientID(), value, new ComManager.OnExtendedInfoListener() {
+                    ComManager.getInstance().getProductsFromIRID(value, new ComManager.OnExtendedInfoListener() {
                         @Override
                         public void onExtendedInfo(JSONObject products) {
 

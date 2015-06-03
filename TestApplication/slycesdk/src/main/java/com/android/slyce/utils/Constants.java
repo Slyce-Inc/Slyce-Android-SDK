@@ -18,6 +18,7 @@ public class Constants {
     public static final String POUNCE_BASE_URL = "http://api.pounce.mobi/v2/";
     public static final String POUNCE_USERS_SDK_API = "users/sdk?";
     public static final String POUNCE_IRID_API = "ir?";
+    public static final String POUNCE_PRODUCTS_API = "products/";
     public static final String POUNCE_CID = "cid";
     public static final String POUNCE_ID = "id";
     public static final String POUNCE_STATUS = "status";

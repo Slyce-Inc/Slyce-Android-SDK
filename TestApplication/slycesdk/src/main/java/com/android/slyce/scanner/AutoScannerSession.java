@@ -31,6 +31,8 @@ import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
 import android.view.SurfaceView;
+
+import com.android.slyce.utils.Constants;
 import com.moodstocks.android.ManualScannerSession;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;
@@ -162,6 +164,9 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
 
   private boolean isSnap = false;
 
+  /** Flag indicating whether the automatics detection is paused or not */
+  boolean pausedDetection = false;
+
   /**
    * Constructor.
    * @param parent the parent {@link Activity}.
@@ -236,6 +241,14 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
     this.cameraManager.stop();
   }
 
+  public void disableDetection(){
+    this.pausedDetection = true;
+  }
+
+  public void enableDetection(){
+    this.pausedDetection = false;
+  }
+
   // CameraManager.Listener
   /**
    * {@link CameraManager.Listener CameraManager.Listener} implementation
@@ -243,7 +256,7 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
    */
   @Override
   public boolean isListening() {
-    return (this.started && !this.paused);
+    return (this.started);// && !this.paused);
   }
 
   /**
@@ -338,7 +351,7 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
         Pair<Result,Bitmap> pair = (Pair<Result,Bitmap>)msg.obj;
         Result res = pair.first;
         Bitmap bmp = pair.second;
-        if (res != null) {
+        if (res != null && !this.pausedDetection) {
           transmitResult(res, bmp);
         }
         break;
@@ -373,7 +386,7 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
    */
   private void transmitResult(Result r, Bitmap bmp) {
     if (this.started && !this.paused) {
-      pause();
+      disableDetection(); //pause();
       if (this.advancedListener)
         ((AdvancedListener)this.listener).onResult(r, bmp);
       else
@@ -395,5 +408,16 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
 
   public void requestFocus(boolean focusAtPoint, final Rect focusRect){
     cameraManager.requestFocus(focusAtPoint, focusRect);
+  }
+
+  public void resumeDelayed() {
+
+    // Resume the automatic scan after 3 seconds
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+          enableDetection();
+      }
+    }, Constants.AUTO_SCAN_DELAY);
   }
 }

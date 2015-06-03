@@ -9,10 +9,12 @@ package com.android.slyce.barcode;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.view.SurfaceView;
 
 import com.android.slyce.scanner.CameraFrame;
 import com.android.slyce.scanner.CameraManager;
+import com.android.slyce.utils.Constants;
 import com.moodstocks.android.advanced.Tools;
 import com.moodstocks.android.core.Loader;
 
@@ -42,12 +44,22 @@ public class BarcodeSession implements CameraManager.Listener {
 
     private boolean paused = false;
 
+    /** Flag indicating whether the automatics detection is paused or not */
+    boolean pausedDetection = false;
+
     static {
         System.loadLibrary("iconv");
     }
 
     static {
         Loader.load();
+    }
+
+    public interface OnBarcodeListener{
+
+        void onBarcodeResult(int type, String result);
+
+        void onBarcodeSnap(Bitmap bitmap);
     }
 
     public BarcodeSession(Activity parent, SurfaceView preview, OnBarcodeListener listener) {
@@ -93,12 +105,20 @@ public class BarcodeSession implements CameraManager.Listener {
         cameraManager.requestFocus(focusAtPoint, focusRect);
     }
 
+    public void disableDetection(){
+        this.pausedDetection = true;
+    }
+
+    public void enableDetection(){
+        this.pausedDetection = false;
+    }
+
     /*
      *  CameraManager.Listener call backs
      */
     @Override
     public boolean isListening() {
-        return (this.started && !this.paused);
+        return (this.started);// && !this.paused);
     }
 
     @Override
@@ -114,10 +134,10 @@ public class BarcodeSession implements CameraManager.Listener {
 
         int result = scanner.scanImage(barcode);
 
-        if (result != 0) {
+        if (result != 0 && !this.pausedDetection) {
 
             if (this.started && !this.paused) {
-                pause();
+                disableDetection();//pause();
             }
 
             SymbolSet syms = scanner.getResults();
@@ -143,9 +163,14 @@ public class BarcodeSession implements CameraManager.Listener {
      *
      */
 
-    public interface OnBarcodeListener{
-        void onBarcodeResult(int type, String result);
-        void onBarcodeSnap(Bitmap bitmap);
-    }
+    public void resumeDelayed() {
 
+        // Resume the automatic scan after 3 seconds
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                enableDetection();
+            }
+        }, Constants.AUTO_SCAN_DELAY);
+    }
 }

@@ -99,10 +99,6 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
     public SlyceCameraFragment() {
     }
 
-    public void setContinuousRecognition(boolean value){
-        mSlyceCamera.setContinuousRecognition(value);
-    }
-
     public void cancelSlyceProductsRequests(){
         mSlyceCamera.cancel();
     }
@@ -276,7 +272,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
             cancelSlyceProductsRequests();
 
             // Resume the automatic scan
-            setContinuousRecognition(true);
+            mSlyceCamera.setContinuousRecognition(true);
         }
     }
 
@@ -404,9 +400,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
             // Take a picture using SlyceCamera object
             mSlyceCamera.snap();
-
-            // Pause the automatic scan
-            setContinuousRecognition(false);
+            mSlyceCamera.setContinuousRecognition(false);
         }
     }
 

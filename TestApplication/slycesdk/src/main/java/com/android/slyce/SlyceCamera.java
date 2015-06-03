@@ -74,7 +74,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
     private SlyceProductsRequest mSlyceProductsRequest;
 
     private static final class SlyceCameraMessage{
-
         private static final int SEARCH = 0;
     }
 
@@ -156,9 +155,11 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         // Else snap  via Barcode/QR engine
         if(session != null){
             // Snap via MS
+            session.disableDetection();
             session.snap();
         }else{
             // Snap via Barcode/QR engine
+            barcodeSession.disableDetection();
             barcodeSession.snap();
         }
     }
@@ -281,13 +282,8 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         public void onBarcodeResult(int type, String result) {
             Log.i(TAG, "onBarcodeResult");
 
-            // Resume the automatic scan after 2 seconds
-            new  Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    barcodeSession.resume();
-                }
-            }, Constants.AUTO_SCAN_DELAY);
+            // Resume the automatic scan after 3 seconds
+            barcodeSession.resumeDelayed();
 
             if(isContinuousRecognition){
                 // Handle barcode detection
@@ -314,14 +310,10 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
         @Override
         public void onResult(Result result) {
+            Log.i(TAG, "onResult");
 
             // Resume the automatic scan after 3 seconds
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    session.resume();
-                }
-            }, Constants.AUTO_SCAN_DELAY);
+            session.resumeDelayed();
 
             if(isContinuousRecognition){
 
@@ -385,7 +377,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
     /* Private methods */
     private void handleSnap(Bitmap bitmap){
 
-        // Notify the host application on snaped image
+        // Notify the host application on snapped image
         mCameraSynchronizer.onSnap(bitmap);
 
         // Start search Slyce + MoodStock (if 2D enabled)

@@ -340,13 +340,13 @@ public final class Slyce {
          */
         @Override
         public void onSyncStart() {
-            SlyceLog.d(TAG, "MS Sync will start.");
+            SlyceLog.d(TAG, "2D Sync will start.");
         }
 
         @Override
         public void onSyncComplete() {
             try {
-                SlyceLog.d(TAG, "MS Sync succeeded (" + scanner.count() + " images)");
+                SlyceLog.d(TAG, "2D Sync succeeded (" + scanner.count() + " images)");
             } catch (MoodstocksError e) {
                 e.printStackTrace();
             }
@@ -354,13 +354,13 @@ public final class Slyce {
 
         @Override
         public void onSyncFailed(MoodstocksError e) {
-            SlyceLog.d(TAG, "MS Sync error #" + e.getErrorCode() + ": " + e.getMessage());
+            SlyceLog.d(TAG, "2D Sync error #" + e.getErrorCode() + ": " + e.getMessage());
         }
 
         @Override
         public void onSyncProgress(int total, int current) {
             int percent = (int) ((float) current / (float) total * 100);
-            SlyceLog.d(TAG, "MS Sync progressing: " + percent + "%");
+            SlyceLog.d(TAG, "2D Sync progressing: " + percent + "%");
         }
     }
 

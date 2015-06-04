@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -30,7 +29,6 @@ import com.moodstocks.android.Result;
 import com.moodstocks.android.Scanner;
 import com.android.slyce.scanner.AutoScannerSession;
 import com.android.slyce.scanner.AutoScannerSession.Listener;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -280,7 +278,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
         @Override
         public void onBarcodeResult(int type, String result) {
-            Log.i(TAG, "onBarcodeResult");
+            SlyceLog.i(TAG, "onBarcodeResult");
 
             // Resume the automatic scan after 3 seconds
             barcodeSession.resumeDelayed();
@@ -293,7 +291,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
         @Override
         public void onBarcodeSnap(Bitmap bitmap) {
-            Log.i(TAG, "onBarcodeSnap");
+            SlyceLog.i(TAG, "onBarcodeSnap");
 
             handleSnap(bitmap);
         }
@@ -305,12 +303,12 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
         @Override
         public void onCameraOpenFailed(Exception e) {
-            Log.i(TAG, "onCameraOpenFailed");
+            SlyceLog.i(TAG, "2D onCameraOpenFailed");
         }
 
         @Override
         public void onResult(Result result) {
-            Log.i(TAG, "onResult");
+            SlyceLog.i(TAG, "onResult");
 
             // Resume the automatic scan after 3 seconds
             session.resumeDelayed();
@@ -362,12 +360,12 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
         @Override
         public void onWarning(String s) {
-            Log.i(TAG, "onWarning: " + s);
+            SlyceLog.i(TAG, "2D onWarning: " + s);
         }
 
         @Override
         public void onSnap(Bitmap bitmap) {
-            Log.i(TAG, "onSnap");
+            SlyceLog.i(TAG, "2D onSnap");
 
             handleSnap(bitmap);
         }

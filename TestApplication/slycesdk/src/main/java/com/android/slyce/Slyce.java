@@ -122,7 +122,7 @@ public final class Slyce {
         initMixPanel();
 
         //
-        initClientInfo(listener);
+        initClientInfo(clientID, listener);
     }
 
     /**
@@ -168,15 +168,7 @@ public final class Slyce {
      */
     public void close(){
         // Required by MS
-        if (compatible) {
-            try {
-                scanner.close();
-                scanner.destroy();
-                scanner = null;
-            } catch (MoodstocksError e) {
-                e.printStackTrace();
-            }
-        }
+        release();
     }
 
     /**
@@ -257,10 +249,10 @@ public final class Slyce {
         } catch (JSONException e) {}
     }
 
-    private void initClientInfo(final OnSlyceOpenListener listener){
+    private void initClientInfo(final String clientId, final OnSlyceOpenListener listener){
 
         // Get client info
-        ComManager.getInstance().getClientIDInfo(getClientID(), new ComManager.OnResponseListener() {
+        ComManager.getInstance().getClientIDInfo(clientId, new ComManager.OnResponseListener() {
             @Override
             public void onResponse(JSONObject jsonResponse) {
 
@@ -269,7 +261,7 @@ public final class Slyce {
 
                     mSharedPrefHelper.setPremium(jsonResponse.optString(Constants.PREMIUM));
 
-                    JSONObject msJson = jsonResponse.optJSONObject(Constants.MS);
+                    final JSONObject msJson = jsonResponse.optJSONObject(Constants.MS);
 
                     if(msJson != null){
 
@@ -288,12 +280,14 @@ public final class Slyce {
                                 @Override
                                 public void run() {
 
+                                    String fileName = getClientID()+"_scanner.db";
+
                                     // Init MoodStocks
                                     compatible = Scanner.isCompatible();
                                     if(compatible){
                                         try {
                                             scanner = Scanner.get();
-                                            String path = Scanner.pathFromFilesDir(mContext, "scanner.db");
+                                            String path = Scanner.pathFromFilesDir(mContext, fileName);
                                             scanner.open(path, key, secret);
                                             scanner.setSyncListener(new AutoScannerSynceListener());
                                             scanner.sync();
@@ -367,6 +361,18 @@ public final class Slyce {
         public void onSyncProgress(int total, int current) {
             int percent = (int) ((float) current / (float) total * 100);
             SlyceLog.d(TAG, "MS Sync progressing: " + percent + "%");
+        }
+    }
+
+    private void release(){
+        if (compatible) {
+            try {
+                scanner.close();
+                scanner.destroy();
+                scanner = null;
+            } catch (MoodstocksError e) {
+                e.printStackTrace();
+            }
         }
     }
 }

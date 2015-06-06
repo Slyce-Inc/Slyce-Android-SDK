@@ -106,6 +106,7 @@ public class ComManager {
                 }
 
                 listener.onExtendedInfo(response);
+
             }
 
         }).start();

@@ -172,6 +172,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     @Override
     public void onCameraFragment3DRecognition(JSONObject results) {
 
+        // Display products in a grid
         JSONArray products = results.optJSONArray("products");
 
         Intent intent = new Intent(this, ProductsGridActivity.class);
@@ -190,8 +191,15 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void onCameraFragment2DExtendedRecognition(JSONObject products) {
-//        Toast.makeText(this, "onCameraFragment2DExtendedRecognition:" + "\n" + products, Toast.LENGTH_SHORT).show();
+    public void onCameraFragment2DExtendedRecognition(JSONObject results) {
+
+        // Display products in a grid
+        JSONArray products = results.optJSONArray("products");
+
+//        Intent intent = new Intent(this, ProductsGridActivity.class);
+//        intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, products.toString());
+//        startActivity(intent);
+
     }
 
     @Override

@@ -71,14 +71,4 @@ public class JsonObjectRequest extends JsonRequest<JSONObject> {
             return Response.error(new ParseError(je));
         }
     }
-
-//    @Override
-//    public Map<String, String> getHeaders() throws AuthFailureError {
-//
-//        HashMap<String, String> params = new HashMap<String, String>();
-//        String creds = String.format("%s:%s","USERNAME","PASSWORD");
-//        String auth = "Basic " +  Base64.encodeBytes(creds.getBytes());
-//        params.put("Authorization", auth);
-//        return params;
-//    }
 }

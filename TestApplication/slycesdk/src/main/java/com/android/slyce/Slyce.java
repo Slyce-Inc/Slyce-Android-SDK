@@ -119,7 +119,7 @@ public final class Slyce {
         mSharedPrefHelper.setClientID(clientID);
 
         //
-        initMixPanel();
+        initMixPanel(clientID);
 
         //
         initClientInfo(clientID, listener);
@@ -199,7 +199,7 @@ public final class Slyce {
         return Constants.SDK_VERSION;
     }
 
-    private void initMixPanel(){
+    private void initMixPanel(String clientId){
 
         // Check if should report "created" field
         String created = mSharedPrefHelper.getCreated();
@@ -215,7 +215,7 @@ public final class Slyce {
             mixpanel.getPeople().identify(mixpanel.getDistinctId());
 
             peopleAnalytics.put(Constants.USER_ID, mixpanel.getDistinctId());
-            peopleAnalytics.put(Constants.MP_CLIENT_ID, getClientID());
+            peopleAnalytics.put(Constants.MP_CLIENT_ID, clientId);
             peopleAnalytics.put(Constants.DEVICE_TYPE, Utils.getDeviceType());
             peopleAnalytics.put(Constants.SYSTEM_TYPE, Constants.ANDROID);
             peopleAnalytics.put(Constants.SYSTEM_VERSION, Utils.getOSVersion());
@@ -269,6 +269,22 @@ public final class Slyce {
                         final String key = msJson.optString(Constants.KEY);
                         final String secret = msJson.optString(Constants.SECRET);
 
+                        final String savedKey = mSharedPrefHelper.getMSkey();
+                        final String savedSecret = mSharedPrefHelper.getMSkey();
+
+                        if(scanner != null){
+                            // Check if key secret changed
+                            if(!TextUtils.equals(key, savedKey) || !TextUtils.equals(secret, savedSecret)){
+                                // key or secret changed
+                                // 1. close scanner
+                                try {
+                                    scanner.close();
+                                } catch (MoodstocksError moodstocksError) {
+                                    SlyceLog.e(TAG, moodstocksError.getMessage());
+                                }
+                            }
+                        }
+
                         mSharedPrefHelper.setMSEnabled(isEnabled);
                         mSharedPrefHelper.setMSkey(key);
                         mSharedPrefHelper.setMSsecret(secret);
@@ -280,12 +296,13 @@ public final class Slyce {
                                 @Override
                                 public void run() {
 
-                                    String fileName = getClientID()+"_scanner.db";
+                                    String fileName = key + "_" + secret +"_scanner.db";
 
                                     // Init MoodStocks
                                     compatible = Scanner.isCompatible();
                                     if(compatible){
                                         try {
+
                                             scanner = Scanner.get();
                                             String path = Scanner.pathFromFilesDir(mContext, fileName);
                                             scanner.open(path, key, secret);

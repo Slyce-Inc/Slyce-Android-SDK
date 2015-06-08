@@ -25,9 +25,9 @@ public interface OnSlyceRequestListener {
     void on2DRecognition(String irId, String productInfo);
 
     /** Called when additional info for the previously recognized 2D product is found.
-     *  @param products a JSONObject of additional info.
+     *  @param products a JSONArray of additional info.
      *  */
-    void on2DExtendedRecognition(JSONObject products);
+    void on2DExtendedRecognition(JSONArray products);
 
     /** Reporting the stage currently being processed.
      *  @param message current stage.

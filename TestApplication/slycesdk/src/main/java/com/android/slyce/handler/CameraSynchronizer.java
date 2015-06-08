@@ -43,7 +43,7 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(2, search2DProgress).sendToTarget();
     }
 
-    public void on2DExtendedRecognition(JSONObject products){
+    public void on2DExtendedRecognition(JSONArray products){
         obtainMessage(3, products).sendToTarget();
     }
 
@@ -101,7 +101,7 @@ public class CameraSynchronizer extends Handler {
 
             case 3:
 
-                JSONObject extenedInfo = (JSONObject) msg.obj;
+                JSONArray extenedInfo = (JSONArray) msg.obj;
 
                 mCameraListener.onCamera2DExtendedRecognition(extenedInfo);
 

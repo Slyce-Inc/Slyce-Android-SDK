@@ -84,7 +84,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
-    public void onCamera2DExtendedRecognition(JSONObject products) {
+    public void onCamera2DExtendedRecognition(JSONArray products) {
 
         Toast.makeText(this,
                 "onCamera2DExtendedRecognition:" +

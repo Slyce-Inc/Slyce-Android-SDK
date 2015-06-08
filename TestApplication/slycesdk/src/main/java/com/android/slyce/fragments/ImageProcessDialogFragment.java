@@ -92,7 +92,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         void onImageProcess2DRecognition(String irid, String productInfo);
 
-        void onImageProcess2DExtendedRecognition(JSONObject products);
+        void onImageProcess2DExtendedRecognition(JSONArray products);
 
         void onImageProcess3DRecognition(JSONObject products);
 
@@ -289,7 +289,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     /* Invoke this method after an Image was picked from Gallery */
     private void performSlyceProductsRequest(Bitmap bitmap){
 
-        mSlyceProductsRequest = new SlyceProductsRequest(Slyce.getInstance(getActivity()), new OnSlyceRequestListener() {
+        mSlyceProductsRequest = new SlyceProductsRequest(Slyce.getInstance(getActivity()), new OnSlyceRequestListener()
+        {
 
             @Override
             public void onBarcodeRecognition(SlyceBarcode barcode) {
@@ -317,7 +318,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void on2DExtendedRecognition(JSONObject products) {
+            public void on2DExtendedRecognition(JSONArray products) {
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessDialogFragmentListener.onImageProcess2DExtendedRecognition(products);

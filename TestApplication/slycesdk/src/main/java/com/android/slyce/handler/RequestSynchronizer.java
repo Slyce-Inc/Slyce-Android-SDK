@@ -51,7 +51,7 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(5, message).sendToTarget();
     }
 
-    public void on2DExtendedRecognition(JSONObject products){
+    public void on2DExtendedRecognition(JSONArray products){
         obtainMessage(6, products).sendToTarget();
     }
 
@@ -126,7 +126,7 @@ public class RequestSynchronizer extends Handler {
 
             case 6:
 
-                JSONObject extenedInfo = (JSONObject) msg.obj;
+                JSONArray extenedInfo = (JSONArray) msg.obj;
 
                 mRequestListener.on2DExtendedRecognition(extenedInfo);
 

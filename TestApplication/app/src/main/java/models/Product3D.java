@@ -5,11 +5,9 @@ import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by didiuzan on 5/20/15.
- */
+import interfaces.ProductInterface;
 
-public class Product {
+public class Product3D implements ProductInterface{
 
     @Expose
     private String itemId;
@@ -52,7 +50,7 @@ public class Product {
         this.itemId = itemId;
     }
 
-    public Product withItemId(String itemId) {
+    public Product3D withItemId(String itemId) {
         this.itemId = itemId;
         return this;
     }
@@ -71,7 +69,7 @@ public class Product {
         this.loadSwatches = loadSwatches;
     }
 
-    public Product withLoadSwatches(Boolean loadSwatches) {
+    public Product3D withLoadSwatches(Boolean loadSwatches) {
         this.loadSwatches = loadSwatches;
         return this;
     }
@@ -90,7 +88,7 @@ public class Product {
         this.name = name;
     }
 
-    public Product withName(String name) {
+    public Product3D withName(String name) {
         this.name = name;
         return this;
     }
@@ -109,7 +107,7 @@ public class Product {
         this.originalPrice = originalPrice;
     }
 
-    public Product withOriginalPrice(String originalPrice) {
+    public Product3D withOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
         return this;
     }
@@ -128,7 +126,7 @@ public class Product {
         this.productDescription = productDescription;
     }
 
-    public Product withProductDescription(String productDescription) {
+    public Product3D withProductDescription(String productDescription) {
         this.productDescription = productDescription;
         return this;
     }
@@ -147,7 +145,7 @@ public class Product {
         this.productImageURL = productImageURL;
     }
 
-    public Product withProductImageURL(String productImageURL) {
+    public Product3D withProductImageURL(String productImageURL) {
         this.productImageURL = productImageURL;
         return this;
     }
@@ -166,7 +164,7 @@ public class Product {
         this.productName = productName;
     }
 
-    public Product withProductName(String productName) {
+    public Product3D withProductName(String productName) {
         this.productName = productName;
         return this;
     }
@@ -185,7 +183,7 @@ public class Product {
         this.productPrice = productPrice;
     }
 
-    public Product withProductPrice(String productPrice) {
+    public Product3D withProductPrice(String productPrice) {
         this.productPrice = productPrice;
         return this;
     }
@@ -204,7 +202,7 @@ public class Product {
         this.productURL = productURL;
     }
 
-    public Product withProductURL(String productURL) {
+    public Product3D withProductURL(String productURL) {
         this.productURL = productURL;
         return this;
     }
@@ -223,7 +221,7 @@ public class Product {
         this.rating = rating;
     }
 
-    public Product withRating(String rating) {
+    public Product3D withRating(String rating) {
         this.rating = rating;
         return this;
     }
@@ -242,7 +240,7 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public Product withSalePrice(String salePrice) {
+    public Product3D withSalePrice(String salePrice) {
         this.salePrice = salePrice;
         return this;
     }
@@ -261,7 +259,7 @@ public class Product {
         this.swatches = swatches;
     }
 
-    public Product withSwatches(List<Swatch> swatches) {
+    public Product3D withSwatches(List<Swatch> swatches) {
         this.swatches = swatches;
         return this;
     }
@@ -280,11 +278,30 @@ public class Product {
         this.url = url;
     }
 
-    public Product withUrl(String url) {
+    public Product3D withUrl(String url) {
         this.url = url;
         return this;
     }
 
+    @Override
+    public String productImageUr() {
+        return productImageURL;
+    }
+
+    @Override
+    public String productPrice() {
+        return productPrice;
+    }
+
+    @Override
+    public String productWebUrl() {
+        return productURL;
+    }
+
+    @Override
+    public String productName() {
+        return productName;
+    }
 }
 
 class Swatch {

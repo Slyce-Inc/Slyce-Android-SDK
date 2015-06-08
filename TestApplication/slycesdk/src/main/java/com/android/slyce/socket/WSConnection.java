@@ -235,9 +235,10 @@ public class WSConnection implements
             mRequestSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
 
             // Get extended products results
-            ComManager.getInstance().getProductsFromIRID(irId, new ComManager.OnExtendedInfoListener() {
+            ComManager.getInstance().getProductsFromIRID(irId, new ComManager.OnExtendedInfoListener()
+            {
                 @Override
-                public void onExtendedInfo(JSONObject products) {
+                public void onExtendedInfo(JSONArray products) {
 
                     // 3. Notify the host application for 2D extended result
                     mRequestSynchronizer.on2DExtendedRecognition(products);

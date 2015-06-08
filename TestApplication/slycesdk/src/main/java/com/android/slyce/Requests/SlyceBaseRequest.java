@@ -44,7 +44,7 @@ public class SlyceBaseRequest implements SlyceRequestInterface ,WSConnection.OnT
 
     @Override
     public void cancel() {
-        wsConnection.close();
+//        wsConnection.close();
     }
 
     @Override

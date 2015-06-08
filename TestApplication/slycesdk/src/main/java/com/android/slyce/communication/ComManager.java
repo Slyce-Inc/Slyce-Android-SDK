@@ -62,7 +62,7 @@ public class ComManager {
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
 
                 // Perform request
-                JSONObject response = performRequest(request);
+                JSONObject response = parseJsonObjectResponse(performRequest(request));
 
                 listener.onResponse(response);
 
@@ -99,11 +99,7 @@ public class ComManager {
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
 
                 // Perform request
-                JSONObject response = performRequest(request);
-
-                if(response == null){
-                    response = new JSONObject();
-                }
+                JSONArray response = parseJsonArrayResponse(performRequest(request));
 
                 listener.onExtendedInfo(response);
 
@@ -143,7 +139,7 @@ public class ComManager {
 
                 request.setShouldCache(false);
 
-                JSONObject response = performRequest(request);
+                JSONObject response = parseJsonObjectResponse(performRequest(request));
 
                 listener.onResponse(response);
 
@@ -192,7 +188,7 @@ public class ComManager {
 
                 request.setShouldCache(false);
 
-                JSONObject response = performRequest(request);
+                JSONObject response = parseJsonObjectResponse(performRequest(request));
 
                 handle2DResponse(response, listener);
             }
@@ -265,23 +261,45 @@ public class ComManager {
         return request;
     }
 
-    private JSONObject performRequest(JsonObjectRequest request){
+    private String performRequest(JsonObjectRequest request){
 
-        JSONObject object = null;
+        String response = null;
 
         try {
 
             networkResponse = network.performRequest(request);
 
-            String response = new String(networkResponse.data, HttpHeaderParser.parseCharset(networkResponse.headers));
-
-            object = new JSONObject(response);
+            response = new String(networkResponse.data, HttpHeaderParser.parseCharset(networkResponse.headers));
 
         } catch (VolleyError volleyError) {
             volleyError.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             SlyceLog.e(TAG, "UnsupportedEncodingException");
-        } catch (JSONException e) {
+        }
+
+        return response;
+    }
+
+    private JSONObject parseJsonObjectResponse(String response){
+
+        JSONObject object = null;
+
+        try{
+            object = new JSONObject(response);
+        }catch (JSONException e){
+            SlyceLog.e(TAG, "JSONException");
+        }
+
+        return object;
+    }
+
+    private JSONArray parseJsonArrayResponse(String response){
+
+        JSONArray object = null;
+
+        try{
+            object = new JSONArray(response);
+        }catch (JSONException e){
             SlyceLog.e(TAG, "JSONException");
         }
 
@@ -297,6 +315,6 @@ public class ComManager {
     }
 
     public interface OnExtendedInfoListener{
-        void onExtendedInfo(JSONObject result);
+        void onExtendedInfo(JSONArray result);
     }
 }

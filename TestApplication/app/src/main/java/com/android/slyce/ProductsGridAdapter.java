@@ -12,13 +12,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
-import models.Product;
+import interfaces.ProductInterface;
+import models.Product3D;
 
-/**
- * Created by didiuzan on 5/20/15.
- */
 public class ProductsGridAdapter extends RecyclerView.Adapter<ProductsGridAdapter.ViewHolder> {
-        private ArrayList<Product> products;
+
+        private ArrayList<ProductInterface> products;
         private ImageLoader imageLoader;
         private DisplayImageOptions options;
 
@@ -40,7 +39,7 @@ public class ProductsGridAdapter extends RecyclerView.Adapter<ProductsGridAdapte
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public ProductsGridAdapter(ArrayList<Product> myDataset) {
+        public ProductsGridAdapter(ArrayList<ProductInterface> myDataset) {
             products = myDataset;
             imageLoader = ImageLoader.getInstance();
 
@@ -65,9 +64,9 @@ public class ProductsGridAdapter extends RecyclerView.Adapter<ProductsGridAdapte
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
 
-            imageLoader.displayImage(products.get(position).getProductImageURL(), holder.mProductImageView, options);
-            holder.mProductPriceTv.setText(products.get(position).getProductPrice());
-            holder.mProductNameTv.setText(products.get(position).getName());
+            imageLoader.displayImage(products.get(position).productImageUr(), holder.mProductImageView, options);
+            holder.mProductPriceTv.setText(products.get(position).productPrice());
+            holder.mProductNameTv.setText(products.get(position).productName());
 
         }
 

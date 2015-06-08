@@ -25,9 +25,9 @@ public interface OnSlyceCameraFragmentListener {
     void onCameraFragment2DRecognition(String irId, String productInfo);
 
     /** Called when additional info for the previously recognized 2D product is found.
-     *  @param products a JsonArray of additional info.
+     *  @param products a JSONArray of additional info.
      *  */
-    void onCameraFragment2DExtendedRecognition(JSONObject products);
+    void onCameraFragment2DExtendedRecognition(JSONArray products);
 
     /** Called when 3D products are found
      *  @param products a JSONObject of products. Can be empty in case no match was found.

@@ -124,7 +124,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void on2DExtendedRecognition(JSONObject products) {
+    public void on2DExtendedRecognition(JSONArray products) {
         Toast.makeText(this,
                 "on2DExtendedRecognition:" +
                         "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
@@ -177,6 +177,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
         Intent intent = new Intent(this, ProductsGridActivity.class);
         intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, products.toString());
+        intent.putExtra(ProductsGridActivity.PRODUCTS_TYPE, ProductsGridActivity.PRODUCTS_3D_KEY);
         startActivity(intent);
     }
 
@@ -191,15 +192,13 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void onCameraFragment2DExtendedRecognition(JSONObject results) {
+    public void onCameraFragment2DExtendedRecognition(JSONArray results) {
 
         // Display products in a grid
-        JSONArray products = results.optJSONArray("products");
-
-//        Intent intent = new Intent(this, ProductsGridActivity.class);
-//        intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, products.toString());
-//        startActivity(intent);
-
+        Intent intent = new Intent(this, ProductsGridActivity.class);
+        intent.putExtra(ProductsGridActivity.PRODUCTS_KEY, results.toString());
+        intent.putExtra(ProductsGridActivity.PRODUCTS_TYPE, ProductsGridActivity.PRODUCTS_2D_KEY);
+        startActivity(intent);
     }
 
     @Override

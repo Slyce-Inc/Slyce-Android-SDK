@@ -162,15 +162,4 @@ public class BarcodeSession implements CameraManager.Listener {
     /*
      *
      */
-
-    public void resumeDelayed() {
-
-        // Resume the automatic scan after 3 seconds
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                enableDetection();
-            }
-        }, Constants.AUTO_SCAN_DELAY);
-    }
 }

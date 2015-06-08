@@ -57,8 +57,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
     /* Hosting Activity */
     private Activity mActivity;
 
-    private boolean isContinuousRecognition = true;
-
     private Slyce mSlyce;
 
     /* Barcode/QR scanner engine */
@@ -249,7 +247,11 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
      */
     @Override
     public void setContinuousRecognition(boolean value) {
-        isContinuousRecognition = value;
+        if(true){
+            session.enableDetection();
+        }else{
+            session.disableDetection();
+        }
     }
 
     /**
@@ -282,10 +284,8 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         public void onBarcodeResult(int type, String result) {
             SlyceLog.i(TAG, "onBarcodeResult");
 
-            if(isContinuousRecognition){
-                // Handle barcode detection
-                handleBarcodeResult(type, result, ScannerType._3D);
-            }
+            // Handle barcode detection
+            handleBarcodeResult(type, result, ScannerType._3D);
         }
 
         @Override
@@ -309,48 +309,42 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         public void onResult(Result result) {
             SlyceLog.i(TAG, "onResult");
 
-            if(isContinuousRecognition){
+            String value = result.getValue();
 
-                String value = result.getValue();
+            int type = result.getType();
 
-                int type = result.getType();
+            if(type == Result.Type.IMAGE){
+                // Image detection
 
-                if(type == Result.Type.IMAGE){
-                    // Image detection
+                try {
+                    JSONObject imageDetectReport = new JSONObject();
+                    imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
+                    imageDetectReport.put(Constants.DATA_IRID, value);
+                    mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
+                    mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
+                } catch (JSONException e) {}
 
-                    try {
-                        JSONObject imageDetectReport = new JSONObject();
-                        imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
-                        imageDetectReport.put(Constants.DATA_IRID, value);
-                        mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
-                        mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
-                    } catch (JSONException e) {}
-
-                    if(!TextUtils.isEmpty(value)){
-                        // Play sound/vibrate only on detection
-                        Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
-                    }
-
-                    // Notify the host application for basic result
-                    mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
-
-                    // Get extended products results
-                    ComManager.getInstance().getProductsFromIRID(value, new ComManager.OnExtendedInfoListener() {
-                        @Override
-                        public void onExtendedInfo(JSONArray products) {
-
-                            // Notify the host application for extended result
-                            mCameraSynchronizer.on2DExtendedRecognition(products);
-                        }
-                    });
-
-                }else{
-                    // Handle barcode detection
-                    handleBarcodeResult(type, value, ScannerType._2D);
+                if(!TextUtils.isEmpty(value)){
+                    // Play sound/vibrate only on detection
+                    Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
                 }
 
+                // Notify the host application for basic result
+                mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
+
+                // Get extended products results
+                ComManager.getInstance().getProductsFromIRID(value, new ComManager.OnExtendedInfoListener() {
+                    @Override
+                    public void onExtendedInfo(JSONArray products) {
+
+                        // Notify the host application for extended result
+                        mCameraSynchronizer.on2DExtendedRecognition(products);
+                    }
+                });
+
             }else{
-                // Do Nothing
+                // Handle barcode detection
+                handleBarcodeResult(type, value, ScannerType._2D);
             }
         }
 

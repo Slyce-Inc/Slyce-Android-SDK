@@ -409,15 +409,4 @@ public class AutoScannerSession extends Handler implements CameraManager.Listene
   public void requestFocus(boolean focusAtPoint, final Rect focusRect){
     cameraManager.requestFocus(focusAtPoint, focusRect);
   }
-
-  public void resumeDelayed() {
-
-    // Resume the automatic scan after 3 seconds
-    new Handler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-          enableDetection();
-      }
-    }, Constants.AUTO_SCAN_DELAY);
-  }
 }

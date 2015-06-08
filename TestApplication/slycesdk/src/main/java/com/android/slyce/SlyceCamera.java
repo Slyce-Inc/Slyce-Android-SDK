@@ -282,9 +282,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         public void onBarcodeResult(int type, String result) {
             SlyceLog.i(TAG, "onBarcodeResult");
 
-            // Resume the automatic scan after 3 seconds
-            barcodeSession.resumeDelayed();
-
             if(isContinuousRecognition){
                 // Handle barcode detection
                 handleBarcodeResult(type, result, ScannerType._3D);
@@ -311,9 +308,6 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         @Override
         public void onResult(Result result) {
             SlyceLog.i(TAG, "onResult");
-
-            // Resume the automatic scan after 3 seconds
-            session.resumeDelayed();
 
             if(isContinuousRecognition){
 

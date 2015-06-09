@@ -104,8 +104,6 @@ public class ProductsGridActivity extends Activity {
                         JSONObject productJson = productsJsonArray.optJSONObject(i);
 
                         productsArray.add(gson.<Class<T>>fromJson(productJson.toString(), clazz));
-
-                        SlyceLog.i("", "");
                     }
                 }
             } catch (JSONException e) {

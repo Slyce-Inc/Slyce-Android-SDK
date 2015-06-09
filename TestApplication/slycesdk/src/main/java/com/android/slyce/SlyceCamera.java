@@ -340,6 +340,11 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                         // Notify the host application for extended result
                         mCameraSynchronizer.on2DExtendedRecognition(products);
                     }
+
+                    @Override
+                    public void onExtenedInfoError() {
+                        mCameraSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+                    }
                 });
 
             }else{

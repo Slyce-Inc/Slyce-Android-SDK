@@ -139,4 +139,5 @@ public class Constants {
 
     /* General error messages */
     public static final String SLYCE_OBJECT_IS_NULL = "Slyce object is null";
+
 }

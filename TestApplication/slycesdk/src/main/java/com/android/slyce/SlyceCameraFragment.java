@@ -270,9 +270,6 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         public void onImageProcessDialogFragmentDismiss() {
 
             cancelSlyceProductsRequests();
-
-            // Resume the automatic scan
-            mSlyceCamera.setContinuousRecognition(true);
         }
     }
 
@@ -399,8 +396,8 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
             showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP, null, new ImageProcessDialogFragmentListener());
 
             // Take a picture using SlyceCamera object
-            mSlyceCamera.snap();
             mSlyceCamera.setContinuousRecognition(false);
+            mSlyceCamera.snap();
         }
     }
 

@@ -243,6 +243,11 @@ public class WSConnection implements
                     // 3. Notify the host application for 2D extended result
                     mRequestSynchronizer.on2DExtendedRecognition(products);
                 }
+
+                @Override
+                public void onExtenedInfoError() {
+                    mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+                }
             });
 
         }else{

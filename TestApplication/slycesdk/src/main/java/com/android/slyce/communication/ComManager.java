@@ -66,16 +66,6 @@ public class ComManager {
 
                 listener.onResponse(response);
 
-                // Json response example
-//                {
-//                    status: "success",
-//                            premium: "true",
-//                        ms: {
-//                            enabled: "true",
-//                            key: "3jygvjimebpivrohfxyf",
-//                            secret: "s9cWbmzuRGjRDYeb"
-//                }
-//                }
             }
 
         }).start();
@@ -99,10 +89,15 @@ public class ComManager {
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
 
                 // Perform request
-                JSONArray response = parseJsonArrayResponse(performRequest(request));
+                String response = performRequest(request);
 
-                listener.onExtendedInfo(response);
+                JSONArray result = parseJsonArrayResponse(response);
 
+                if(result != null && result.length() > 0){
+                    listener.onExtendedInfo(result);
+                }else{
+                    listener.onExtenedInfoError();
+                }
             }
 
         }).start();
@@ -316,5 +311,6 @@ public class ComManager {
 
     public interface OnExtendedInfoListener{
         void onExtendedInfo(JSONArray result);
+        void onExtenedInfoError();
     }
 }

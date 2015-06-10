@@ -28,9 +28,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by davidsvilem on 3/22/15.
- */
+
 public class WSConnection implements
         WebSocket.StringCallback,
         DataCallback,

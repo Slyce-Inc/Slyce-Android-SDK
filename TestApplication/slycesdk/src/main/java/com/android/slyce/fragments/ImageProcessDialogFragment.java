@@ -312,6 +312,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             @Override
             public void on2DRecognition(String irid, String productInfo) {
 
+                dismiss();
+
                 // Notify SlyceCameraFragment
                 mOnImageProcessDialogFragmentListener.onImageProcess2DRecognition(irid, productInfo);
             }

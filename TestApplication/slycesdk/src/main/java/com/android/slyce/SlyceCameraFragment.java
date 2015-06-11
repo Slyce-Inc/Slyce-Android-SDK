@@ -245,6 +245,9 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         @Override
         public void onImageProcess2DRecognition(String irid, String productInfo) {
             if(mListener != null){
+
+                mDialogLayout.setVisibility(View.VISIBLE);
+
                 // Notify the host application of MS recognition
                 mListener.onCameraFragment2DRecognition(irid, productInfo);
             }
@@ -253,6 +256,9 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         @Override
         public void onImageProcess2DExtendedRecognition(JSONArray products) {
             if(mListener != null){
+
+                mDialogLayout.setVisibility(View.GONE);
+
                 // Notify the host application of extra products details
                 mListener.onCameraFragment2DExtendedRecognition(products);
             }
@@ -312,6 +318,11 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
                 // Notify the host application of MS recognition
                 mListener.onCameraFragment2DRecognition(irId, productInfo);
+
+                if(mImageProcessDialogFragment != null){
+                    // Close ImageProcessDialogFragment
+                    mImageProcessDialogFragment.dismiss();
+                }
             }
         }
 

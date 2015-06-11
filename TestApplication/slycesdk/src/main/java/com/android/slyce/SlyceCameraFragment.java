@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.fragments.ImageProcessDialogFragment;
 import com.android.slyce.fragments.ImageProcessDialogFragment.OnImageProcessDialogFragmentListener;
@@ -67,6 +69,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
     private CheckBox mFlashButton;
     private ImageButton mSnapButton;
     private ImageView mOnTapView;
+    private RelativeLayout mDialogLayout;
 
     /* Slyce Camera object */
     private SlyceCamera mSlyceCamera;
@@ -180,6 +183,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         mFlashButton = (CheckBox) view.findViewById(R.id.flash_button);
         mSnapButton = (ImageButton) view.findViewById(R.id.snap_button);
         mOnTapView = (ImageView) view.findViewById(R.id.on_tap_view);
+        mDialogLayout = (RelativeLayout) view.findViewById(R.id.dialog_layout);
 
         mCloseButton.setOnClickListener(this);
         mScanTipsButton.setOnClickListener(this);
@@ -301,7 +305,11 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
         @Override
         public void onCamera2DRecognition(String irId, String productInfo) {
+
             if(isAttached){
+
+                mDialogLayout.setVisibility(View.VISIBLE);
+
                 // Notify the host application of MS recognition
                 mListener.onCameraFragment2DRecognition(irId, productInfo);
             }
@@ -309,7 +317,11 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
         @Override
         public void onCamera2DExtendedRecognition(JSONArray products) {
+
             if(isAttached){
+
+                mDialogLayout.setVisibility(View.GONE);
+
                 // Notify the host application of extra products details
                 mListener.onCameraFragment2DExtendedRecognition(products);
             }
@@ -334,6 +346,9 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         @Override
         public void onSlyceCameraError(String message) {
             if(isAttached){
+
+                mDialogLayout.setVisibility(View.GONE);
+
                 // Notify host application
                 mListener.onCameraFragmentError(message);
 

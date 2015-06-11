@@ -214,7 +214,10 @@ public class WSConnection implements
         if(!irId.isEmpty()){
             // 2D search found
 
-            // 1. Report to MixPanel
+            // 1. Cancel 3D search SlycRequest
+            close();
+
+            // 2. Report to MixPanel
             try {
                 JSONObject imageDetectReport = new JSONObject();
 
@@ -229,12 +232,11 @@ public class WSConnection implements
 
             }catch (JSONException e){}
 
-            // 2. Notify the host application for 2D search found
+            // 3. Notify the host application for 2D search found
             mRequestSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
 
             // Get extended products results
-            ComManager.getInstance().getProductsFromIRID(irId, new ComManager.OnExtendedInfoListener()
-            {
+            ComManager.getInstance().getProductsFromIRID(irId, new ComManager.OnExtendedInfoListener(){
                 @Override
                 public void onExtendedInfo(JSONArray products) {
 

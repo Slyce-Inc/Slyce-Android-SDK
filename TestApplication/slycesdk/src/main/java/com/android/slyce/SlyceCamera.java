@@ -72,7 +72,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
     private SlyceProductsRequest mSlyceProductsRequest;
 
     private static final class SlyceCameraMessage{
-        private static final int SEARCH = 0;
+        private static final int SNAP_SEARCH = 001;
     }
 
     /**
@@ -373,8 +373,8 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         // Notify the host application on snapped image
         mCameraSynchronizer.onSnap(bitmap);
 
-        // Start search Slyce + MoodStock (if 2D enabled)
-        obtainMessage(SlyceCameraMessage.SEARCH, bitmap).sendToTarget();
+        // Start SlyceProductsRequest (Slyce + MoodStock)
+        obtainMessage(SlyceCameraMessage.SNAP_SEARCH, bitmap).sendToTarget();
 
         // Report to MP on image snapped
         mixpanel.track(Constants.IMAGE_SNAPPED, null);
@@ -430,11 +430,8 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
         switch(msg.what){
 
-            case SlyceCameraMessage.SEARCH:
+            case SlyceCameraMessage.SNAP_SEARCH:
 
-                final Bitmap bitmap = (Bitmap) msg.obj;
-
-                // Slyce + 2D search
                 mSlyceProductsRequest = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
                     @Override
                     public void onBarcodeRecognition(SlyceBarcode barcode) {

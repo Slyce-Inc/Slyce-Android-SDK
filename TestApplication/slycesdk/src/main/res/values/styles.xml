@@ -24,4 +24,9 @@
     <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
   </style>
 
+  <!--<style name="SlyceSimpleDialogTheme" parent="@android:style/Theme.Dialog">-->
+    <!--<item name="android:windowTitleStyle">@null</item>-->
+    <!--<item name="android:windowBackground">@android:color/background_dark</item>-->
+  <!--</style>-->
+
 </resources>

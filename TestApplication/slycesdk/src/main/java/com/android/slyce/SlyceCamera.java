@@ -297,6 +297,17 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         public void onBarcodeResult(int type, String result) {
             SlyceLog.i(TAG, "onBarcodeResult");
 
+            if(!mShouldPauseScanner && mContinuousRecognition){
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        barcodeSession.enableDetection();
+                    }
+                },Constants.AUTO_SCAN_DELAY);
+            }
+
             // Handle barcode detection
             handleBarcodeResult(type, result, ScannerType._3D);
         }

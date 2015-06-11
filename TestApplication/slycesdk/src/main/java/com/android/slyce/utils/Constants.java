@@ -128,7 +128,7 @@ public class Constants {
     public static final String ERROR = "error";
 
     /* Barcode */
-    public static final int AUTO_SCAN_DELAY = 2000;
+    public static final int AUTO_SCAN_DELAY = 3000;
     public static final String BARCODE_FORMAT = "barcodeFormat";
     public static final String PARSED_RESULT = "parsedResult";
 

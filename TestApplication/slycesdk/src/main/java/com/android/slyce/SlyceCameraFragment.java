@@ -381,6 +381,9 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
             // Displays the touch point
             Utils.performAlphaAnimation(mOnTapView, x, y);
         }
+
+        @Override
+        public void onCameraFinished(){}
         // OnSlyceCameraListener callbacks END
     }
     // PRIVATE METHODS END

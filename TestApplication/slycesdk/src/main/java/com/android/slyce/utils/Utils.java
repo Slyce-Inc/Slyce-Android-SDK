@@ -36,9 +36,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import javax.net.ssl.HttpsURLConnection;
 
-/**
- * Created by davidsvilem on 3/23/15.
- */
 public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();

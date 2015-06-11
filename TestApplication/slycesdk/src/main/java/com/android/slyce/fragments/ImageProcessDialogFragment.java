@@ -357,6 +357,9 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 showDialogFragment();
             }
 
+            @Override
+            public void onFinished() {}
+
         }, bitmap);
 
         mSlyceProductsRequest.execute();

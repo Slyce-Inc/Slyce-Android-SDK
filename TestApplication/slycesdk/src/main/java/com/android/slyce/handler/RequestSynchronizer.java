@@ -55,6 +55,10 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(6, products).sendToTarget();
     }
 
+    public void onFinished(){
+        obtainMessage(7).sendToTarget();
+    }
+
     @Override
     public void handleMessage(Message msg) {
 
@@ -131,6 +135,12 @@ public class RequestSynchronizer extends Handler {
                 mRequestListener.on2DExtendedRecognition(extenedInfo);
 
                 SlyceLog.i(TAG, "on2DExtendedRecognition(" + extenedInfo + ")");
+
+                break;
+
+            case 7:
+
+                mRequestListener.onFinished();
 
                 break;
         }

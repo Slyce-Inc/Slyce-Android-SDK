@@ -56,4 +56,9 @@ public interface OnSlyceCameraListener {
      *  @param y axis point
      *  */
     void onTap(float x, float y);
+
+    /** Called when Slyce search process ended
+     *
+     */
+    void onCameraFinished();
 }

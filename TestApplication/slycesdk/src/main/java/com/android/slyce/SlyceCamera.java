@@ -473,6 +473,11 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                         mCameraSynchronizer.onError(message);
                     }
 
+                    @Override
+                    public void onFinished(){
+
+                    }
+
                 }, (Bitmap) msg.obj, mOptions);
 
                 mSlyceProductsRequestMap.add(mSlyceProductsRequest);

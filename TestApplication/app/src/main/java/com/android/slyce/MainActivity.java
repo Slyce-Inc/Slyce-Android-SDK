@@ -166,6 +166,12 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
         Toast.makeText(MainActivity.this, "onSlyceRequestStage:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onFinished() {
+
+        Toast.makeText(MainActivity.this, "onFinished", Toast.LENGTH_SHORT).show();
+    }
     // OnSlyceRequestListener callbacks END
 
     // OnSlyceCameraFragmentListener callbacks (Full UI Mode)

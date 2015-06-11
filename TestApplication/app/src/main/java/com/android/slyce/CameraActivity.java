@@ -137,6 +137,13 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
+    public void onCameraFinished() {
+
+        Toast.makeText(this, "onCameraFinished", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
     public void onClick(View v) {
 
         switch(v.getId()){

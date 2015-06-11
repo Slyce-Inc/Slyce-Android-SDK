@@ -604,6 +604,8 @@ public class WSConnection implements
 
                     mWebSocket.close();
 
+                    mRequestSynchronizer.onFinished();
+
                     break;
 
                 case Constants.TICKET_CREATION_FAILED:

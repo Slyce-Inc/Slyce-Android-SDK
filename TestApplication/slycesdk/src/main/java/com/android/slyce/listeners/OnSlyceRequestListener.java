@@ -45,4 +45,9 @@ public interface OnSlyceRequestListener {
      *  @param message the error description
      *  */
     void onError(String message);
+
+    /** Called when Slyce search process ended
+     *
+     */
+    void onFinished();
 }

@@ -2,7 +2,6 @@ package com.android.slyce.listeners;
 
 import com.android.slyce.SlyceBarcode;
 import com.android.slyce.enums.SlyceRequestStage;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -11,5 +11,5 @@ public interface SlyceCameraInterface {
     void focusAtPoint(float x, float y);
     void setContinuousRecognition(boolean value);
     void turnFlash();
-    void shouldResumeScanner(boolean value);
+    void shouldPauseScanner(boolean value);
 }

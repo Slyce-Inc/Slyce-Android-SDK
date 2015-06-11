@@ -48,6 +48,8 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
     // the fragment initialization parameters
     private static final String ARG_OPTION_JSON = "arg_option_json";
+    private static final String ARG_CONTINUOUS_RECOGNITION = "arg_continuous_recognition";
+    private static final String ARG_SHOULD_PAUSE_SCANNER = "arg_should_pause_scanner";
 
     private static final int RESULT_LOAD_IMG = 1;
 
@@ -55,6 +57,8 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
     private JSONObject mOptionsJson;
 
     private boolean isAttached;
+    private boolean mContinuousRecognition;
+    private boolean mShouldPauseScanner;
 
     /* Listeners */
     private com.android.slyce.listeners.OnSlyceCameraFragmentListener mListener;
@@ -85,9 +89,12 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
      * this fragment using the provided parameters.
      *
      * @param options use this JSONObject to pass properties to Slyce servers. Can be null.
+     * @param continuousRecognition boolean use this in order to stop the automatic scanner
+     * @param shouldPauseScanner boolean use this to resume/pause the automatic scanner after detection
+     *
      * @return A new instance of fragment SlyceCameraFragment.
      */
-    public static SlyceCameraFragment newInstance(JSONObject options) {
+    public static SlyceCameraFragment newInstance(JSONObject options, boolean continuousRecognition, boolean shouldPauseScanner) {
         SlyceCameraFragment fragment = new SlyceCameraFragment();
         Bundle args = new Bundle();
 
@@ -95,15 +102,14 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
             args.putString(ARG_OPTION_JSON, options.toString());
         }
 
+        args.putBoolean(ARG_CONTINUOUS_RECOGNITION, continuousRecognition);
+        args.putBoolean(ARG_SHOULD_PAUSE_SCANNER, shouldPauseScanner);
+
         fragment.setArguments(args);
         return fragment;
     }
 
     public SlyceCameraFragment() {
-    }
-
-    public void cancelSlyceProductsRequests(){
-        mSlyceCamera.cancel();
     }
     // PUBLIC METHODS END
 
@@ -173,6 +179,8 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
     // PRIVATE METHODS
     private void createSlyceCamera(){
         mSlyceCamera = new SlyceCamera(getActivity(), mSlyce, mPreview, mOptionsJson, new SlyceCameraListener());
+        mSlyceCamera.setContinuousRecognition(mContinuousRecognition);
+        mSlyceCamera.shouldPauseScanner(mShouldPauseScanner);
     }
 
     private void initViews(View view){
@@ -204,6 +212,12 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
                     SlyceLog.i(TAG, "Failed to create options Json");
                 }
             }
+
+            // Parameter 2.
+            mContinuousRecognition = getArguments().getBoolean(ARG_CONTINUOUS_RECOGNITION);
+
+            // Parameter 3.
+            mShouldPauseScanner = getArguments().getBoolean(ARG_SHOULD_PAUSE_SCANNER);
         }
     }
 
@@ -212,6 +226,10 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
             // getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             getActivity().getFragmentManager().popBackStack();
         }
+    }
+
+    private void cancelSlyceProductsRequests(){
+        mSlyceCamera.cancel();
     }
 
     private ImageProcessDialogFragment showDialogFragment(

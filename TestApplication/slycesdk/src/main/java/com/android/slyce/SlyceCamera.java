@@ -71,6 +71,10 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
     private SlyceProductsRequest mSlyceProductsRequest;
 
+    private boolean mShouldPauseScanner = true;
+
+    private boolean mContinuousRecognition = true;
+
     private static final class SlyceCameraMessage{
         private static final int SNAP_SEARCH = 001;
     }
@@ -247,6 +251,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
      */
     @Override
     public void setContinuousRecognition(boolean value) {
+        mContinuousRecognition = value;
         if(true){
             session.enableDetection();
         }else{
@@ -280,8 +285,8 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
      * If true then after 2D automatic detection the scanner will resume scanning after 2 seconds
      */
     @Override
-    public void shouldResumeScanner(boolean value) {
-
+    public void shouldPauseScanner(boolean value) {
+        mShouldPauseScanner = value;
     }
     /* */
 
@@ -316,6 +321,17 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         @Override
         public void onResult(Result result) {
             SlyceLog.i(TAG, "onResult");
+
+            if(!mShouldPauseScanner && mContinuousRecognition){
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        session.enableDetection();
+                    }
+                },Constants.AUTO_SCAN_DELAY);
+            }
 
             String value = result.getValue();
 

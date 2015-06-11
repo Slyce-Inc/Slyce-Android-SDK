@@ -5,9 +5,7 @@ import com.android.slyce.SlyceBarcode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Created by davidsvilem on 5/17/15.
- */
+
 public interface OnSlyceCameraFragmentListener {
 
     /** Called when barcode is found
@@ -38,4 +36,9 @@ public interface OnSlyceCameraFragmentListener {
      *  @param message the error description
      *  */
     void onCameraFragmentError(String message);
+
+    /** Called when Slyce search process ended
+     *
+     */
+    void onCameraFragmentFinished();
 }

@@ -211,6 +211,11 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     public void onCameraFragmentError(String message) {
 //        Toast.makeText(this, "onCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onCameraFragmentFinished() {
+
+    }
     // OnSlyceCameraFragmentListener callbacks END
 
     @Override

@@ -383,7 +383,9 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         }
 
         @Override
-        public void onCameraFinished(){}
+        public void onCameraFinished(){
+
+        }
         // OnSlyceCameraListener callbacks END
     }
     // PRIVATE METHODS END

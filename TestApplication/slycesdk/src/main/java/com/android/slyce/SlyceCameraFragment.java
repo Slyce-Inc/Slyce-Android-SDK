@@ -305,7 +305,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
         // OnSlyceCameraListener callbacks
         @Override
-        public void onCamera3DRecognition(JSONObject products) {
+        public void onCameraResultsReceived(JSONObject products) {
 
             // Close SDK
             close();
@@ -315,12 +315,12 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
                 mListener.onCameraFragment3DRecognition(products);
 
                 // Notify ImageProcessDialogFragment for found products
-                mImageProcessDialogFragment.onCamera3DRecognition(products);
+                mImageProcessDialogFragment.onCameraResultsReceived(products);
             }
         }
 
         @Override
-        public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
+        public void onCameraBarcodeDetected(SlyceBarcode barcode) {
             if(isAttached){
                 // Notify the host application of barcode recognition
                 mListener.onCameraFragmentBarcodeRecognition(barcode);
@@ -328,7 +328,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         }
 
         @Override
-        public void onCamera2DRecognition(String irId, String productInfo) {
+        public void onCameraImageDetected(String irId, String productInfo) {
 
             if(isAttached){
 
@@ -345,7 +345,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         }
 
         @Override
-        public void onCamera2DExtendedRecognition(JSONArray products) {
+        public void onCameraImageInfoReceived(JSONArray products) {
 
             if(isAttached){
 

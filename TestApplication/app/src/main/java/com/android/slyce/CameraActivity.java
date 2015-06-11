@@ -66,28 +66,28 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
     /* OnSlyceCameraListener */
     @Override
-    public void onCameraBarcodeRecognition(SlyceBarcode barcode) {
+    public void onCameraBarcodeDetected(SlyceBarcode barcode) {
 
         Toast.makeText(this,
-                        "onCameraBarcodeRecognition:" + "\n" +
+                        "onCameraBarcodeDetected:" + "\n" +
                         "Barcode Type: " + barcode.getType() + "\n" +
                         "Barcode: " + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onCamera2DRecognition(String irId, String productInfo) {
+    public void onCameraImageDetected(String irId, String productInfo) {
 
         Toast.makeText(this,
-                "onCamera2DRecognition:" + "\n" +
+                "onCameraImageDetected:" + "\n" +
                         "IrId: " + irId + "\n" +
                         "Product Info: " + productInfo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onCamera2DExtendedRecognition(JSONArray products) {
+    public void onCameraImageInfoReceived(JSONArray products) {
 
         Toast.makeText(this,
-                "onCamera2DExtendedRecognition:" +
+                "onCameraImageInfoReceived:" +
                         "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
     }
 
@@ -109,9 +109,9 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
-    public void onCamera3DRecognition(JSONObject products) {
+    public void onCameraResultsReceived(JSONObject products) {
 
-        Toast.makeText(this, "onCamera3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onCameraResultsReceived:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
     }
 
     @Override

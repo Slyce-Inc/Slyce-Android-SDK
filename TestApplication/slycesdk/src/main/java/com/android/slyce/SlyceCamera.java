@@ -365,7 +365,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                 }
 
                 // Notify the host application for basic result
-                mCameraSynchronizer.on2DRecognition(value, Utils.decodeBase64(value));
+                mCameraSynchronizer.onCameraImageDetected(value, Utils.decodeBase64(value));
 
                 // Get extended products results
                 ComManager.getInstance().getProductsFromIRID(value, new ComManager.OnExtendedInfoListener() {
@@ -373,7 +373,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     public void onExtendedInfo(JSONArray products) {
 
                         // Notify the host application for extended result
-                        mCameraSynchronizer.on2DExtendedRecognition(products);
+                        mCameraSynchronizer.onCameraImageInfoReceived(products);
                     }
 
                     @Override
@@ -456,7 +456,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
 
         // Notify the host application
-        mCameraSynchronizer.onBarcodeRecognition(slyceBarcode);
+        mCameraSynchronizer.onCameraBarcodeDetected(slyceBarcode);
     }
     /* */
 
@@ -485,17 +485,17 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                             Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
                         }
 
-                        mCameraSynchronizer.on2DRecognition(irid, productInfo);
+                        mCameraSynchronizer.onCameraImageDetected(irid, productInfo);
                     }
 
                     @Override
                     public void onImageInfoReceived(JSONArray products) {
-                        mCameraSynchronizer.on2DExtendedRecognition(products);
+                        mCameraSynchronizer.onCameraImageInfoReceived(products);
                     }
 
                     @Override
                     public void onResultsReceived(JSONObject products) {
-                        mCameraSynchronizer.on3DRecognition(products);
+                        mCameraSynchronizer.onCameraResultsReceived(products);
                     }
 
                     @Override

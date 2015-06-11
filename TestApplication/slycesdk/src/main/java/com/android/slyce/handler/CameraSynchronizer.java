@@ -15,9 +15,6 @@ import com.android.slyce.utils.SlyceLog;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Created by davidsvilem on 4/21/15.
- */
 public class CameraSynchronizer extends Handler {
 
     private final String TAG = CameraSynchronizer.class.getSimpleName();
@@ -30,16 +27,16 @@ public class CameraSynchronizer extends Handler {
         mCameraListener = listener;
     }
 
-    public void onBarcodeRecognition(SlyceBarcode barcode){
+    public void onCameraBarcodeDetected(SlyceBarcode barcode){
         obtainMessage(1, barcode).sendToTarget();
     }
 
-    public void on2DRecognition(String irId, String productInfo){
+    public void onCameraImageDetected(String irId, String productInfo){
         Search2DProgress search2DProgress = new Search2DProgress(irId, productInfo);
         obtainMessage(2, search2DProgress).sendToTarget();
     }
 
-    public void on2DExtendedRecognition(JSONArray products){
+    public void onCameraImageInfoReceived(JSONArray products){
         obtainMessage(3, products).sendToTarget();
     }
 
@@ -59,7 +56,7 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(7, slyceProgress).sendToTarget();
     }
 
-    public void on3DRecognition(JSONObject products){
+    public void onCameraResultsReceived(JSONObject products){
         obtainMessage(8, products).sendToTarget();
     }
 
@@ -82,7 +79,7 @@ public class CameraSynchronizer extends Handler {
 
             case 1:
 
-                mCameraListener.onCameraBarcodeRecognition((SlyceBarcode) msg.obj);
+                mCameraListener.onCameraBarcodeDetected((SlyceBarcode) msg.obj);
 
                 break;
 
@@ -93,9 +90,9 @@ public class CameraSynchronizer extends Handler {
                 String irid = search2DProgress.irId;
                 String productInfo = search2DProgress.productInfo;
 
-                mCameraListener.onCamera2DRecognition(irid, productInfo);
+                mCameraListener.onCameraImageDetected(irid, productInfo);
 
-                SlyceLog.i(TAG, "onCamera2DRecognition(" + irid + ", " + productInfo + ")");
+                SlyceLog.i(TAG, "onCameraImageDetected(" + irid + ", " + productInfo + ")");
 
                 break;
 
@@ -103,9 +100,9 @@ public class CameraSynchronizer extends Handler {
 
                 JSONArray extenedInfo = (JSONArray) msg.obj;
 
-                mCameraListener.onCamera2DExtendedRecognition(extenedInfo);
+                mCameraListener.onCameraImageInfoReceived(extenedInfo);
 
-                SlyceLog.i(TAG, "onCamera2DExtendedRecognition(" + extenedInfo + ")");
+                SlyceLog.i(TAG, "onCameraImageInfoReceived(" + extenedInfo + ")");
 
                 break;
 
@@ -146,9 +143,9 @@ public class CameraSynchronizer extends Handler {
 
                 JSONObject products = (JSONObject) msg.obj;
 
-                mCameraListener.onCamera3DRecognition(products);
+                mCameraListener.onCameraResultsReceived(products);
 
-                SlyceLog.i(TAG, "onCamera3DRecognition(" + products + ")");
+                SlyceLog.i(TAG, "onCameraResultsReceived(" + products + ")");
                 break;
 
             case 9:

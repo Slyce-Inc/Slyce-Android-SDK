@@ -249,9 +249,9 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         progressMsg.setText(message);
     }
 
-    public void onCamera3DRecognition(JSONObject products) {
+    public void onCameraResultsReceived(JSONObject products) {
         if(!isAttached){
-            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onCamera3DRecognition fragment is not attached");
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onCameraResultsReceived fragment is not attached");
             return;
         }
 

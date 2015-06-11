@@ -11,23 +11,23 @@ public interface OnSlyceCameraListener {
     /** Called when 3D products are found
      *  @param products a JSONObject of products.
      *  */
-    void onCamera3DRecognition(JSONObject products); // onCameraResultsReceived
+    void onCameraResultsReceived(JSONObject products);
 
     /** Called when barcode is found
      * @param barcode a barcode object.
      * */
-    void onCameraBarcodeRecognition(SlyceBarcode barcode); // onCameraBarcodeDetected
+    void onCameraBarcodeDetected(SlyceBarcode barcode);
 
     /** Called when 2D products are found
      *  @param irId representing the recognized 2D products in base64 format. Can be en empty string in case no match has been found.
      *  @param productInfo representing a short info about the matched 2D products. Can be empty in case no match has been found.
      *  */
-    void onCamera2DRecognition(String irId, String productInfo); // onCameraImageDetected
+    void onCameraImageDetected(String irId, String productInfo);
 
     /** Called when additional info for the previously recognized 2D product is found.
      *  @param products a JSONArray of additional info.
      *  */
-    void onCamera2DExtendedRecognition(JSONArray products); // onCameraImageInfoReceived
+    void onCameraImageInfoReceived(JSONArray products);
 
     /** Reporting the stage currently being processed.
      *  @param message current stage.

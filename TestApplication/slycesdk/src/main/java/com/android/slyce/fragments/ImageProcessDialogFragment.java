@@ -292,7 +292,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         mSlyceProductsRequest = new SlyceProductsRequest(Slyce.getInstance(getActivity()), new OnSlyceRequestListener() {
 
             @Override
-            public void onBarcodeRecognition(SlyceBarcode barcode) {
+            public void onBarcodeDetected(SlyceBarcode barcode) {
 
                 // Update progress bar
                 updateProgressInfo(FINISH_ANALYZING_IMAGE);
@@ -310,7 +310,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void on2DRecognition(String irid, String productInfo) {
+            public void onImageDetected(String irid, String productInfo) {
 
                 dismiss();
 
@@ -319,14 +319,14 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void on2DExtendedRecognition(JSONArray products) {
+            public void onImageInfoReceived(JSONArray products) {
 
                 // Notify SlyceCameraFragment
                 mOnImageProcessDialogFragmentListener.onImageProcess2DExtendedRecognition(products);
             }
 
             @Override
-            public void on3DRecognition(JSONObject products) {
+            public void onResultsReceived(JSONObject products) {
 
                 // Update progress bar
                 updateProgressInfo(FINISH_ANALYZING_IMAGE);

@@ -233,7 +233,7 @@ public class WSConnection implements
             }catch (JSONException e){}
 
             // 3. Notify the host application for 2D search found
-            mRequestSynchronizer.on2DRecognition(irId, Utils.decodeBase64(irId));
+            mRequestSynchronizer.onImageDetected(irId, Utils.decodeBase64(irId));
 
             // Get extended products results
             ComManager.getInstance().getProductsFromIRID(irId, new ComManager.OnExtendedInfoListener(){
@@ -241,7 +241,7 @@ public class WSConnection implements
                 public void onExtendedInfo(JSONArray products) {
 
                     // 3. Notify the host application for 2D extended result
-                    mRequestSynchronizer.on2DExtendedRecognition(products);
+                    mRequestSynchronizer.onImageInfoReceived(products);
                 }
 
                 @Override
@@ -264,7 +264,7 @@ public class WSConnection implements
             }
 
 //            // Notify the host application for a 2D search not found (empty data)
-//            mRequestSynchronizer.on2DRecognition("","");
+//            mRequestSynchronizer.onImageDetected("","");
         }
     }
 
@@ -545,7 +545,7 @@ public class WSConnection implements
                         SlyceBarcode slyceBarcode = BarcodeHelper.createSlyceBarcode(format, BarcodeHelper.ScannerType._Slyce, parsedResult);
 
                         // Notify the host application on barcode recognition
-                        mRequestSynchronizer.onBarcodeRecognition(slyceBarcode);
+                        mRequestSynchronizer.onBarcodeDetected(slyceBarcode);
 
                         JSONObject imageDetectReport = new JSONObject();
                         imageDetectReport.put(Constants.DETECTION_TYPE, slyceBarcode.getTypeString());
@@ -589,7 +589,7 @@ public class WSConnection implements
                         JSONArray products = data.optJSONArray(Constants.PRODUCTS);
                         if(products != null && products.length()>0){
 
-                            mRequestSynchronizer.on3DRecognition(data);
+                            mRequestSynchronizer.onResultsReceived(data);
                         }else{
 
                             mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);

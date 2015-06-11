@@ -25,7 +25,7 @@ public class RequestSynchronizer extends Handler {
         mRequestListener = listener;
     }
 
-    public void onBarcodeRecognition(SlyceBarcode barcode){
+    public void onBarcodeDetected(SlyceBarcode barcode){
         obtainMessage(0, barcode).sendToTarget();
     }
 
@@ -34,12 +34,12 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(1, slyceProgress).sendToTarget();
     }
 
-    public void on2DRecognition(String irId, String productInfo){
+    public void onImageDetected(String irId, String productInfo){
         Search2DProgress search2DProgress = new Search2DProgress(irId, productInfo);
         obtainMessage(2, search2DProgress).sendToTarget();
     }
 
-    public void on3DRecognition(JSONObject products){
+    public void onResultsReceived(JSONObject products){
         obtainMessage(3, products).sendToTarget();
     }
 
@@ -51,7 +51,7 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(5, message).sendToTarget();
     }
 
-    public void on2DExtendedRecognition(JSONArray products){
+    public void onImageInfoReceived(JSONArray products){
         obtainMessage(6, products).sendToTarget();
     }
 
@@ -67,7 +67,7 @@ public class RequestSynchronizer extends Handler {
             case 0:
 
                 SlyceBarcode barcode = (SlyceBarcode) msg.obj;
-                mRequestListener.onBarcodeRecognition(barcode);
+                mRequestListener.onBarcodeDetected(barcode);
 
                 break;
 
@@ -92,9 +92,9 @@ public class RequestSynchronizer extends Handler {
                 String irid = search2DProgress.irId;
                 String productInfo = search2DProgress.productInfo;
 
-                mRequestListener.on2DRecognition(irid, productInfo);
+                mRequestListener.onImageDetected(irid, productInfo);
 
-                SlyceLog.i(TAG, "on2DRecognition(" + irid + ", " + productInfo + ")");
+                SlyceLog.i(TAG, "onImageDetected(" + irid + ", " + productInfo + ")");
 
                 break;
 
@@ -102,9 +102,9 @@ public class RequestSynchronizer extends Handler {
 
                 JSONObject products = (JSONObject) msg.obj;
 
-                mRequestListener.on3DRecognition(products);
+                mRequestListener.onResultsReceived(products);
 
-                SlyceLog.i(TAG, "on3DRecognition(" + products + ")");
+                SlyceLog.i(TAG, "onResultsReceived(" + products + ")");
 
                 break;
 
@@ -132,9 +132,9 @@ public class RequestSynchronizer extends Handler {
 
                 JSONArray extenedInfo = (JSONArray) msg.obj;
 
-                mRequestListener.on2DExtendedRecognition(extenedInfo);
+                mRequestListener.onImageInfoReceived(extenedInfo);
 
-                SlyceLog.i(TAG, "on2DExtendedRecognition(" + extenedInfo + ")");
+                SlyceLog.i(TAG, "onImageInfoReceived(" + extenedInfo + ")");
 
                 break;
 

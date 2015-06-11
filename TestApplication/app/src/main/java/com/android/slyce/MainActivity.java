@@ -113,10 +113,10 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void on2DRecognition(String irId, String productInfo) {
+    public void onImageDetected(String irId, String productInfo) {
 
         Toast.makeText(this,
-                "on2DRecognition:" +
+                "onImageDetected:" +
                         "IrId: " + irId + "\n" +
                         "Product Info: " + productInfo, Toast.LENGTH_SHORT).show();
 
@@ -124,19 +124,19 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void on2DExtendedRecognition(JSONArray products) {
+    public void onImageInfoReceived(JSONArray products) {
         Toast.makeText(this,
-                "on2DExtendedRecognition:" +
+                "onImageInfoReceived:" +
                         "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
 
         progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void onBarcodeRecognition(SlyceBarcode barcode) {
+    public void onBarcodeDetected(SlyceBarcode barcode) {
 
         Toast.makeText(this,
-                "onBarcodeRecognition:" + "\n" +
+                "onBarcodeDetected:" + "\n" +
                 "Barcode Type: " + barcode.getType() + "\n" +
                 "Barcode: " + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
 
@@ -144,9 +144,9 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void on3DRecognition(final JSONObject products) {
+    public void onResultsReceived(final JSONObject products) {
 
-        Toast.makeText(MainActivity.this, "on3DRecognition:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "onResultsReceived:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
 
         results.setText(products.toString());
 

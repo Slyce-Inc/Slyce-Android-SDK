@@ -469,7 +469,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
                 mSlyceProductsRequest = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
                     @Override
-                    public void onBarcodeRecognition(SlyceBarcode barcode) {
+                    public void onBarcodeDetected(SlyceBarcode barcode) {
                         notifyOnBarcodeRecognition(barcode);
                     }
 
@@ -479,7 +479,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     }
 
                     @Override
-                    public void on2DRecognition(String irid, String productInfo) {
+                    public void onImageDetected(String irid, String productInfo) {
                         if(!TextUtils.isEmpty(irid)){
                             // Play sound/vibrate only on detection
                             Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
@@ -489,12 +489,12 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     }
 
                     @Override
-                    public void on2DExtendedRecognition(JSONArray products) {
+                    public void onImageInfoReceived(JSONArray products) {
                         mCameraSynchronizer.on2DExtendedRecognition(products);
                     }
 
                     @Override
-                    public void on3DRecognition(JSONObject products) {
+                    public void onResultsReceived(JSONObject products) {
                         mCameraSynchronizer.on3DRecognition(products);
                     }
 

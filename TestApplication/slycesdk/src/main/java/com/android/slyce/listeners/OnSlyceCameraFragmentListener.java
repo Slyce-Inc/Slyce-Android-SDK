@@ -13,7 +13,7 @@ public interface OnSlyceCameraFragmentListener {
     /** Called when barcode is found
      * @param barcode a barcode object.
      * */
-    void onCameraFragmentBarcodeRecognition(SlyceBarcode barcode);
+    void onCameraFragmentBarcodeRecognition(SlyceBarcode barcode); // onCameraFragmentBarcodeDetected
 
     /** Called when 2D products are found
      *  @param irId representing the recognized 2D products in base64 format. Can be en empty string in case no match has been found.
@@ -22,17 +22,17 @@ public interface OnSlyceCameraFragmentListener {
      *  <p> This method will be called upon a successful match either from a live video preview (automatic scanner) or from an image captured (by pressing snap button)
      *      or picked from the gallery<p/>
      *  */
-    void onCameraFragment2DRecognition(String irId, String productInfo);
+    void onCameraFragment2DRecognition(String irId, String productInfo); // onCameraFragmentImageDetected
 
     /** Called when additional info for the previously recognized 2D product is found.
      *  @param products a JSONArray of additional info.
      *  */
-    void onCameraFragment2DExtendedRecognition(JSONArray products);
+    void onCameraFragment2DExtendedRecognition(JSONArray products); // onCameraFragmentImageInfoReceived
 
     /** Called when 3D products are found
      *  @param products a JSONObject of products. Can be empty in case no match was found.
      *  */
-    void onCameraFragment3DRecognition(JSONObject products);
+    void onCameraFragment3DRecognition(JSONObject products);  // onCameraFragmentResultsReceived
 
     /** Called when an error occured
      *  @param message the error description

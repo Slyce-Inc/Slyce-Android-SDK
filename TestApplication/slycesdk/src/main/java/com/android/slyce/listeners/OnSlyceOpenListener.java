@@ -5,6 +5,6 @@ package com.android.slyce.listeners;
  */
 public interface OnSlyceOpenListener {
 
-    public void onOpenSuccess();
-    public void onOpenFail(String message);
+    void onOpenSuccess();
+    void onOpenFail(String message);
 }

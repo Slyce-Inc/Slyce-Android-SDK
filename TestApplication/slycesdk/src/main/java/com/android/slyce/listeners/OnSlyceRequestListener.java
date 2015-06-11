@@ -11,23 +11,23 @@ public interface OnSlyceRequestListener {
     /** Called when 3D products are found
      *  @param products a JSONObject of products.
      *  */
-    void on3DRecognition(JSONObject products);
+    void on3DRecognition(JSONObject products); // onResultsReceived
 
     /** Called when barcode is found
      * @param barcode a barcode object.
      * */
-    void onBarcodeRecognition(SlyceBarcode barcode);
+    void onBarcodeRecognition(SlyceBarcode barcode); // onBarcodeDetected
 
     /** Called when 2D products are found
      *  @param irId representing the recognized 2D products in base64 format. Can be en empty string in case no match has been found.
      *  @param productInfo representing a short info about the matched 2D products. Can be empty in case no match has been found.
      *  */
-    void on2DRecognition(String irId, String productInfo);
+    void on2DRecognition(String irId, String productInfo); // onImageDetected
 
     /** Called when additional info for the previously recognized 2D product is found.
      *  @param products a JSONArray of additional info.
      *  */
-    void on2DExtendedRecognition(JSONArray products);
+    void on2DExtendedRecognition(JSONArray products); // onImageInfoReceived
 
     /** Reporting the stage currently being processed.
      *  @param message current stage.

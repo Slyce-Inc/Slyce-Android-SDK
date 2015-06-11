@@ -275,6 +275,14 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
             mixpanel.track(Constants.FLASH_TURNED_OFF, null);
         }
     }
+
+    /**
+     * If true then after 2D automatic detection the scanner will resume scanning after 2 seconds
+     */
+    @Override
+    public void shouldResumeScanner(boolean value) {
+
+    }
     /* */
 
     /** {@link BarcodeSession.OnBarcodeListener} */

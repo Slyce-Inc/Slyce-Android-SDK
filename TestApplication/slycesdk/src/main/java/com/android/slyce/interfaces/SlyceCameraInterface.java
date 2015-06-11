@@ -1,8 +1,5 @@
 package com.android.slyce.interfaces;
 
-/**
- * Created by davidsvilem on 5/12/15.
- */
 public interface SlyceCameraInterface {
 
     void snap();
@@ -14,4 +11,5 @@ public interface SlyceCameraInterface {
     void focusAtPoint(float x, float y);
     void setContinuousRecognition(boolean value);
     void turnFlash();
+    void shouldResumeScanner(boolean value);
 }

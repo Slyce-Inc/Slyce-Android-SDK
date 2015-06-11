@@ -263,8 +263,8 @@ public class WSConnection implements
                 } catch (JSONException e) {}
             }
 
-            // Notify the host application for a 2D search not found (empty data)
-            mRequestSynchronizer.on2DRecognition("","");
+//            // Notify the host application for a 2D search not found (empty data)
+//            mRequestSynchronizer.on2DRecognition("","");
         }
     }
 

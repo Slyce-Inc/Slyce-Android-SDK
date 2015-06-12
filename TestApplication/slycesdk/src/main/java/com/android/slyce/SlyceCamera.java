@@ -252,10 +252,21 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
     @Override
     public void setContinuousRecognition(boolean value) {
         mContinuousRecognition = value;
-        if(true){
-            session.enableDetection();
-        }else{
-            session.disableDetection();
+
+        if(session != null){
+            if(value){
+                session.enableDetection();
+            }else{
+                session.disableDetection();
+            }
+        }
+
+        if(barcodeSession != null){
+            if(value){
+                barcodeSession.enableDetection();
+            }else{
+                barcodeSession.disableDetection();
+            }
         }
     }
 

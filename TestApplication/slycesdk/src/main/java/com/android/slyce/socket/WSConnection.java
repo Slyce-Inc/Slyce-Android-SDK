@@ -3,7 +3,6 @@ package com.android.slyce.socket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-
 import com.android.slyce.communication.ComManager;
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.handler.RequestSynchronizer;
@@ -25,7 +24,6 @@ import com.android.slyce.report.mpmetrics.MixpanelAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.concurrent.TimeUnit;
 
 

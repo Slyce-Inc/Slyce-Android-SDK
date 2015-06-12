@@ -7,7 +7,6 @@ import android.os.Message;
 
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraListener;
-import com.android.slyce.models.Search2DProgress;
 import com.android.slyce.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
@@ -31,9 +30,8 @@ public class CameraSynchronizer extends Handler {
         obtainMessage(1, barcode).sendToTarget();
     }
 
-    public void onCameraImageDetected(String irId, String productInfo){
-        Search2DProgress search2DProgress = new Search2DProgress(irId, productInfo);
-        obtainMessage(2, search2DProgress).sendToTarget();
+    public void onCameraImageDetected(String productInfo){
+        obtainMessage(2, productInfo).sendToTarget();
     }
 
     public void onCameraImageInfoReceived(JSONArray products){
@@ -85,14 +83,11 @@ public class CameraSynchronizer extends Handler {
 
             case 2:
 
-                Search2DProgress search2DProgress = (Search2DProgress) msg.obj;
+                String productInfo = (String) msg.obj;
 
-                String irid = search2DProgress.irId;
-                String productInfo = search2DProgress.productInfo;
+                mCameraListener.onCameraImageDetected(productInfo);
 
-                mCameraListener.onCameraImageDetected(irid, productInfo);
-
-                SlyceLog.i(TAG, "onCameraImageDetected(" + irid + ", " + productInfo + ")");
+                SlyceLog.i(TAG, "onCameraImageDetected(" + productInfo + ")");
 
                 break;
 

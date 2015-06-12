@@ -6,7 +6,6 @@ import android.os.Message;
 
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.models.Search2DProgress;
 import com.android.slyce.SlyceBarcode;
 import com.android.slyce.models.SlyceProgress;
 import com.android.slyce.utils.SlyceLog;
@@ -34,9 +33,8 @@ public class RequestSynchronizer extends Handler {
         obtainMessage(1, slyceProgress).sendToTarget();
     }
 
-    public void onImageDetected(String irId, String productInfo){
-        Search2DProgress search2DProgress = new Search2DProgress(irId, productInfo);
-        obtainMessage(2, search2DProgress).sendToTarget();
+    public void onImageDetected(String productInfo){
+        obtainMessage(2, productInfo).sendToTarget();
     }
 
     public void onResultsReceived(JSONObject products){
@@ -87,14 +85,11 @@ public class RequestSynchronizer extends Handler {
 
             case 2:
 
-                Search2DProgress search2DProgress = (Search2DProgress) msg.obj;
+                String productInfo = (String) msg.obj;
 
-                String irid = search2DProgress.irId;
-                String productInfo = search2DProgress.productInfo;
+                mRequestListener.onImageDetected(productInfo);
 
-                mRequestListener.onImageDetected(irid, productInfo);
-
-                SlyceLog.i(TAG, "onImageDetected(" + irid + ", " + productInfo + ")");
+                SlyceLog.i(TAG, "onImageDetected(" + productInfo + ")");
 
                 break;
 

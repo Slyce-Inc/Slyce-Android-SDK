@@ -365,7 +365,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                 }
 
                 // Notify the host application for basic result
-                mCameraSynchronizer.onCameraImageDetected(value, Utils.decodeBase64(value));
+                mCameraSynchronizer.onCameraImageDetected(Utils.decodeBase64(value));
 
                 // Get extended products results
                 ComManager.getInstance().getProductsFromIRID(value, new ComManager.OnExtendedInfoListener() {
@@ -479,13 +479,13 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
                     }
 
                     @Override
-                    public void onImageDetected(String irid, String productInfo) {
-                        if(!TextUtils.isEmpty(irid)){
+                    public void onImageDetected(String productInfo) {
+                        if(!TextUtils.isEmpty(productInfo)){
                             // Play sound/vibrate only on detection
                             Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
                         }
 
-                        mCameraSynchronizer.onCameraImageDetected(irid, productInfo);
+                        mCameraSynchronizer.onCameraImageDetected(productInfo);
                     }
 
                     @Override

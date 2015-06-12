@@ -18,10 +18,9 @@ public interface OnSlyceRequestListener {
     void onBarcodeDetected(SlyceBarcode barcode);
 
     /** Called when 2D products are found
-     *  @param irId representing the recognized 2D products in base64 format. Can be en empty string in case no match has been found.
      *  @param productInfo representing a short info about the matched 2D products. Can be empty in case no match has been found.
      *  */
-    void onImageDetected(String irId, String productInfo);
+    void onImageDetected(String productInfo);
 
     /** Called when additional info for the previously recognized 2D product is found.
      *  @param products a JSONArray of additional info.

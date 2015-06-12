@@ -233,7 +233,7 @@ public class WSConnection implements
             }catch (JSONException e){}
 
             // 3. Notify the host application for 2D search found
-            mRequestSynchronizer.onImageDetected(irId, Utils.decodeBase64(irId));
+            mRequestSynchronizer.onImageDetected(Utils.decodeBase64(irId));
 
             // Get extended products results
             ComManager.getInstance().getProductsFromIRID(irId, new ComManager.OnExtendedInfoListener(){

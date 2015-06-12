@@ -253,7 +253,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         public void onImageProcessBarcodeRecognition(SlyceBarcode barcode) {
             if(mListener != null){
                 // Notify the host application of barcode recognition
-                mListener.onCameraFragmentBarcodeRecognition(barcode);
+                mListener.onCameraFragmentBarcodeDetected(barcode);
             }
 
             // Close SDK
@@ -261,13 +261,13 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         }
 
         @Override
-        public void onImageProcess2DRecognition(String irid, String productInfo) {
+        public void onImageProcess2DRecognition(String productInfo) {
             if(mListener != null){
 
                 mDialogLayout.setVisibility(View.VISIBLE);
 
                 // Notify the host application of MS recognition
-                mListener.onCameraFragment2DRecognition(irid, productInfo);
+                mListener.onCameraFragmentImageDetected(productInfo);
             }
         }
 
@@ -278,7 +278,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
                 mDialogLayout.setVisibility(View.GONE);
 
                 // Notify the host application of extra products details
-                mListener.onCameraFragment2DExtendedRecognition(products);
+                mListener.onCameraFragmentImageInfoReceived(products);
             }
         }
 
@@ -290,7 +290,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
             if(mListener != null){
                 // Notify the host application of found products
-                mListener.onCameraFragment3DRecognition(products);
+                mListener.onCameraFragmentResultsReceived(products);
             }
         }
 
@@ -312,7 +312,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
 
             if(isAttached){
                 // Notify the host application of found products
-                mListener.onCameraFragment3DRecognition(products);
+                mListener.onCameraFragmentResultsReceived(products);
 
                 // Notify ImageProcessDialogFragment for found products
                 mImageProcessDialogFragment.onCameraResultsReceived(products);
@@ -323,19 +323,19 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
         public void onCameraBarcodeDetected(SlyceBarcode barcode) {
             if(isAttached){
                 // Notify the host application of barcode recognition
-                mListener.onCameraFragmentBarcodeRecognition(barcode);
+                mListener.onCameraFragmentBarcodeDetected(barcode);
             }
         }
 
         @Override
-        public void onCameraImageDetected(String irId, String productInfo) {
+        public void onCameraImageDetected(String productInfo) {
 
             if(isAttached){
 
                 mDialogLayout.setVisibility(View.VISIBLE);
 
                 // Notify the host application of MS recognition
-                mListener.onCameraFragment2DRecognition(irId, productInfo);
+                mListener.onCameraFragmentImageDetected(productInfo);
 
                 if(mImageProcessDialogFragment != null){
                     // Close ImageProcessDialogFragment
@@ -352,7 +352,7 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener{
                 mDialogLayout.setVisibility(View.GONE);
 
                 // Notify the host application of extra products details
-                mListener.onCameraFragment2DExtendedRecognition(products);
+                mListener.onCameraFragmentImageInfoReceived(products);
             }
         }
 

@@ -113,11 +113,10 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void onImageDetected(String irId, String productInfo) {
+    public void onImageDetected(String productInfo) {
 
         Toast.makeText(this,
-                "onImageDetected:" +
-                        "IrId: " + irId + "\n" +
+                "onImageDetected:" +  "\n" +
                         "Product Info: " + productInfo, Toast.LENGTH_SHORT).show();
 
         progressBar.setVisibility(View.INVISIBLE);
@@ -176,7 +175,7 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     // OnSlyceCameraFragmentListener callbacks (Full UI Mode)
     @Override
-    public void onCameraFragment3DRecognition(JSONObject results) {
+    public void onCameraFragmentResultsReceived(JSONObject results) {
 
         // Display products in a grid
         JSONArray products = results.optJSONArray("products");
@@ -188,17 +187,17 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
-    public void onCameraFragmentBarcodeRecognition(SlyceBarcode barcode) {
-//        Toast.makeText(this, "onCameraFragmentBarcodeRecognition:" + "\n" + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
+    public void onCameraFragmentBarcodeDetected(SlyceBarcode barcode) {
+//        Toast.makeText(this, "onCameraFragmentBarcodeDetected:" + "\n" + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onCameraFragment2DRecognition(String irId, String productInfo) {
-//        Toast.makeText(this, "onCameraFragment2DRecognition:" + "\n" + irId + "\n" + productInfo, Toast.LENGTH_SHORT).show();
+    public void onCameraFragmentImageDetected(String productInfo) {
+//        Toast.makeText(this, "onCameraFragmentImageDetected:" + "\n" + productInfo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onCameraFragment2DExtendedRecognition(JSONArray results) {
+    public void onCameraFragmentImageInfoReceived(JSONArray results) {
 
         // Display products in a grid
         Intent intent = new Intent(this, ProductsGridActivity.class);

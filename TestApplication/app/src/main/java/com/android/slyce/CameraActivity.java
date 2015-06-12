@@ -75,11 +75,10 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
-    public void onCameraImageDetected(String irId, String productInfo) {
+    public void onCameraImageDetected(String productInfo) {
 
         Toast.makeText(this,
                 "onCameraImageDetected:" + "\n" +
-                        "IrId: " + irId + "\n" +
                         "Product Info: " + productInfo, Toast.LENGTH_SHORT).show();
     }
 

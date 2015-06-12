@@ -90,7 +90,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         void onImageProcessBarcodeRecognition(SlyceBarcode barcode);
 
-        void onImageProcess2DRecognition(String irid, String productInfo);
+        void onImageProcess2DRecognition(String productInfo);
 
         void onImageProcess2DExtendedRecognition(JSONArray products);
 
@@ -310,12 +310,12 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void onImageDetected(String irid, String productInfo) {
+            public void onImageDetected(String productInfo) {
 
                 dismiss();
 
                 // Notify SlyceCameraFragment
-                mOnImageProcessDialogFragmentListener.onImageProcess2DRecognition(irid, productInfo);
+                mOnImageProcessDialogFragmentListener.onImageProcess2DRecognition(productInfo);
             }
 
             @Override

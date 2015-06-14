@@ -127,8 +127,11 @@ public class Constants {
     public static final String TICKET_CREATION_FAILED = "ticketCreationFailed";
     public static final String ERROR = "error";
 
+    /* Times */
+    public static final int AUTOMATIC_SCANNER_DELAY = 3000;
+    public static final int BYPASS_IDENTICAL_DETECTION_DELAY = 15 * 1000;
+
     /* Barcode */
-    public static final int AUTO_SCAN_DELAY = 3000;
     public static final String BARCODE_FORMAT = "barcodeFormat";
     public static final String PARSED_RESULT = "parsedResult";
 

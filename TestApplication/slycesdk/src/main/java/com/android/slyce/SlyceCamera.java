@@ -316,7 +316,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
                         barcodeSession.enableDetection();
                     }
-                },Constants.AUTO_SCAN_DELAY);
+                },Constants.AUTOMATIC_SCANNER_DELAY);
             }
 
             // Handle barcode detection
@@ -344,6 +344,9 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
         public void onResult(Result result) {
             SlyceLog.i(TAG, "onResult");
 
+            String value = result.getValue();
+            int type = result.getType();
+
             if(!mShouldPauseScanner && mContinuousRecognition){
 
                 new Handler().postDelayed(new Runnable() {
@@ -352,49 +355,17 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
                         session.enableDetection();
                     }
-                },Constants.AUTO_SCAN_DELAY);
+                },Constants.AUTOMATIC_SCANNER_DELAY);
             }
-
-            String value = result.getValue();
-
-            int type = result.getType();
 
             if(type == Result.Type.IMAGE){
                 // Image detection
 
-                try {
-                    JSONObject imageDetectReport = new JSONObject();
-                    imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
-                    imageDetectReport.put(Constants.DATA_IRID, value);
-                    mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
-                    mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
-                } catch (JSONException e) {}
+                handleImageResult(value);
 
-                if(!TextUtils.isEmpty(value)){
-                    // Play sound/vibrate only on detection
-                    Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
-                }
+            }else{ // Barcode detection
 
-                // Notify the host application for basic result
-                mCameraSynchronizer.onCameraImageDetected(Utils.decodeBase64(value));
-
-                // Get extended products results
-                ComManager.getInstance().getProductsFromIRID(value, new ComManager.OnExtendedInfoListener() {
-                    @Override
-                    public void onExtendedInfo(JSONArray products) {
-
-                        // Notify the host application for extended result
-                        mCameraSynchronizer.onCameraImageInfoReceived(products);
-                    }
-
-                    @Override
-                    public void onExtenedInfoError() {
-                        mCameraSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
-                    }
-                });
-
-            }else{
-                // Handle barcode detection
+                // Handle barcode
                 handleBarcodeResult(type, value, ScannerType._2D);
             }
         }
@@ -441,6 +412,46 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
             mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
             mixpanel.track(Constants.BARCODE_DETECTED, imageDetectReport);
         } catch (JSONException e){}
+    }
+
+    private void handleImageResult(String value){
+
+        // Check whether we need to abort current detection
+        if(shouldAbortDetection(value)){
+            return;
+        }
+
+        try {
+            JSONObject imageDetectReport = new JSONObject();
+            imageDetectReport.put(Constants.DETECTION_TYPE, Constants._2D);
+            imageDetectReport.put(Constants.DATA_IRID, value);
+            mixpanel = MixpanelAPI.getInstance(mActivity, Constants.MIXPANEL_TOKEN);
+            mixpanel.track(Constants.IMAGE_DETECTED, imageDetectReport);
+        } catch (JSONException e) {}
+
+        if(!TextUtils.isEmpty(value)){
+            // Play sound/vibrate only on detection
+            Buzzer.getInstance().buzz(mActivity, R.raw.slyce_detection_sound, mSlyce.isSoundOn(), mSlyce.isVibrateOn());
+        }
+
+        // Notify the host application for basic result
+        mCameraSynchronizer.onCameraImageDetected(Utils.decodeBase64(value));
+
+        // Get extended products results
+        ComManager.getInstance().getProductsFromIRID(value, new ComManager.OnExtendedInfoListener() {
+            @Override
+            public void onExtendedInfo(JSONArray products) {
+
+                // Notify the host application for extended result
+                mCameraSynchronizer.onCameraImageInfoReceived(products);
+            }
+
+            @Override
+            public void onExtenedInfoError() {
+                mCameraSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+            }
+        });
+
     }
 
     private void focusAreas(boolean focusAtPoint, float x, float y){
@@ -534,6 +545,46 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
             default:
                 break;
+        }
+    }
+
+    private String lastDetectedIrId = null;
+    private long lastDetectedTimeStamp = 0;
+
+    /**
+     * Abort the detection under two conditions
+     * 1. the same image detected
+     * 2. time from last detection is less then {@link Constants#BYPASS_IDENTICAL_DETECTION_DELAY}
+     * @exclude
+     */
+    private boolean shouldAbortDetection(String irid){
+
+        if(!TextUtils.equals(irid, lastDetectedIrId)){
+
+            lastDetectedTimeStamp = System.currentTimeMillis();
+            lastDetectedIrId = irid;
+
+            // Should Send result
+            return false;
+
+        }else{
+
+            long timeDif = System.currentTimeMillis() - lastDetectedTimeStamp;
+
+            if(timeDif < Constants.BYPASS_IDENTICAL_DETECTION_DELAY){
+
+                // Abort detection
+                SlyceLog.i(TAG, "Abort 2D detection for two identical images, time difference = " + timeDif);
+                return true;
+
+            }else{
+
+                lastDetectedTimeStamp = System.currentTimeMillis();
+                lastDetectedIrId = irid;
+
+                // Should Send result
+                return false;
+            }
         }
     }
 }

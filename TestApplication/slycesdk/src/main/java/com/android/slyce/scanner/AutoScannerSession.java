@@ -31,8 +31,6 @@ import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
 import android.view.SurfaceView;
-
-import com.android.slyce.utils.Constants;
 import com.moodstocks.android.ManualScannerSession;
 import com.moodstocks.android.MoodstocksError;
 import com.moodstocks.android.Result;

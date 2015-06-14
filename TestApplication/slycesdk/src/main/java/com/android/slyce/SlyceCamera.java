@@ -552,10 +552,9 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
     private long lastDetectedTimeStamp = 0;
 
     /**
-     * Abort the detection under two conditions
+     * Abort image detection under two conditions:
      * 1. the same image detected
      * 2. time from last detection is less then {@link Constants#BYPASS_IDENTICAL_DETECTION_DELAY}
-     * @exclude
      */
     private boolean shouldAbortDetection(String irid){
 

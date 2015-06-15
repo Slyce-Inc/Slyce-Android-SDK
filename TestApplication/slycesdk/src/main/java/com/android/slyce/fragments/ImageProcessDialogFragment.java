@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.slyce.Slyce;
@@ -55,6 +57,10 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
     private static final int UPLOAD_IMAGE_TOTAL_PROGRESS_TIME = 3000;
 
+    private int screenHeight;
+    private int screenWidth;
+    private int layoutSize;
+
     private String mProcessType;
     private String mImageDecodableString;
 
@@ -75,6 +81,11 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     private TextView progressMsg;
     private TextView sendImageText;
     private TextView analyzeImageText;
+
+    private RelativeLayout topLayout;
+    private RelativeLayout bottomLayout;
+
+    private RelativeLayout.LayoutParams layoutParams;
 
     /* for searching products from gallery image */
     private SlyceProductsRequest mSlyceProductsRequest;
@@ -123,6 +134,9 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        calculateSize();
+
         if (getArguments() != null) {
             mProcessType = getArguments().getString(ARG_PROCESS_TYPE);
             mImageDecodableString = getArguments().getString(ARG_IMAGE_DECODABLE_STRING);
@@ -140,6 +154,11 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         View root = inflater.inflate(R.layout.fragment_image_process_dialog, container, false);
 
         initRoundedImage(root);
+
+        topLayout = (RelativeLayout) root.findViewById(R.id.top_layout);
+        bottomLayout = (RelativeLayout) root.findViewById(R.id.bottom_layout);
+
+        setSize();
 
         horizontalProgressBar = (ProgressBar) root.findViewById(R.id.horizontal_progress_bar);
         horizontalProgressBar.setIndeterminate(false);
@@ -284,6 +303,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         mImage.setBorderWidth(getResources().getDimension(R.dimen.slyce_dimen_2dp));
         mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mImage.setOval(false);
+//        mImage.setLayoutParams(layoutParams);
     }
 
     /* Invoke this method after an Image was picked from Gallery */
@@ -509,5 +529,36 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
                 break;
         }
+    }
+
+    private void calculateSize(){
+
+        screenHeight = getResources().getDisplayMetrics().heightPixels;
+        screenWidth = getResources().getDisplayMetrics().widthPixels;
+
+        int orientation = getActivity().getResources().getConfiguration().orientation;
+
+        if(screenHeight > screenWidth){
+            //code for portrait mode
+            layoutSize = (screenWidth * 90)/100;
+
+        } else{
+            //code for landscape mode
+            layoutSize = (screenHeight * 65)/100;
+        }
+    }
+
+    private void setSize(){
+        topLayout.getLayoutParams().height = layoutSize;
+        topLayout.getLayoutParams().width = layoutSize;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        calculateSize();
+        setSize();
+
+        super.onConfigurationChanged(newConfig);
     }
 }

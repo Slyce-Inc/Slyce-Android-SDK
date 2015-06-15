@@ -137,4 +137,28 @@
         android:layout_height="match_parent">
     </FrameLayout>
 
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_margin="10dp">-->
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/top"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="250dp"-->
+            <!--android:background="@drawable/image_processing_top">-->
+        <!--</RelativeLayout>-->
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/bottom"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:background="@drawable/image_processing_bottom"-->
+            <!--android:layout_below="@id/top"-->
+            <!-->-->
+        <!--</RelativeLayout>-->
+
+    <!--</RelativeLayout>-->
+
 </RelativeLayout>

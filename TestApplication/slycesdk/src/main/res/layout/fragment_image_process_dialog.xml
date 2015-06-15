@@ -1,27 +1,29 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.slyce.fragments.ImageProcessDialogFragment">
+    tools:context="com.android.slyce.fragments.ImageProcessDialogFragment"
+    android:orientation="vertical"
+    android:weightSum="1"
+    >
 
         <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/fragment_image_process_top_background"
-            >
+            android:gravity="center_horizontal"
+            android:layout_weight="0.5"
+            android:background="@drawable/image_processing_top">
+
+            <!--android:background="@drawable/fragment_image_process_top_background"-->
 
             <com.android.slyce.roundedimage.RoundedImageView
                 android:id="@+id/image"
-                android:layout_width="@dimen/slyce_dimen_300dp"
-                android:layout_height="@dimen/slyce_dimen_300dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/slyce_dimen_20dp"
-                android:layout_marginRight="@dimen/slyce_dimen_20dp"
-                android:layout_marginTop="@dimen/slyce_dimen_16dp"
-                android:layout_marginBottom="@dimen/slyce_dimen_16dp"
-                />
+                android:padding="5dp"/>
 
             <ProgressBar
                 android:id="@+id/image_progress_bar"
@@ -29,28 +31,34 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:visibility="invisible"/>
-
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#bebebe"/>
 
         <RelativeLayout
             android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/top_layout"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/fragment_image_process_bottom_background"
-            android:paddingLeft="@dimen/slyce_dimen_20dp"
-            android:paddingRight="@dimen/slyce_dimen_20dp">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/image_processing_bottom">
+
+            <!--android:background="@drawable/fragment_image_process_bottom_background"-->
 
             <TextView
                 android:id="@+id/scan_status_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/slyce_dimen_8dp"
                 android:textSize="@dimen/slyce_dimen_14dp"
                 android:textStyle="italic"
                 android:textColor="@android:color/black"
+                android:padding="5dp"
                 />
 
             <ProgressBar
@@ -60,7 +68,6 @@
                 android:layout_height="@dimen/slyce_dimen_12dp"
                 android:layout_below="@id/scan_status_main"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/slyce_dimen_8dp"
                 android:max="100"
                 android:progressDrawable="@drawable/progress_drawable"
                 android:visibility="visible" />
@@ -70,15 +77,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/horizontal_progress_bar"
                 android:paddingBottom="@dimen/slyce_dimen_8dp"
-                android:paddingTop="@dimen/slyce_dimen_8dp"
                 >
-
 
                 <RelativeLayout
                     android:id="@+id/progress_first_text_main_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/slyce_dimen_8dp">
+                    android:layout_marginTop="6dp"
+                    android:layout_toLeftOf="@+id/cancel_button"
+                    android:layout_toStartOf="@+id/cancel_button">
 
                     <!-- First Text-->
                     <FrameLayout
@@ -115,8 +122,6 @@
                         android:text="@string/fragment_image_process_first_progress_text"
                         android:textColor="@color/slyce_color_grey_2_alpha_80"
                         android:textSize="@dimen/slyce_dimen_14dp" />
-
-
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -124,7 +129,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/progress_first_text_main_layout"
-                    android:layout_marginTop="@dimen/slyce_dimen_8dp">
+                    android:layout_alignRight="@+id/progress_first_text_main_layout"
+                    android:layout_alignEnd="@+id/progress_first_text_main_layout"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:paddingRight="10dp">
 
                     <!-- Second Text-->
                     <FrameLayout
@@ -159,7 +168,8 @@
                         android:layout_toRightOf="@id/progress_second_text_secondary_layout"
                         android:text="@string/fragment_image_process_second_progress_text"
                         android:textColor="@color/slyce_color_grey_2_alpha_80"
-                        android:textSize="@dimen/slyce_dimen_14dp" />
+                        android:textSize="@dimen/slyce_dimen_14dp"
+                        android:paddingRight="10dp"/>
 
                 </RelativeLayout>
 
@@ -167,15 +177,17 @@
                     android:id="@+id/cancel_button"
                     android:layout_width="@dimen/slyce_dimen_68dp"
                     android:layout_height="@dimen/slyce_dimen_37dp"
+                    android:background="@drawable/ps_general_assets_empty_btn_normal"
                     android:layout_alignBottom="@id/progress_second_text_main_layout"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/ps_general_assets_empty_btn_normal"
-                    android:text="Cancel"
                     android:textAllCaps="false"
+                    android:text="Cancel"
                     android:textColor="@color/slyce_color_blue"
-                    android:textSize="@dimen/slyce_dimen_12dp" />
+                    android:textSize="@dimen/slyce_dimen_12dp"
+                    />
+
             </RelativeLayout>
 
         </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

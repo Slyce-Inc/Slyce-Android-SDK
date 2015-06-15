@@ -8,8 +8,6 @@
 
     <dimen name="slyce_dimen_8dp">8dp</dimen>
 
-    <dimen name="slyce_dimen_10dp">10dp</dimen>
-
     <dimen name="slyce_dimen_12dp">12dp</dimen>
 
     <dimen name="slyce_dimen_14dp">14dp</dimen>
@@ -19,8 +17,6 @@
     <dimen name="slyce_dimen_16dp">16dp</dimen>
 
     <dimen name="slyce_dimen_18dp">18dp</dimen>
-
-    <dimen name="slyce_dimen_20dp">20dp</dimen>
 
     <dimen name="slyce_dimen_24dp">24dp</dimen>
 
@@ -39,7 +35,5 @@
     <dimen name="slyce_dimen_68dp">68dp</dimen>
 
     <dimen name="slyce_dimen_100dp">100dp</dimen>
-
-    <dimen name="slyce_dimen_300dp">300dp</dimen>
 
 </resources>

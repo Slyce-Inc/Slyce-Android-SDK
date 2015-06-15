@@ -26,7 +26,7 @@ public class Constants {
 
     /* 2D */
     public static final String MS_SEARCH_API = "@api.moodstocks.com/v2/search";
-    public static final String MS_ECHO_API = "@api.moodstocks.com/v2/echo?success=true";
+    public static final String MS_ECHO_API = "@api.moodstocks.com/v2/echo/?foo=bar";
     public static final String MS_IMAGE_URL = "image_url";
     public static final String MS_FOUND = "found";
     public static final String MS_ERROR = "error";
@@ -128,7 +128,7 @@ public class Constants {
     public static final String ERROR = "error";
 
     /* Times */
-    public static final int AUTOMATIC_SCANNER_DELAY = 3000;
+    public static final int AUTOMATIC_SCANNER_DELAY = 1000;
     public static final int BYPASS_IDENTICAL_DETECTION_DELAY = 15 * 1000;
 
     /* Barcode */

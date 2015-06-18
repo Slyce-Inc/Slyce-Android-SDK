@@ -3,9 +3,6 @@ package com.android.slyce.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-/**
- * Created by davidsvilem on 5/21/15.
- */
 public class BitmapLoader {
 
     public static Bitmap decodeSampledBitmapFromResource(String res, int reqWidth, int reqHeight) {

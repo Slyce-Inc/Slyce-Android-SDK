@@ -32,6 +32,17 @@ public class WSConnection implements
         DataCallback,
         CompletedCallback{
 
+    // Enumerator for request type
+    public enum MethodType{
+        SEND_IMAGE,
+        SEND_IMAGE_URL
+    }
+
+    // Interface for available token
+    public interface OnTokenListener{
+        void onTokenReceived(String token);
+    }
+
     private final String TAG = WSConnection.class.getSimpleName();
 
     private Context mContext;
@@ -165,7 +176,9 @@ public class WSConnection implements
 
             case SEND_IMAGE:
 
-                ComManager.getInstance().search2DImageFile(mContext, mBitmap,
+                Bitmap scaledBitmap = Utils.scaleDown(mBitmap);
+
+                ComManager.getInstance().search2DImageFile(scaledBitmap,
                         new ComManager.On2DSearchListener() {
 
                             @Override
@@ -178,7 +191,7 @@ public class WSConnection implements
 
             case SEND_IMAGE_URL:
 
-                ComManager.getInstance().seach2DImageURL(mContext, mImageUrl,
+                ComManager.getInstance().search2DImageURL(mContext, mImageUrl,
                         new ComManager.On2DSearchListener() {
                             @Override
                             public void onResponse(String irId, String error) {
@@ -653,14 +666,5 @@ public class WSConnection implements
         }else{
             isRequestCancelled = true;
         }
-    }
-
-    public enum MethodType{
-        SEND_IMAGE,
-        SEND_IMAGE_URL
-    }
-
-    public interface OnTokenListener{
-        void onTokenReceived(String token);
     }
 }

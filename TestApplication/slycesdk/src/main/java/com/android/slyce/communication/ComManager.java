@@ -2,6 +2,9 @@ package com.android.slyce.communication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+
+import com.android.slyce.communication.utils.AuthFailureError;
 import com.android.slyce.communication.utils.BasicNetwork;
 import com.android.slyce.communication.utils.HttpHeaderParser;
 import com.android.slyce.communication.utils.HttpStack;
@@ -17,10 +20,18 @@ import com.android.slyce.utils.Constants;
 import com.android.slyce.utils.SharedPrefHelper;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slyce.utils.Utils;
+import com.moodstocks.android.MoodstocksError;
+import com.moodstocks.android.Result;
+import com.moodstocks.android.Scanner;
+import com.moodstocks.android.advanced.ApiSearcher;
+import com.moodstocks.android.advanced.Image;
+import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 
 public class ComManager {
 
@@ -32,6 +43,19 @@ public class ComManager {
     private Network network;
 
     private NetworkResponse networkResponse;
+
+    public interface OnResponseListener{
+        void onResponse(JSONObject jsonResponse);
+    }
+
+    public interface On2DSearchListener {
+        void onResponse(String irid, String error);
+    }
+
+    public interface OnExtendedInfoListener{
+        void onExtendedInfo(JSONArray result);
+        void onExtenedInfoError();
+    }
 
     private ComManager(){
         stack = new HurlStack();
@@ -62,7 +86,10 @@ public class ComManager {
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
 
                 // Perform request
-                JSONObject response = parseJsonObjectResponse(performRequest(request));
+                JSONObject response = null;
+                try {
+                    response = parseJsonObjectResponse(performRequest(request));
+                } catch (AuthFailureError authFailureError) {}
 
                 listener.onResponse(response);
 
@@ -89,7 +116,10 @@ public class ComManager {
                 JsonObjectRequest request = createRequest(requestURLBuilder.toString());
 
                 // Perform request
-                String response = performRequest(request);
+                String response = null;
+                try {
+                    response = performRequest(request);
+                } catch (AuthFailureError authFailureError) {}
 
                 JSONArray result = parseJsonArrayResponse(response);
 
@@ -103,9 +133,10 @@ public class ComManager {
         }).start();
     }
 
-    public void getMSAuth(final Context context,  final OnResponseListener listener){
+    public void search2DImageURL(final Context context, final String imageUrl, final On2DSearchListener listener){
 
         new Thread(new Runnable() {
+
             @Override
             public void run() {
 
@@ -114,109 +145,72 @@ public class ComManager {
                 String key = sharedPrefHelper.getMSkey();
                 String secret = sharedPrefHelper.getMSsecret();
 
-                StringBuilder url = new StringBuilder();
-                url.append("http://").append(key).append(":").append(secret).append(Constants.MS_ECHO_API);
 
-                AuthRequest request = new AuthRequest(
-                        Request.Method.GET,
-                        url.toString(),
-                        null ,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        });
+                HttpClientHelper http = new HttpClientHelper(key, secret);
+                try {
+                    HttpGet request = http.createImageUrlSearchRequest(HttpClientHelper.SEARCH_API, imageUrl);
+                    String response = http.dispatch(request);
+                    http.clean();
 
-                request.setShouldCache(false);
+                    JSONObject jsonObjectResponse = parseJsonObjectResponse(response);
 
-                JSONObject response = parseJsonObjectResponse(performRequest(request));
+                    handle2DResponse(jsonObjectResponse, listener);
 
-                listener.onResponse(response);
-
+                } catch (IOException | URISyntaxException e) {
+                    SlyceLog.i(TAG, "Exception on 2D search image url");
+                }
             }
-
         }).start();
     }
 
-    public void seach2DImageURL(final Context context, final String imageUrl, final On2DSearchListener listener){
+    public void search2DImageFile(final Bitmap bitmap, final On2DSearchListener listener){
 
-        new Thread(new Runnable() {
+        // Get Scanner
+        Scanner scanner = null;
+        try {
+            scanner = Scanner.get();
+        } catch (MoodstocksError moodstocksError) {
+            SlyceLog.e(TAG, "Error at Scanner.get()");
+            return;
+        }
 
-            @Override
-            public void run() {
+        // Create Image
+        Image img = null;
+        try {
+            img = new Image(bitmap);
+        } catch (IllegalArgumentException | MoodstocksError e) {
+            SlyceLog.i(TAG, "Fail to create Image object");
+            return;
+        }
 
-                // Get MS Api Key, Api Secret
-                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
-                String key = sharedPrefHelper.getMSkey();
-                String secret = sharedPrefHelper.getMSsecret();
-
-                StringBuilder url = new StringBuilder();
-                url.append("http://").
-                        append(key).
-                        append(":").
-                        append(secret).
-                        append(Constants.MS_SEARCH_API).
-                        append("?").
-                        append(Constants.MS_IMAGE_URL).
-                        append("=").
-                        append(imageUrl);
-
-                AuthRequest request = new AuthRequest(
-                        Request.Method.GET,
-                        url.toString(),
-                        null ,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        });
-
-                request.setShouldCache(false);
-
-                JSONObject response = parseJsonObjectResponse(performRequest(request));
-
-                handle2DResponse(response, listener);
+        // 1. Local search
+        try {
+            Result result = scanner.search(img, Scanner.SearchOption.DEFAULT, Result.Extra.NONE);
+            if (result != null) {
+                handle2DResponse(result.getValue(), "", listener);
+                return;
             }
-
-        }).start();
-    }
-
-    public void search2DImageFile(final Context context, final Bitmap bitmap, final On2DSearchListener listener){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                // Get MS Api Key, Api Secret
-                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
-                String key = sharedPrefHelper.getMSkey();
-                String secret = sharedPrefHelper.getMSsecret();
-
-                StringBuilder url = new StringBuilder();
-                url.append("http://").
-                        append(key).
-                        append(":").
-                        append(secret).
-                        append(Constants.MS_SEARCH_API);
-
-                Bitmap scaledBitmap = Utils.scaleDown(bitmap);
-
-                JSONObject response = Utils.uploadBitmapToMS(url.toString(), scaledBitmap);
-
-                handle2DResponse(response, listener);
-
+            else {
+                SlyceLog.d(TAG, "[Local search] No result found");
             }
-        }).start();
+        } catch (MoodstocksError e) {
+            SlyceLog.i(TAG, "Failed on local search");
+        }
+
+        // 2. Server search
+        try {
+            ApiSearcher searcher = new ApiSearcher(scanner);
+            Result result = searcher.search(img);
+            if (result != null) {
+                handle2DResponse(result.getValue(), "", listener);
+            }
+            else {
+                SlyceLog.d(TAG, "[Server-side search] No result found");
+                handle2DResponse(null, "No image found", listener);
+            }
+        } catch (MoodstocksError e) {
+            SlyceLog.i(TAG, "Failed on server search");
+        }
     }
 
     private void handle2DResponse(JSONObject response, On2DSearchListener listener){
@@ -229,6 +223,10 @@ public class ComManager {
             irId = response.optString(Constants.MS_ID);
         }
 
+        listener.onResponse(irId, error);
+    }
+
+    private void handle2DResponse(String irId, String error, On2DSearchListener listener){
         listener.onResponse(irId, error);
     }
 
@@ -256,7 +254,7 @@ public class ComManager {
         return request;
     }
 
-    private String performRequest(JsonObjectRequest request){
+    private String performRequest(JsonObjectRequest request) throws AuthFailureError{
 
         String response = null;
 
@@ -301,16 +299,134 @@ public class ComManager {
         return object;
     }
 
-    public interface OnResponseListener{
-        void onResponse(JSONObject jsonResponse);
-    }
+//    @Deprecated
+//    public void getMSAuth(final Context context,  final OnResponseListener listener){
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                // Get MS Api Key, Api Secret
+//                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
+//                String key = sharedPrefHelper.getMSkey();
+//                String secret = sharedPrefHelper.getMSsecret();
+//
+//                StringBuilder url = new StringBuilder();
+//                url.append("http://").append(key).append(":").append(secret).append(Constants.MS_ECHO_API);
+//
+//                AuthRequest request = new AuthRequest(
+//                        Request.Method.GET,
+//                        url.toString(),
+//                        null ,
+//                        new Response.Listener<JSONObject>() {
+//                            @Override
+//                            public void onResponse(JSONObject response) {
+//                            }
+//                        },
+//                        new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                            }
+//                        });
+//
+//                request.setShouldCache(false);
+//
+//                JSONObject response = null;
+//                try {
+//                    response = parseJsonObjectResponse(performRequest(request));
+//                } catch (AuthFailureError authFailureError) {
+//                }
+//
+//                listener.onResponse(response);
+//
+//            }
+//
+//        }).start();
+//    }
 
-    public interface On2DSearchListener {
-        void onResponse(String irid, String error);
-    }
+    //    @Deprecated
+//    public void search2DImageURL(final Context context, final String imageUrl, final On2DSearchListener listener){
+//
+//        new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//
+//                // Get MS Api Key, Api Secret
+//                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
+//                String key = sharedPrefHelper.getMSkey();
+//                String secret = sharedPrefHelper.getMSsecret();
+//
+//                StringBuilder url = new StringBuilder();
+//                url.append("http://").
+//                        append(key).
+//                        append(":").
+//                        append(secret).
+//                        append(Constants.MS_SEARCH_API).
+//                        append("?").
+//                        append(Constants.MS_IMAGE_URL).
+//                        append("=").
+//                        append(imageUrl);
+//
+//                AuthRequest request = new AuthRequest(
+//                        Request.Method.GET,
+//                        url.toString(),
+//                        null ,
+//                        new Response.Listener<JSONObject>() {
+//                            @Override
+//                            public void onResponse(JSONObject response) {
+//                            }
+//                        },
+//                        new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                            }
+//                        });
+//
+//                request.setShouldCache(false);
+//
+//                JSONObject response = null;
+//                try {
+//
+//                    response = parseJsonObjectResponse(performRequest(request));
+//
+//                } catch (AuthFailureError authFailureError) {
+//
+//                }
+//
+//                handle2DResponse(response, listener);
+//            }
+//
+//        }).start();
+//    }
 
-    public interface OnExtendedInfoListener{
-        void onExtendedInfo(JSONArray result);
-        void onExtenedInfoError();
-    }
+    //    @Deprecated
+//    public void search2DImageFile(final Context context, final Bitmap bitmap, final On2DSearchListener listener){
+//
+//        // Using MS Http API
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                // Get MS Api Key, Api Secret
+//                SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance(context);
+//                String key = sharedPrefHelper.getMSkey();
+//                String secret = sharedPrefHelper.getMSsecret();
+//
+//                StringBuilder url = new StringBuilder();
+//                url.append("http://").
+//                        append(key).
+//                        append(":").
+//                        append(secret).
+//                        append(Constants.MS_SEARCH_API);
+//
+//                Bitmap scaledBitmap = Utils.scaleDown(bitmap);
+//
+//                JSONObject response = Utils.uploadBitmapToMS(url.toString(), scaledBitmap, key, secret);
+//
+//                handle2DResponse(response, listener);
+//
+//            }
+//        }).start();
+//    }
 }

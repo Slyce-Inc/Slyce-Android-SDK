@@ -208,9 +208,10 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.cancel_button){
-            dismiss();
-        }else if(v.getId() == R.id.scan_not_found_button_done){
+
+        int id = v.getId();
+
+        if(id == R.id.cancel_button || id == R.id.scan_not_found_button_done){
             dismiss();
         }
     }
@@ -239,7 +240,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         NotFoundDialogFragment newFragment = NotFoundDialogFragment.newInstance();
         newFragment.show(ft, "NotFoundDialogFragment");
 
-        dismiss();
+//        dismiss();
     }
 
     public void onSnap(Bitmap bitmap) {
@@ -289,9 +290,9 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             return;
         }
 
-        updateProgressInfo("");
+//        updateProgressInfo("");
 
-        showDialogFragment();
+//        showDialogFragment();
     }
     /* End */
 
@@ -303,7 +304,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         mImage.setBorderWidth(getResources().getDimension(R.dimen.slyce_dimen_2dp));
         mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mImage.setOval(false);
-//        mImage.setLayoutParams(layoutParams);
     }
 
     /* Invoke this method after an Image was picked from Gallery */
@@ -371,10 +371,10 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             public void onError(String message) {
 
                 // Update progress bar
-                updateProgressInfo("");
+//                updateProgressInfo("");
 
                 // Set the not found layout
-                showDialogFragment();
+//                showDialogFragment();
             }
 
             @Override
@@ -471,25 +471,23 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
         private final WeakReference<ImageView> imageViewReference;
-        private final WeakReference<ProgressBar> progressBarReference;
         private String data;
 
         public BitmapWorkerTask(ImageView imageView, ProgressBar progress) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
             imageViewReference = new WeakReference<ImageView>(imageView);
-            progressBarReference = new WeakReference<ProgressBar>(progress);
         }
 
         @Override
         protected void onPreExecute() {
-            progressBarReference.get().setVisibility(View.VISIBLE);
         }
 
         // Decode image in background.
         @Override
         protected Bitmap doInBackground(String... params) {
             data = params[0];
-            return BitmapLoader.decodeSampledBitmapFromResource(data, 200, 200);
+
+            return BitmapLoader.decodeSampledBitmapFromResource(data, 400, 400);
         }
 
         // Once complete, see if ImageView is still around and set bitmap.
@@ -502,8 +500,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 }
 
                 performSlyceProductsRequest(bitmap);
-
-                progressBarReference.get().setVisibility(View.INVISIBLE);
             }
         }
     }

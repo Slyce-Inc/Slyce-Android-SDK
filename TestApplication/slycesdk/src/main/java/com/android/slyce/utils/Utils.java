@@ -19,6 +19,25 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+
+import com.android.slyce.communication.HttpAuthHeader;
+import com.android.slyce.communication.utils.AuthFailureError;
+
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.AUTH;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthenticationException;
+import org.apache.http.auth.MalformedChallengeException;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.auth.DigestScheme;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -27,13 +46,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.Authenticator;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
+
 import javax.net.ssl.HttpsURLConnection;
 
 public class Utils {
@@ -150,7 +181,161 @@ public class Utils {
         return serverResponseCode;
     }
 
-    public static JSONObject uploadBitmapToMS(String serverUrl, Bitmap bitmap) {
+    public static void moodstocksAuth(String serverUrl, final String key, final String password, String digest){
+
+            BufferedInputStream is = null;
+            // Only display the first 500 characters of the retrieved
+            // web page content.
+            int len = 500;
+
+            try {
+
+                URL url = new URL(serverUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestProperty("Connection", "Keep-Alive");
+
+//                conn.addRequestProperty("Content-Type", "application/json;charset=utf-8");
+//                conn.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+//                conn.setAllowUserInteraction(true);
+
+                if(digest != null){
+                    conn.setRequestProperty("Authorization", digest);
+                }
+
+                // Starts the query
+                try{
+                    conn.connect();
+                }catch(Throwable e){
+                    Log.i(",","");
+                }
+
+                int response = conn.getResponseCode();
+
+                if(response == HttpsURLConnection.HTTP_UNAUTHORIZED){
+
+                    Map<String, List<String>> headersMap = conn.getHeaderFields();
+                    List<String> headers = headersMap.get("WWW-Authenticate");
+
+                    HttpAuthHeader auth = new HttpAuthHeader(headers.get(0));
+
+                    String nonce = auth.getNonce();
+                    String realm = auth.getRealm();
+                    String qop = auth.getQop();
+
+                    MessageDigest md5 = null;
+                    try{
+                        md5 = MessageDigest.getInstance("MD5");
+                    }catch(NoSuchAlgorithmException e){
+                        return;
+                    }
+
+                    String HA1 = null;
+                    try{
+                        md5.reset();
+                        StringBuilder ha1 = new StringBuilder();
+                        ha1.append(key).append(":").append(realm).append(password);
+                        md5.update(ha1.toString().getBytes("ISO-8859-1"));
+                        byte[] ha1bytes = md5.digest();
+                        HA1 = bytesToHexString(ha1bytes);
+
+                    }  catch(UnsupportedEncodingException e){
+                        return;
+                    }
+
+                    URL u = null;
+                    try {
+                        u = new URL(serverUrl);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                    String HA2 = null;
+                    try{
+
+                        md5.reset();
+                        StringBuilder ha2 = new StringBuilder();
+                        ha2.append(conn.getRequestMethod()).append(":").append(u.getPath());
+                        md5.update(ha2.toString().getBytes("ISO-8859-1"));
+                        HA2 = bytesToHexString(md5.digest());
+
+                    }catch (UnsupportedEncodingException e){
+                        return;
+                    }
+
+                    String cnonce = System.currentTimeMillis()*1000+"";
+
+                    String HA3 = null;
+                    try{
+
+                        StringBuilder ha3 = new StringBuilder();
+                        ha3.append(HA1).append(":").append(nonce).append(":").append("00000001").append(":").append(cnonce).append(":").append("auth").append(":").append(HA2);
+                        md5.reset();
+                        md5.update(ha3.toString().getBytes("ISO-8859-1"));
+                        HA3 = bytesToHexString(md5.digest());
+
+                    }catch (UnsupportedEncodingException e){
+                        return;
+                    }
+
+                    StringBuilder sb = new StringBuilder(128);
+                    sb.append("Digest ");
+                    sb.append("username").append("=\"").append(key).append("\",");
+                    sb.append("realm").append("=\"").append(realm).append("\",");
+                    sb.append("nonce").append("=\"").append(nonce).append("\",");
+                    sb.append("uri").append("=\"").append(u.getPath()).append("\",");
+                    sb.append("qop").append("=\"").append(qop).append("\",");
+                    sb.append("nc").append("=\"").append("00000001").append("\",");
+                    sb.append("cnonce").append("=\"").append(cnonce).append("\",");
+                    sb.append("response").append("=\"").append(HA3).append("\"");
+
+                    moodstocksAuth(serverUrl,key,password,sb.toString());
+                    return;
+
+                }else if(response == HttpsURLConnection.HTTP_OK){
+
+                }
+
+                Log.d(TAG, "The response is: " + response);
+
+                is = new BufferedInputStream(conn.getInputStream());
+
+                // Convert the InputStream into a string
+                String contentAsString = readIt(is, len);
+
+                // Makes sure that the InputStream is closed after the app is
+                // finished using it.
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+    }
+
+    public static String readIt(BufferedInputStream stream, int len) throws IOException, UnsupportedEncodingException {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
+    }
+
+    public static JSONObject uploadBitmapToMS(String serverUrl, Bitmap bitmap, final String key, final String password) {
 
         JSONObject response = null;
 
@@ -180,7 +365,7 @@ public class Utils {
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
-            String digest = "Digest username=\"3jygvjimebpivrohfxyf\", realm=\"Moodstocks API\", nonce=\"MTQyOTQzNDY2OCBlMWFlZTg1Y2Y4NjM2ODgxYWEzOTQxODExYjc0NmI2NA==\", uri=\"/v2/search\", response=\"36b171db79e93cd5ffa2fdbee85481a0\", opaque=\"b1a8d1044b0de768f7905b15aa7f95de\", qop=auth, nc=00000001, cnonce=\"8712f44508f59394\"";
+           String digest = "Digest username=\"3jygvjimebpivrohfxyf\", realm=\"Moodstocks API\", nonce=\"MTQyOTQzNDY2OCBlMWFlZTg1Y2Y4NjM2ODgxYWEzOTQxODExYjc0NmI2NA==\", uri=\"/v2/search\", response=\"36b171db79e93cd5ffa2fdbee85481a0\", opaque=\"b1a8d1044b0de768f7905b15aa7f95de\", qop=auth, nc=00000001, cnonce=\"8712f44508f59394\"";
             conn.setRequestProperty("Authorization", digest);
 
             dos = new DataOutputStream(conn.getOutputStream());
@@ -222,7 +407,9 @@ public class Utils {
             Log.i("uploadFile", "HTTP Response is : "
                     + serverResponseMessage + ": " + serverResponseCode);
 
-            if (serverResponseCode == 200) {
+            if(serverResponseCode == HttpsURLConnection.HTTP_UNAUTHORIZED){
+
+            }else if(serverResponseCode == 200) {
 
                 SlyceLog.i(TAG, "uploadFile File Upload Complete.");
 
@@ -447,6 +634,42 @@ public class Utils {
     public static Uri getImageUri(Intent data, Context context){
         Uri selectedImage = data.getData();
         return selectedImage;
+    }
+
+    private static final String HEX_LOOKUP = "0123456789abcdef";
+    private static String bytesToHexString(byte[] bytes)
+    {
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for(int i = 0; i < bytes.length; i++){
+            sb.append(HEX_LOOKUP.charAt((bytes[i] & 0xF0) >> 4));
+            sb.append(HEX_LOOKUP.charAt((bytes[i] & 0x0F) >> 0));
+        }
+        return sb.toString();
+    }
+
+    public static final String MD5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

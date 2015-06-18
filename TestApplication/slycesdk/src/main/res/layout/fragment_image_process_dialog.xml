@@ -26,12 +26,6 @@
                 android:padding="5dp"
                 />
 
-            <ProgressBar
-                android:id="@+id/image_progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="visible"/>
         </RelativeLayout>
 
         <View
@@ -190,5 +184,4 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
 </LinearLayout>

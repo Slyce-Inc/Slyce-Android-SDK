@@ -76,7 +76,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     private ProgressBar horizontalProgressBar;
     private ProgressBar progressSendingImage;
     private ProgressBar progressAnalyzeImage;
-    private ProgressBar imageProgressBar;
 
     private TextView progressMsg;
     private TextView sendImageText;
@@ -174,8 +173,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         sendImageText = (TextView) root.findViewById(R.id.text_sending_image);
         analyzeImageText = (TextView) root.findViewById(R.id.text_analyzing_image);
 
-        imageProgressBar = (ProgressBar) root.findViewById(R.id.image_progress_bar);
-
         cancelButton = (Button) root.findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(this);
 
@@ -183,7 +180,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         if(mProcessType == GALLERY_BITMAP){
 
-            BitmapWorkerTask loader = new BitmapWorkerTask(mImage, imageProgressBar);
+            BitmapWorkerTask loader = new BitmapWorkerTask(mImage);
             loader.execute(mImageDecodableString);
 
         }else{
@@ -391,8 +388,8 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         switch (progress) {
             case STARTING_REQUEST:
-                task = new UpdateProgressBarAsyncTask();
-                task.execute();
+//                task = new UpdateProgressBarAsyncTask();
+//                task.execute();
 
                 progressSendingImage.setVisibility(View.VISIBLE);
                 sendDoneImage.setVisibility(View.INVISIBLE);
@@ -405,7 +402,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 break;
 
             case ANALYZING_IMAGE:
-                task.cancel(true);
+//                task.cancel(true);
 
                 progressSendingImage.setVisibility(View.INVISIBLE);
                 sendDoneImage.setVisibility(View.VISIBLE);
@@ -473,7 +470,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         private final WeakReference<ImageView> imageViewReference;
         private String data;
 
-        public BitmapWorkerTask(ImageView imageView, ProgressBar progress) {
+        public BitmapWorkerTask(ImageView imageView) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
             imageViewReference = new WeakReference<ImageView>(imageView);
         }

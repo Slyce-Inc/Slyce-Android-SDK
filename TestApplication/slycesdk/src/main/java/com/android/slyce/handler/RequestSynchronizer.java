@@ -137,6 +137,8 @@ public class RequestSynchronizer extends Handler {
 
                 mRequestListener.onFinished();
 
+                SlyceLog.i(TAG, "onFinished()");
+
                 break;
         }
     }

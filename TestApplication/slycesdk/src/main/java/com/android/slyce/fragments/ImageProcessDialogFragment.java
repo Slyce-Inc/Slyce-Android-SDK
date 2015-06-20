@@ -2,12 +2,9 @@ package com.android.slyce.fragments;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -20,21 +17,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.slyce.Slyce;
-import com.android.slyce.SlyceCameraFragment;
 import com.android.slyce.enums.SlyceRequestStage;
-import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.SlyceBarcode;
-import com.android.slyce.SlyceProductsRequest;
 import com.android.slyce.roundedimage.RoundedImageView;
-import com.android.slyce.utils.BitmapLoader;
 import com.android.slyce.utils.SlyceLog;
 import com.android.slycesdk.R;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Use the {@link ImageProcessDialogFragment#newInstance} factory method to
@@ -42,12 +28,8 @@ import java.lang.ref.WeakReference;
  */
 public class ImageProcessDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    private static final String TAG = ImageProcessDialogFragment.class.getSimpleName();
+    public static final String TAG = ImageProcessDialogFragment.class.getSimpleName();
 
-    private static final String ARG_PROCESS_TYPE = "arg_process_type";
-    private static final String ARG_IMAGE_DECODABLE_STRING = "arg_image_decodable_string";
-
-    public static final String GALLERY_BITMAP = "gallery_bitmap";
     public static final String CAMERA_BITMAP = "camera_bitmap";
 
     private static final String STARTING_REQUEST = "starting_request";
@@ -60,9 +42,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     private int screenHeight;
     private int screenWidth;
     private int layoutSize;
-
-    private String mProcessType;
-    private String mImageDecodableString;
 
     private boolean isAttached;
 
@@ -82,47 +61,23 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
     private TextView analyzeImageText;
 
     private RelativeLayout topLayout;
-    private RelativeLayout bottomLayout;
-
-    private RelativeLayout.LayoutParams layoutParams;
-
-    /* for searching products from gallery image */
-    private SlyceProductsRequest mSlyceProductsRequest;
 
     private UpdateProgressBarAsyncTask task;
 
-    private Uri selecedGalleryImageUri;
+    private OnImageProcessListener listener;
 
-    private OnImageProcessDialogFragmentListener mOnImageProcessDialogFragmentListener;
-
-    /** Handles {@link OnSlyceRequestListener} callbacks and sends them to {@link SlyceCameraFragment} */
-    public interface OnImageProcessDialogFragmentListener {
-
-        void onImageProcessBarcodeRecognition(SlyceBarcode barcode);
-
-        void onImageProcess2DRecognition(String productInfo);
-
-        void onImageProcess2DExtendedRecognition(JSONArray products);
-
-        void onImageProcess3DRecognition(JSONObject products);
-
-        void onImageProcessDialogFragmentDismiss();
+    public interface OnImageProcessListener{
+        void onCancelClicked();
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param processType Parameter 1.
-     * @param imageDecodableString Parameter 2.
      * @return A new instance of fragment ImageProcessDialogFragment.
      */
-    public static ImageProcessDialogFragment newInstance(String processType, String imageDecodableString) {
+    public static ImageProcessDialogFragment newInstance() {
         ImageProcessDialogFragment fragment = new ImageProcessDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PROCESS_TYPE, processType);
-        args.putString(ARG_IMAGE_DECODABLE_STRING, imageDecodableString);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -135,11 +90,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         super.onCreate(savedInstanceState);
 
         calculateSize();
-
-        if (getArguments() != null) {
-            mProcessType = getArguments().getString(ARG_PROCESS_TYPE);
-            mImageDecodableString = getArguments().getString(ARG_IMAGE_DECODABLE_STRING);
-        }
 
 //        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.SlyceDialogTheme);
         setStyle(2, 0);
@@ -155,7 +105,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         initRoundedImage(root);
 
         topLayout = (RelativeLayout) root.findViewById(R.id.top_layout);
-        bottomLayout = (RelativeLayout) root.findViewById(R.id.bottom_layout);
 
         setSize();
 
@@ -178,16 +127,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         updateProgressInfo("");
 
-        if(mProcessType == GALLERY_BITMAP){
-
-            BitmapWorkerTask loader = new BitmapWorkerTask(mImage);
-            loader.execute(mImageDecodableString);
-
-        }else{
-            // mProcessType = CAMERA_BITMAP
-            // Set the snapped bitmap to ImageView when its ready
-        }
-
         return root;
     }
 
@@ -208,36 +147,83 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
 
         int id = v.getId();
 
-        if(id == R.id.cancel_button || id == R.id.scan_not_found_button_done){
+        if(id == R.id.cancel_button){
+
+            listener.onCancelClicked();
+
             dismiss();
         }
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        // Cancel SlyceProductsRequest
-        if(mSlyceProductsRequest != null){
-            mSlyceProductsRequest.cancel();
+    public void setOnImageProcessListener(OnImageProcessListener listener){
+        this.listener = listener;
+    }
+
+    public void handleStageMessage(SlyceRequestStage message){
+
+        switch (message){
+
+            case StageStartingRequest:
+
+                updateProgressInfo(STARTING_REQUEST);
+
+                break;
+
+            case StageSendingImage:
+
+
+                break;
+
+            case StageAnalyzingImage:
+
+                updateProgressInfo(ANALYZING_IMAGE);
+
+                break;
+        }
+    }
+
+    public void onResultsReceived(){
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onResultsReceived fragment is not attached");
+            return;
         }
 
-        // Notify SlyceCameraFragment to cancel SlyceCamera cause ImageProcessDialogFragment dismissed
-        mOnImageProcessDialogFragmentListener.onImageProcessDialogFragmentDismiss();
+        // Update progress bar
+        updateProgressInfo(FINISH_ANALYZING_IMAGE);
 
-        super.onDismiss(dialog);
+        dismiss();
     }
 
-    /* PUBLIC METHODS */
-    public void setmOnImageProcessDialogFragmentListener(OnImageProcessDialogFragmentListener listener){
-        mOnImageProcessDialogFragmentListener = listener;
+    public void onBarcodeDetected(){
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onBarcodeDetected fragment is not attached");
+            return;
+        }
+
+        // Update progress bar
+        updateProgressInfo(FINISH_ANALYZING_IMAGE);
+
+        dismiss();
     }
 
-    public void showDialogFragment(){
-        // Create and show the dialog.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        NotFoundDialogFragment newFragment = NotFoundDialogFragment.newInstance();
-        newFragment.show(ft, "NotFoundDialogFragment");
+    public void onSlyceProgress(long progress, String message){
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onSlyceProgress fragment is not attached");
+            return;
+        }
 
-//        dismiss();
+        // Update progress bar
+        horizontalProgressBar.setProgress(50 + (int) progress / 2);
+        progressMsg.setText(message);
+    }
+
+    public void onSlyceRequestStage(SlyceRequestStage message){
+        if(!isAttached){
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onSlyceRequestStage fragment is not attached");
+            return;
+        }
+
+        handleStageMessage(message);
     }
 
     public void onSnap(Bitmap bitmap) {
@@ -246,50 +232,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
             return;
         }
         mImage.setImageBitmap(bitmap);
-    }
-
-    public void onRequestStage(SlyceRequestStage message) {
-        if(!isAttached){
-            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onRequestStage fragment is not attached");
-            return;
-        }
-
-        handleStageMessage(message);
-    }
-
-    public void onProgress(long progress, String message) {
-        if(!isAttached){
-            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onProgress fragment is not attached");
-            return;
-        }
-        horizontalProgressBar.setProgress(50 + (int) progress / 2);
-        progressMsg.setText(message);
-    }
-
-    public void onCameraResultsReceived(JSONObject products) {
-        if(!isAttached){
-            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onCameraResultsReceived fragment is not attached");
-            return;
-        }
-
-        updateProgressInfo(FINISH_ANALYZING_IMAGE);
-
-        if(products.length() > 0){
-            dismiss();
-        }else{
-            showDialogFragment();
-        }
-    }
-
-    public void onError(String message) {
-        if(!isAttached){
-            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onError fragment is not attached");
-            return;
-        }
-
-//        updateProgressInfo("");
-
-//        showDialogFragment();
     }
     /* End */
 
@@ -303,93 +245,14 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         mImage.setOval(false);
     }
 
-    /* Invoke this method after an Image was picked from Gallery */
-    private void performSlyceProductsRequest(Bitmap bitmap){
-
-        mSlyceProductsRequest = new SlyceProductsRequest(Slyce.getInstance(getActivity()), new OnSlyceRequestListener() {
-
-            @Override
-            public void onBarcodeDetected(SlyceBarcode barcode) {
-
-                // Update progress bar
-                updateProgressInfo(FINISH_ANALYZING_IMAGE);
-
-                // Notify SlyceCameraFragment
-                mOnImageProcessDialogFragmentListener.onImageProcessBarcodeRecognition(barcode);
-
-                dismiss();
-            }
-
-            @Override
-            public void onSlyceProgress(long progress, String message, String id) {
-                horizontalProgressBar.setProgress(50 + (int) progress / 2);
-                progressMsg.setText(message);
-            }
-
-            @Override
-            public void onImageDetected(String productInfo) {
-
-                dismiss();
-
-                // Notify SlyceCameraFragment
-                mOnImageProcessDialogFragmentListener.onImageProcess2DRecognition(productInfo);
-            }
-
-            @Override
-            public void onImageInfoReceived(JSONArray products) {
-
-                // Notify SlyceCameraFragment
-                mOnImageProcessDialogFragmentListener.onImageProcess2DExtendedRecognition(products);
-            }
-
-            @Override
-            public void onResultsReceived(JSONObject products) {
-
-                // Update progress bar
-                updateProgressInfo(FINISH_ANALYZING_IMAGE);
-
-                // Notify SlyceCameraFragment
-                mOnImageProcessDialogFragmentListener.onImageProcess3DRecognition(products);
-
-                if(products.length() > 0){
-                    dismiss();
-                }else{
-                    showDialogFragment();
-                }
-            }
-
-            @Override
-            public void onSlyceRequestStage(SlyceRequestStage message) {
-
-                handleStageMessage(message);
-            }
-
-            @Override
-            public void onError(String message) {
-
-                // Update progress bar
-//                updateProgressInfo("");
-
-                // Set the not found layout
-//                showDialogFragment();
-            }
-
-            @Override
-            public void onFinished() {}
-
-        }, bitmap);
-
-        mSlyceProductsRequest.execute();
-    }
-
     private void updateProgressInfo(String progress) {
 
         Resources resources = getResources();
 
         switch (progress) {
             case STARTING_REQUEST:
-//                task = new UpdateProgressBarAsyncTask();
-//                task.execute();
+                task = new UpdateProgressBarAsyncTask();
+                task.execute();
 
                 progressSendingImage.setVisibility(View.VISIBLE);
                 sendDoneImage.setVisibility(View.INVISIBLE);
@@ -402,7 +265,7 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
                 break;
 
             case ANALYZING_IMAGE:
-//                task.cancel(true);
+                task.cancel(true);
 
                 progressSendingImage.setVisibility(View.INVISIBLE);
                 sendDoneImage.setVisibility(View.VISIBLE);
@@ -464,65 +327,6 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         }
     }
     /* End */
-
-    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
-
-        private final WeakReference<ImageView> imageViewReference;
-        private String data;
-
-        public BitmapWorkerTask(ImageView imageView) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
-            imageViewReference = new WeakReference<ImageView>(imageView);
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        // Decode image in background.
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            data = params[0];
-
-            return BitmapLoader.decodeSampledBitmapFromResource(data, 400, 400);
-        }
-
-        // Once complete, see if ImageView is still around and set bitmap.
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (imageViewReference != null && bitmap != null) {
-                final ImageView imageView = imageViewReference.get();
-                if (imageView != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-
-                performSlyceProductsRequest(bitmap);
-            }
-        }
-    }
-
-    private void handleStageMessage(SlyceRequestStage message){
-
-        switch (message){
-
-            case StageStartingRequest:
-
-                updateProgressInfo(STARTING_REQUEST);
-
-                break;
-
-            case StageSendingImage:
-
-
-                break;
-
-            case StageAnalyzingImage:
-
-                updateProgressInfo(ANALYZING_IMAGE);
-
-                break;
-        }
-    }
 
     private void calculateSize(){
 

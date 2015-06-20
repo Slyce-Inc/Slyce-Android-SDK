@@ -165,8 +165,6 @@ public class CameraSynchronizer extends Handler {
 
                 mCameraListener.onCameraFinished();
 
-                SlyceLog.i(TAG, "onCameraFinished()");
-
                 break;
         }
     }

@@ -448,7 +448,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
             @Override
             public void onExtenedInfoError() {
-                mCameraSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+//                mCameraSynchronizer.onError(Constants.NO_PRODUCTS_FOUND_2D);
             }
         });
 
@@ -532,7 +532,7 @@ public class SlyceCamera extends Handler implements SlyceCameraInterface {
 
                     @Override
                     public void onFinished(){
-
+                        mCameraSynchronizer.onFinished();
                     }
 
                 }, (Bitmap) msg.obj, mOptions);

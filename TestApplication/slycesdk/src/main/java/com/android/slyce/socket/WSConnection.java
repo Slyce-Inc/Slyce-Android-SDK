@@ -217,7 +217,7 @@ public class WSConnection implements
             } catch (JSONException e){}
 
             // 2. Notify the host application for a 2D search error
-            mRequestSynchronizer.onError(error);
+//            mRequestSynchronizer.onError(error);
 
             return;
         }
@@ -257,7 +257,7 @@ public class WSConnection implements
 
                 @Override
                 public void onExtenedInfoError() {
-                    mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+//                    mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND_2D);
                 }
             });
 
@@ -514,7 +514,7 @@ public class WSConnection implements
                         }
 
                         // Send an error message to host application
-                        mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+                        mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND_3D);
                     }
 
                     break;
@@ -603,7 +603,7 @@ public class WSConnection implements
                             mRequestSynchronizer.onResultsReceived(data);
                         }else{
 
-                            mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND);
+                            mRequestSynchronizer.onError(Constants.NO_PRODUCTS_FOUND_3D);
                         }
 
                         return;

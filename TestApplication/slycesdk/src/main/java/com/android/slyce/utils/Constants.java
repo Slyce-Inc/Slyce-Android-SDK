@@ -43,7 +43,8 @@ public class Constants {
     public static final String CONTEXT_ERROR    = "Context can not be null";
     public static final String CLIENT_ID_ERROR  = "Client ID can not be null or empty";
     public static final String LISTENER_ERROR  = "OnSlyceOpenListener can not be null";
-    public static final String NO_PRODUCTS_FOUND = "No Products Found";
+    public static final String NO_PRODUCTS_FOUND_2D = "2D No Products Found";
+    public static final String NO_PRODUCTS_FOUND_3D = "3D No Products Found";
 
 
     /* MixPanel */

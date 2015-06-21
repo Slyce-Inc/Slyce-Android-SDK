@@ -273,9 +273,6 @@ public class WSConnection implements
                     mixpanel.track(Constants.SEARCH_NOT_FOUND, searchNotFound);
                 } catch (JSONException e) {}
             }
-
-//            // Notify the host application for a 2D search not found (empty data)
-//            mRequestSynchronizer.onImageDetected("","");
         }
     }
 

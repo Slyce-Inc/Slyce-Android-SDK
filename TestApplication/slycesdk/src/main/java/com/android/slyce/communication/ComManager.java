@@ -175,7 +175,7 @@ public class ComManager {
         }
 
         // Create Image
-        Image img = null;
+        Image img;
         try {
             img = new Image(bitmap);
         } catch (IllegalArgumentException | MoodstocksError e) {
@@ -187,14 +187,17 @@ public class ComManager {
         try {
             Result result = scanner.search(img, Scanner.SearchOption.DEFAULT, Result.Extra.NONE);
             if (result != null) {
+
+                SlyceLog.d(TAG, "[2D Local search] Result found: "+result.getValue());
+
                 handle2DResponse(result.getValue(), "", listener);
                 return;
             }
             else {
-                SlyceLog.d(TAG, "[Local search] No result found");
+                SlyceLog.d(TAG, "[2D Local search] No result found");
             }
         } catch (MoodstocksError e) {
-            SlyceLog.i(TAG, "Failed on local search");
+            SlyceLog.i(TAG, "Failed on 2D local search");
         }
 
         // 2. Server search
@@ -202,14 +205,22 @@ public class ComManager {
             ApiSearcher searcher = new ApiSearcher(scanner);
             Result result = searcher.search(img);
             if (result != null) {
+
+                SlyceLog.d(TAG, "[2D Server-side search] Result found: "+result.getValue());
+
                 handle2DResponse(result.getValue(), "", listener);
             }
             else {
-                SlyceLog.d(TAG, "[Server-side search] No result found");
+                SlyceLog.d(TAG, "[2D Server-side search] No result found");
                 handle2DResponse(null, "No image found", listener);
             }
         } catch (MoodstocksError e) {
-            SlyceLog.i(TAG, "Failed on server search");
+            SlyceLog.i(TAG, "Failed on 2D server search");
+        }
+
+        // 3. Release the `Image` object!
+        if(img != null){
+            img.release();
         }
     }
 

@@ -282,8 +282,10 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener, Im
 
     private void barcodeDetected(SlyceBarcode barcode){
         if(isAttached){
-            // Update UI (processing fragment)
-            mImageProcessDialogFragment.onBarcodeDetected();
+            if(mImageProcessDialogFragment != null){
+                // Update UI (processing fragment)
+                mImageProcessDialogFragment.onBarcodeDetected();
+            }
 
             // Notify the host application of found barcode
             mListener.onCameraFragmentBarcodeDetected(barcode);

@@ -536,10 +536,11 @@ public class Utils {
     public static void getGoogleAdvertisingID(final Context context, final CallBack listener){
 
         new Thread(new Runnable() {
+
+            String advertisingId = null;
+
             @Override
             public void run() {
-
-                String advertisingId = null;
 
                 Exception exception = null;
                 try {
@@ -554,15 +555,6 @@ public class Utils {
 
                     advertisingId = getIdMethod.invoke(mInfoClass, new Object[0]).toString();
 //                    boolean mIsLimitedTrackingEnabled = ((Boolean)isLimitAdTrackingEnabledMethod.invoke(mInfoClass, new Object[0])).booleanValue();
-
-                    final String id = advertisingId;
-
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.onReady(id);
-                        }
-                    });
 
                 } catch (ClassNotFoundException e) {
                     exception = e;
@@ -586,6 +578,13 @@ public class Utils {
                     }else{
                         SlyceLog.i(TAG, "Google Advertising Id: " + advertisingId);
                     }
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onReady(advertisingId);
+                        }
+                    });
                 }
             }
         }).start();

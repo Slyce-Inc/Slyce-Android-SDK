@@ -231,7 +231,9 @@ public final class Slyce {
 
                     try {
                         peopleAnalytics.put(Constants.GOOGLE_ADVERTISING_ID, value);
-                    } catch (JSONException e) {}
+                    } catch (JSONException e) {
+                        SlyceLog.e(TAG, "Unable to report Google Advertising Id");
+                    }
 
                     // Make it user profile
                     mixpanel.getPeople().set(peopleAnalytics);

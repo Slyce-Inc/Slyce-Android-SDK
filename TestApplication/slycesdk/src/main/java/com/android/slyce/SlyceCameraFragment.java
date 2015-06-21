@@ -506,8 +506,10 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener, Im
 
     private void imageDetected(String productInfo){
         if(isAttached){
-            // Update UI (processing fragment)
-            mImageProcessDialogFragment.dismiss();
+            if(mImageProcessDialogFragment != null){
+                // Update UI (processing fragment)
+                mImageProcessDialogFragment.dismiss();
+            }
 
             // Show progress bar
             mDialogLayout.setVisibility(View.VISIBLE);

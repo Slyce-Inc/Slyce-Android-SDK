@@ -226,9 +226,9 @@ public class ImageProcessDialogFragment extends DialogFragment implements View.O
         handleStageMessage(message);
     }
 
-    public void onSnap(Bitmap bitmap) {
+    public void onBitmapReady(Bitmap bitmap) {
         if(!isAttached){
-            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onSnap fragment is not attached");
+            SlyceLog.i(TAG, "Can not perform ImageProcessDialogFragment:onBitmapReady fragment is not attached");
             return;
         }
         mImage.setImageBitmap(bitmap);

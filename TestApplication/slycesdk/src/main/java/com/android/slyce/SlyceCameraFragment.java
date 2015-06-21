@@ -245,223 +245,9 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener, Im
         return newFragment;
     }
 
-    @Override
-    public void onCancelClicked() {
-        if(mSlyceCamera != null){
-            mSlyceCamera.cancel();
-        }
-        if(mSlyceRequest != null){
-            mSlyceRequest.cancel();
-        }
-    }
-
-    private class SlyceCameraListener implements OnSlyceCameraListener{
-
-        @Override
-        public void onCameraResultsReceived(JSONObject products) {
-            resultsReceived(products);
-        }
-
-        @Override
-        public void onCameraBarcodeDetected(SlyceBarcode barcode) {
-            barcodeDetected(barcode);
-        }
-
-        @Override
-        public void onCameraImageDetected(String productInfo) {
-            imageDetected(productInfo);
-        }
-
-        @Override
-        public void onCameraImageInfoReceived(JSONArray products) {
-            imageInfoReceived(products);
-        }
-
-        @Override
-        public void onCameraSlyceProgress(long progress, String message, String id) {
-            slyceProgress(progress, message);
-        }
-
-        @Override
-        public void onCameraSlyceRequestStage(SlyceRequestStage message) {
-            slyceRequestStage(message);
-        }
-
-        @Override
-        public void onSlyceCameraError(String message) {
-            onError(message);
-        }
-
-        @Override
-        public void onSnap(Bitmap bitmap) {
-            if(isAttached) {
-                // Notify ImageProcessDialogFragment that bitmap is ready
-                mImageProcessDialogFragment.onSnap(bitmap);
-            }
-        }
-
-        @Override
-        public void onTap(float x, float y) {
-            // Displays the touch point
-            Utils.performAlphaAnimation(mOnTapView, x, y);
-        }
-
-        @Override
-        public void onCameraFinished(){
-
-        }
-        // OnSlyceCameraListener callbacks END
-    }
-    // PRIVATE METHODS END
-
-    @Override
-    public void onClick(View v) {
-
-        int id = v.getId();
-
-        if(id == R.id.close_button){
-
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
-
-            close();
-
-        }else if(id == R.id.scan_tips_button){
-
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
-
-            ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
-            dialogFragment.show(getFragmentManager(), null);
-
-        }else if(id == R.id.gallery_button){
-
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
-
-            Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
-
-        }else if(id == R.id.flash_button){
-
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_flash_sound, mSlyce.isSoundOn(), false);
-
-            mSlyceCamera.turnFlash();
-
-        }else if(id == R.id.snap_button){
-
-            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
-
-            showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP);
-
-            // Take a picture using SlyceCamera object
-            mSlyceCamera.setContinuousRecognition(false);
-            mSlyceCamera.snap();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // When an Image is picked
-        if (requestCode == RESULT_LOAD_IMG && resultCode == getActivity().RESULT_OK && null != data) {
-
-            // Extract Image String
-            String imageDecodableString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
-
-            if(TextUtils.isEmpty(imageDecodableString)){
-
-                SlyceLog.i(TAG, "Error occurred while picking an Image");
-
-            }else{
-
-//                showDialogFragment(ImageProcessDialogFragment.GALLERY_BITMAP, imageDecodableString, new ImageProcessDialogFragmentListener());
-
-                showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP);
-                BitmapWorkerTask task = new BitmapWorkerTask();
-                task.execute(imageDecodableString);
-            }
-
-        } else {
-            SlyceLog.i(TAG, "You haven't picked Image");
-        }
-    }
-
-    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
-
-        private String data;
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        // Decode image in background.
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            data = params[0];
-
-            return BitmapLoader.decodeSampledBitmapFromResource(data, 400, 400);
-        }
-
-        // Once complete, see if ImageView is still around and set bitmap.
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-
-            // Bitmap is ready
-
-            // Notifying ImageProcessDialogFragment for the ready bitmap
-            mImageProcessDialogFragment.onSnap(bitmap);
-
-            // Start Slyce image search
-            mSlyceRequest = createSlyceProductsRequest(bitmap);
-            mSlyceRequest.execute();
-        }
-    }
-
     private SlyceProductsRequest createSlyceProductsRequest(Bitmap bitmap){
 
-        SlyceProductsRequest request = new SlyceProductsRequest(mSlyce, new OnSlyceRequestListener() {
-
-            @Override
-            public void onResultsReceived(JSONObject products) {
-                resultsReceived(products);
-            }
-
-            @Override
-            public void onBarcodeDetected(SlyceBarcode barcode) {
-                barcodeDetected(barcode);
-            }
-
-            @Override
-            public void onImageDetected(String productInfo) {
-                imageDetected(productInfo);
-            }
-
-            @Override
-            public void onImageInfoReceived(JSONArray products) {
-                imageInfoReceived(products);
-            }
-
-            @Override
-            public void onSlyceRequestStage(SlyceRequestStage message) {
-
-               slyceRequestStage(message);
-            }
-
-            @Override
-            public void onSlyceProgress(long progress, String message, String id) {
-                slyceProgress(progress, message);
-            }
-
-            @Override
-            public void onError(String message) {
-                onError(message);
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-
-        }, bitmap);
+        SlyceProductsRequest request = new SlyceProductsRequest(mSlyce, new SlyceRequestListener(), bitmap);
 
         return request;
     }
@@ -555,6 +341,214 @@ public class SlyceCameraFragment extends Fragment implements OnClickListener, Im
 
             // Notify host application
             mListener.onCameraFragmentError(message);
+        }
+    }
+
+    // Used on snapping an image / automatic scanning
+    private class SlyceCameraListener implements OnSlyceCameraListener{
+
+        @Override
+        public void onCameraResultsReceived(JSONObject products) {
+            resultsReceived(products);
+        }
+
+        @Override
+        public void onCameraBarcodeDetected(SlyceBarcode barcode) {
+            barcodeDetected(barcode);
+        }
+
+        @Override
+        public void onCameraImageDetected(String productInfo) {
+            imageDetected(productInfo);
+        }
+
+        @Override
+        public void onCameraImageInfoReceived(JSONArray products) {
+            imageInfoReceived(products);
+        }
+
+        @Override
+        public void onCameraSlyceProgress(long progress, String message, String id) {
+            slyceProgress(progress, message);
+        }
+
+        @Override
+        public void onCameraSlyceRequestStage(SlyceRequestStage message) {
+            slyceRequestStage(message);
+        }
+
+        @Override
+        public void onSlyceCameraError(String message) {
+            onError(message);
+        }
+
+        @Override
+        public void onSnap(Bitmap bitmap) {
+            if(isAttached) {
+                // Notify ImageProcessDialogFragment that bitmap is ready
+                mImageProcessDialogFragment.onBitmapReady(bitmap);
+            }
+        }
+
+        @Override
+        public void onTap(float x, float y) {
+            // Displays the touch point
+            Utils.performAlphaAnimation(mOnTapView, x, y);
+        }
+
+        @Override
+        public void onCameraFinished(){
+
+        }
+    }
+
+    // Used on picking image form gallery
+    private class SlyceRequestListener implements OnSlyceRequestListener{
+
+        @Override
+        public void onResultsReceived(JSONObject products) {
+            resultsReceived(products);
+        }
+
+        @Override
+        public void onBarcodeDetected(SlyceBarcode barcode) {
+            barcodeDetected(barcode);
+        }
+
+        @Override
+        public void onImageDetected(String productInfo) {
+            imageDetected(productInfo);
+        }
+
+        @Override
+        public void onImageInfoReceived(JSONArray products) {
+            imageInfoReceived(products);
+        }
+
+        @Override
+        public void onSlyceRequestStage(SlyceRequestStage message) {
+            slyceRequestStage(message);
+        }
+
+        @Override
+        public void onSlyceProgress(long progress, String message, String id) {
+            slyceProgress(progress, message);
+        }
+
+        @Override
+        public void onError(String message) {
+            onError(message);
+        }
+
+        @Override
+        public void onFinished() {
+
+        }
+    }
+    // PRIVATE METHODS END
+
+    @Override
+    public void onCancelClicked() {
+        if(mSlyceCamera != null){
+            mSlyceCamera.cancel();
+        }
+        if(mSlyceRequest != null){
+            mSlyceRequest.cancel();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        int id = v.getId();
+
+        if(id == R.id.close_button){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
+
+            close();
+
+        }else if(id == R.id.scan_tips_button){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
+
+            ScanningTipsDialogFragment dialogFragment = new ScanningTipsDialogFragment();
+            dialogFragment.show(getFragmentManager(), null);
+
+        }else if(id == R.id.gallery_button){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
+
+            Utils.loadImageFromGallery(this, RESULT_LOAD_IMG);
+
+        }else if(id == R.id.flash_button){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_flash_sound, mSlyce.isSoundOn(), false);
+
+            mSlyceCamera.turnFlash();
+
+        }else if(id == R.id.snap_button){
+
+            Buzzer.getInstance().buzz(getActivity(), R.raw.slyce_click_sound, mSlyce.isSoundOn(), false);
+
+            showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP);
+
+            // Take a picture using SlyceCamera object
+            mSlyceCamera.setContinuousRecognition(false);
+            mSlyceCamera.snap();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // When an Image is picked
+        if (requestCode == RESULT_LOAD_IMG && resultCode == getActivity().RESULT_OK && null != data) {
+
+            // Extract Image String
+            String imageDecodableString  = Utils.getImageDecodableString(data, getActivity().getApplicationContext());
+
+            if(TextUtils.isEmpty(imageDecodableString)){
+
+                SlyceLog.i(TAG, "Error occurred while picking an Image");
+
+            }else{
+
+                showDialogFragment(ImageProcessDialogFragment.CAMERA_BITMAP);
+                BitmapWorkerTask task = new BitmapWorkerTask();
+                task.execute(imageDecodableString);
+            }
+
+        } else {
+            SlyceLog.i(TAG, "You haven't picked Image");
+        }
+    }
+
+    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+
+        private String data;
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            data = params[0];
+
+            return BitmapLoader.decodeSampledBitmapFromResource(data, 400, 400);
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            // Bitmap is ready
+
+            // Notifying ImageProcessDialogFragment for the ready bitmap
+            mImageProcessDialogFragment.onBitmapReady(bitmap);
+
+            // Start Slyce image search
+            mSlyceRequest = createSlyceProductsRequest(bitmap);
+            mSlyceRequest.execute();
         }
     }
 }

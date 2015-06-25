@@ -23,6 +23,15 @@ android {
     }
 }
 
+//task copyFiles(type: Copy) {
+//    from '../'
+//    into '../../../Slyce-Public/TestApplication'
+//}
+//
+//tasks.withType(JavaCompile) {
+//    compileTask -> compileTask.dependsOn(copyFiles)
+//}
+
 repositories {
     flatDir {
         dirs 'libs'

@@ -77,6 +77,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Dudu test
+
         setContentView(R.layout.activity_main);
 
         initViews();

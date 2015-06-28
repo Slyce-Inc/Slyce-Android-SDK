@@ -30,6 +30,27 @@ Ideal for cases where app developers would like to utilize SDK features such as 
 The SDK takes care of the entire flow from scanning to getting results. The SDK provides a UI that can be customized. Provides a turnkey scan-to-products solution.
 
 ## Requirements
+* Android 4.0 (API Level 14) or higher
+* Android Studio developemt enviourment
+* A Slyce client ID 
+
+## Add the SDK to Your Project
+1. Download or clone this repo. The SDK includes a test application, .arr and docs.
+2. Copy the slyce.arr from SlyceSDK directory into your project's libs directory.
+3. Configure build.gradle file with:
+```ruby
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile(name:'slyce', ext:'aar')
+}
+```
+
+
 
 
 

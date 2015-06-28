@@ -62,7 +62,7 @@ After you obtain one, you should use it when initializing the central `SlyceRequ
 
 ## Documentation
 
-* These docs in the SDK, which include an overview of usage (PDF), [API Reference (Java docs)](http://github.com/Slyce-Inc/Slyce-Android-SDK/index.html), and sample code.
+* These docs in the SDK, which include an overview of usage (PDF), [API Reference (Java docs)](http://github.com/Slyce-Inc/Slyce-Android-SDK/Slyce-javadoc/index.html), and sample code.
 * The sample app included in this SDK.
 
 

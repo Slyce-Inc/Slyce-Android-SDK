@@ -35,7 +35,7 @@ The SDK takes care of the entire flow from scanning to getting results. The SDK 
 * A Slyce client ID 
 
 ## Add the SDK to Your Project
-1. Download or clone this repo. The SDK includes a test application, .arr and docs.
+1. Download or clone this repo. The SDK includes a test application, .arr, java docs, release notes and integration doc.
 2. Copy the slyce.arr from SlyceSDK directory into your project's libs directory.
 3. Configure **build.gradle** file:
 ```ruby
@@ -58,6 +58,10 @@ You can obtain these Slyce API credentials by visiting the [Products Services pa
 
 After you obtain one, you should use it when initializing the central `SlyceRequest` object when using of the SDK modes.
 
+## Documentation
+
+* These docs in the SDK, which include an overview of usage (PDF), API Reference (Java docs), and sample code.
+* The sample app included in this SDK.
 
 
 

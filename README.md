@@ -63,6 +63,3 @@ After you obtain one, you should use it when initializing the central `SlyceRequ
 ## Documentation
 
 * These docs in the SDK, which include an overview of usage (PDF), [API Reference (Java docs)](http://htmlpreview.github.io/?https://github.com/Slyce-Inc/Slyce-Android-SDK/blob/master/Slyce-javadoc/index.html), and sample code.
-* The sample app included in this SDK.
-
-

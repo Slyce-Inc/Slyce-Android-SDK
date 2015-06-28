@@ -65,5 +65,5 @@ After you obtain one, you should use it when initializing the central `SlyceRequ
 * These docs in the SDK, which include an overview of usage (PDF), API Reference (Java docs), and sample code.
 * The sample app included in this SDK.
 
-[Comprehensive JavaDoc documentation](http://github.com/Slyce-Inc/Slyce-Android-SDK/).
+[Comprehensive JavaDoc documentation](http://github.com/Slyce-Inc/Slyce-Android-SDK/Slyce-javadoc.zip).
 

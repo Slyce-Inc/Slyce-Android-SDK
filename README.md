@@ -37,7 +37,7 @@ The SDK takes care of the entire flow from scanning to getting results. The SDK 
 ## Add the SDK to Your Project
 1. Download or clone this repo. The SDK includes a test application, .arr and docs.
 2. Copy the slyce.arr from SlyceSDK directory into your project's libs directory.
-3. Configure **build.gradle** file with:
+3. Configure **build.gradle** file:
 ```ruby
 repositories {
     flatDir {

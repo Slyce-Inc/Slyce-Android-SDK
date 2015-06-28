@@ -14,7 +14,6 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,24 +23,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.slyce.communication.ComManager;
-import com.android.slyce.communication.HttpClientHelper;
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.slyce.utils.SharedPrefHelper;
-import com.android.slyce.utils.SlyceLog;
-
-import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 public class MainActivity extends Activity implements View.OnClickListener, OnSlyceRequestListener, OnSlyceCameraFragmentListener,TextView.OnEditorActionListener {
 

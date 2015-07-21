@@ -3,7 +3,6 @@ package com.android.slyce;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -102,8 +101,6 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     @Override
     public void onCameraSlyceRequestStage(SlyceRequestStage message) {
 
-        Log.i("TESTING", message.toString());
-
         Toast.makeText(this, "onCameraSlyceRequestStage:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
     }
 
@@ -129,8 +126,6 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
     @Override
     public void onSnap(Bitmap bitmap) {
-
-        Log.i("TESTING", "onSnap");
 
         Toast.makeText(this, "onSnap:" + "\n" + "Width: " + bitmap.getWidth() + "\n" + "Height:" + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
     }

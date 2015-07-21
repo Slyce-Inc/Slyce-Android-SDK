@@ -36,7 +36,8 @@
             android:layout_height="wrap_content"
             android:text="Accept"
             android:textSize="16dp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:onClick="onButtonClick"/>
 
         </LinearLayout>
 
@@ -67,7 +68,7 @@
             android:layout_height="wrap_content"
             android:text="Send Image URL"
             android:textAllCaps="false"
-            />
+            android:onClick="onButtonClick"/>
 
         <Button
             android:id="@+id/upload_image"
@@ -75,6 +76,7 @@
             android:layout_height="wrap_content"
             android:text="Send from Image Gallery"
             android:textAllCaps="false"
+            android:onClick="onButtonClick"
             />
 
         <Button
@@ -82,7 +84,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel Requests"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:onClick="onButtonClick"/>
 
         <Button
             android:id="@+id/camera_activity"
@@ -90,7 +93,7 @@
             android:layout_height="wrap_content"
             android:text="Camera Activity"
             android:textAllCaps="false"
-            />
+            android:onClick="onButtonClick"/>
 
         <Button
             android:id="@+id/full_ui_mode"
@@ -98,7 +101,15 @@
             android:layout_height="wrap_content"
             android:text="Full UI Mode"
             android:textAllCaps="false"
-            />
+            android:onClick="onButtonClick"/>
+
+        <Button
+            android:id="@+id/public_keywords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Public Keywords (Image URL)"
+            android:textAllCaps="false"
+            android:onClick="onButtonClick"/>
 
         </LinearLayout>
 
@@ -134,7 +145,8 @@
     <FrameLayout
         android:id="@+id/slyce_camera_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
     </FrameLayout>
 
     <!--<RelativeLayout-->

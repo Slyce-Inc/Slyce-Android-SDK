@@ -1,7 +1,3 @@
-buildscript {
-
-
-}
 apply plugin: 'com.android.application'
 
 android {
@@ -13,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "2.0"
+        versionName "2.1"
     }
     buildTypes {
         release {
@@ -24,9 +20,11 @@ android {
 }
 
 //task copyFiles(type: Copy) {
-//    from '../'
-//    into '../../../Slyce-Public/TestApplication'
+//    from 'src'
+//    into '../../../Slyce-Public/TestApplication/app/src'
 //}
+//
+//task copy
 //
 //tasks.withType(JavaCompile) {
 //    compileTask -> compileTask.dependsOn(copyFiles)
@@ -44,6 +42,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.3.0'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile(name:'slyce', ext:'aar')
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+//    compile project(':slycesdk')
+    compile(name:'slyce', ext:'aar')
 }

@@ -109,7 +109,6 @@ public class ProductsGridActivity extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (Exception e) {
-                Log.e("", "");
             }finally {
                 return productsArray;
             }

@@ -18,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,15 +32,9 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class MainActivity extends Activity implements View.OnClickListener, OnSlyceRequestListener, OnSlyceCameraFragmentListener,TextView.OnEditorActionListener {
+public class MainActivity extends Activity implements OnSlyceRequestListener, OnSlyceCameraFragmentListener,TextView.OnEditorActionListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
-
-    private Button enterUrl;
-    private Button uploadImage;
-    private Button cancelRequests;
-    private Button cameraActivity;
-    private Button fullUIMode;
 
     private TextView acceptTextView;
     private TextView premium;
@@ -54,8 +47,9 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     private Slyce slyce;
 
-    private SlyceProductsRequest slyceProductsRequestImageUrl;
-    private SlyceProductsRequest slyceProductsRequestImage;
+    private SlyceRequest slyceRequestImageUrl;
+    private SlyceRequest slyceRequestImage;
+    private SlyceRequest slycePublicKeywordsImageUrl;
 
     private ProgressBar progressBar;
 
@@ -67,8 +61,6 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Dudu test
-
         setContentView(R.layout.activity_main);
 
         initViews();
@@ -76,26 +68,14 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     private void initViews(){
 
-        uploadImage = (Button) findViewById(R.id.upload_image);
-        enterUrl = (Button) findViewById(R.id.enter_url);
-        cancelRequests = (Button) findViewById(R.id.cancel_requests);
         clientIdEditText = (EditText) findViewById(R.id.client_id);
         acceptTextView = (TextView) findViewById(R.id.accept_client_id);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         enabled2D = (TextView) findViewById(R.id.enabled_2d);
         premium = (TextView) findViewById(R.id.premium);
         results = (TextView) findViewById(R.id.results);
-        cameraActivity = (Button) findViewById(R.id.camera_activity);
-        fullUIMode = (Button) findViewById(R.id.full_ui_mode);
 
         results.setTextIsSelectable(true);
-
-        uploadImage.setOnClickListener(this);
-        enterUrl.setOnClickListener(this);
-        acceptTextView.setOnClickListener(this);
-        cancelRequests.setOnClickListener(this);
-        cameraActivity.setOnClickListener(this);
-        fullUIMode.setOnClickListener(this);
 
         clientIdEditText.setOnEditorActionListener(this);
     }
@@ -152,6 +132,12 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
     }
 
     @Override
+    public void onItemDescriptionReceived(JSONObject keywords) {
+
+        Toast.makeText(MainActivity.this, "onItemDescriptionReceived:" +  "\n" + "Keywords: " + keywords, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onError(final String message) {
 
         Toast.makeText(MainActivity.this, "onError: " + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
@@ -187,12 +173,12 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     @Override
     public void onCameraFragmentBarcodeDetected(SlyceBarcode barcode) {
-//        Toast.makeText(this, "onCameraFragmentBarcodeDetected:" + "\n" + barcode.getBarcode(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "onCameraFragmentBarcodeDetected", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragmentImageDetected(String productInfo) {
-//        Toast.makeText(this, "onCameraFragmentImageDetected:" + "\n" + productInfo, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "onCameraFragmentImageDetected", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -207,122 +193,14 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
     @Override
     public void onCameraFragmentError(String message) {
-//        Toast.makeText(this, "onCameraFragmentError:" + "\n" + message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "onCameraFragmentError", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCameraFragmentFinished() {
-
+        Toast.makeText(MainActivity.this, "onCameraFragmentFinished", Toast.LENGTH_SHORT).show();
     }
     // OnSlyceCameraFragmentListener callbacks END
-
-    @Override
-    public void onClick(View v) {
-
-        switch(v.getId()){
-
-            case R.id.accept_client_id:
-
-                String clientId = clientIdEditText.getText().toString();
-
-                if(TextUtils.isEmpty(clientId)){
-                    showDialogError("Please insert Client ID");
-                    return;
-                }
-
-                hideKeyboard();
-
-                // Show progress bar
-                progressBar.setVisibility(View.VISIBLE);
-
-                // Reset boolean
-                isSlyceSDKOpened = false;
-
-                slyce = Slyce.getInstance(this);
-
-                slyce.open(clientId, new OnSlyceOpenListener() {
-
-                    @Override
-                    public void onOpenSuccess() {
-
-                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_SHORT).show();
-
-                        // Hide progress
-                        progressBar.setVisibility(View.INVISIBLE);
-
-                        // Set boolean
-                        isSlyceSDKOpened = true;
-
-                        // Set Premium and 2D Enabled properties
-                        premium.setText(getString(R.string.premium, String.valueOf(slyce.isPremiumUser()).toUpperCase()));
-                        enabled2D.setText(getString(R.string.enabled_2d, String.valueOf(slyce.is2DSearchEnabled()).toUpperCase()));
-                    }
-
-                    @Override
-                    public void onOpenFail(String message) {
-
-                        // Hide progress
-                        progressBar.setVisibility(View.INVISIBLE);
-
-                        Toast.makeText(MainActivity.this, "Slyce SDK open failed: " + message, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                break;
-
-            case R.id.upload_image:
-
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
-
-                break;
-
-            case R.id.enter_url:
-
-                showDialog();
-
-                break;
-
-            case R.id.cancel_requests:
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if(slyceProductsRequestImage != null){
-                    slyceProductsRequestImage.cancel();
-                }
-
-                if(slyceProductsRequestImageUrl != null){
-                    slyceProductsRequestImageUrl.cancel();
-                }
-
-                break;
-
-            case R.id.camera_activity:
-
-                if(slyce == null){
-                    showDialogError("Please init Slyce object");
-                    return;
-                }
-
-                startActivity(new Intent(this, CameraActivity.class));
-
-                break;
-
-            case R.id.full_ui_mode:
-
-                if(slyce == null){
-                    showDialogError("Please init Slyce object");
-                    return;
-                }
-
-                startSlyceCameraFragment();
-
-                break;
-        }
-    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -366,9 +244,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                slyceProductsRequestImage = new SlyceProductsRequest(slyce, this, selectedBitmap);
-                slyceProductsRequestImage.execute();
-
+                slyceRequestImage = new SlyceRequest(slyce, this, new JSONObject());
+                slyceRequestImage.getProducts(selectedBitmap);
             }
         }
     }
@@ -440,8 +317,8 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
                     return;
                 }
 
-                slyceProductsRequestImageUrl = new SlyceProductsRequest(slyce, MainActivity.this, imageUrl);
-                slyceProductsRequestImageUrl.execute();
+                slyceRequestImageUrl = new SlyceRequest(slyce, MainActivity.this, new JSONObject());
+                slyceRequestImageUrl.getProducts(imageUrl);
 
                 progressBar.setVisibility(View.VISIBLE);
             }
@@ -482,5 +359,126 @@ public class MainActivity extends Activity implements View.OnClickListener, OnSl
         }
     }
 
+    public void onButtonClick(View v){
 
+        switch(v.getId()){
+
+            case R.id.upload_image:
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+
+                break;
+
+            case R.id.accept_client_id:
+
+                String clientId = clientIdEditText.getText().toString();
+
+                if(TextUtils.isEmpty(clientId)){
+                    showDialogError("Please insert Client ID");
+                    return;
+                }
+
+                hideKeyboard();
+
+                // Show progress bar
+                progressBar.setVisibility(View.VISIBLE);
+
+                // Reset boolean
+                isSlyceSDKOpened = false;
+
+                slyce = Slyce.getInstance(this);
+
+                slyce.open(clientId, new OnSlyceOpenListener() {
+
+                    @Override
+                    public void onOpenSuccess() {
+
+                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_SHORT).show();
+
+                        // Hide progress
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        // Set boolean
+                        isSlyceSDKOpened = true;
+
+                        // Set Premium and 2D Enabled properties
+                        premium.setText(getString(R.string.premium, String.valueOf(slyce.isPremiumUser()).toUpperCase()));
+                        enabled2D.setText(getString(R.string.enabled_2d, String.valueOf(slyce.is2DSearchEnabled()).toUpperCase()));
+                    }
+
+                    @Override
+                    public void onOpenFail(String message) {
+
+                        // Hide progress
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        Toast.makeText(MainActivity.this, "Slyce SDK open failed: " + message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                break;
+
+            case R.id.enter_url:
+
+                showDialog();
+
+                break;
+
+            case R.id.cancel_requests:
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if(slyceRequestImage != null){
+                    slyceRequestImage.cancel();
+                }
+
+                if(slyceRequestImageUrl != null){
+                    slyceRequestImageUrl.cancel();
+                }
+
+                if(slycePublicKeywordsImageUrl != null){
+                    slycePublicKeywordsImageUrl.cancel();
+                }
+
+                break;
+
+            case R.id.camera_activity:
+
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
+                startActivity(new Intent(this, CameraActivity.class));
+
+                break;
+
+            case R.id.full_ui_mode:
+
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
+                startSlyceCameraFragment();
+
+                break;
+
+            case R.id.public_keywords:
+
+                if(slyce == null){
+                    showDialogError("Please init Slyce object");
+                    return;
+                }
+
+                slycePublicKeywordsImageUrl = new SlyceRequest(slyce, this, new JSONObject());
+                slycePublicKeywordsImageUrl.getItemDescription("https://cdn.lulus.com/images/product/medium/127386.jpg");
+
+                break;
+        }
+    }
 }

@@ -17,3 +17,14 @@ Slyce Android SDK release notes
     * `onBarcodeDetected` called when barcode is found.
     * `onItemDescriptionReceived` called when item description is found.
     * `onFinished` called when Slyce search proccess ended.
+
+
+2.2 - unknown release date 
+--------------------------
+* Fix: Disable flash on front camera mode
+* Add: `flipCamera()` method to `SlyceCamera`. Changing cemara preview from back to front and vise versa. 
+* Add: `onCameraPreviewMode(boolean front)` to `OnSlyceCameraListener`. Will be invoke after calling `SlyceCamera.flipCamera()` indicating the camera preview mode. 
+* Add: `SlyceCamera.turnFalsh()` will return a boolean indicating the falsh state (on/off)
+* Fix: Crash on getProducts() with image url in public flow.
+* Add: New design for SlyceCameraFragment
+* Add: Bug fixing and impeovements. 

@@ -21,10 +21,18 @@ Slyce Android SDK release notes
 
 2.2 - unknown release date 
 --------------------------
-* Fix: Disable flash on front camera mode
-* Add: `flipCamera()` method to `SlyceCamera`. Changing cemara preview from back to front and vise versa. 
-* Add: `onCameraPreviewMode(boolean front)` to `OnSlyceCameraListener`. Will be invoke after calling `SlyceCamera.flipCamera()` indicating the camera preview mode. 
-* Add: `SlyceCamera.turnFalsh()` will return a boolean indicating the falsh state (on/off)
-* Fix: Crash on getProducts() with image url in public flow.
-* Add: New design for SlyceCameraFragment
-* Add: Bug fixing and impeovements. 
+* New: Full UI Mode - Total NEW design for `SlyceCameraFragment`.
+* New: Full UI Mode - Use/Retake screen.
+* New: Full UI Mode - Image crop functionality.  
+* New: Public Flow API.
+* New: UPC resolution - Get additional product\s after a barcode has been detected.
+* New: `Slyce.open(appKey, appID, ...)` method for initialize public users.
+* Added: `OnSlyceRequestListener.onBarcodeInfoReceived(...)` called when additional info for the previously recognized barcode is found.
+* Added: `OnSlyceCameraListener.onCameraBarcodeInfoReceived(...)` same as above.
+* Added: `OnSlyceCameraFragmentListener.onCameraFragmentBarcodeInfoReceived(...)` same as above.
+* Added: `OnSlyceCameraListener.onCameraPreviewMode(boolean front)` will be invoke after calling     `SlyceCamera.flipCamera()` indicating the camera preview mode. 
+* Added: `SlyceCamera.flipCamera()` changing cemara preview from back to front and vise versa. 
+* Added: `SlyceCamera.turnFalsh()` will return a boolean indicating the falsh state (on/off).
+* Fixed: Disable flash on front camera mode.
+* Fixed: Crash on getProducts() with image url in public flow.
+* Add: Bug fixing and impeovements.

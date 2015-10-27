@@ -19,7 +19,7 @@ Slyce Android SDK release notes
     * `onFinished` called when Slyce search proccess ended.
 
 
-2.2 - unknown release date 
+2.2 - 2015/10/27
 --------------------------
 * New: Full UI Mode - Total NEW design for `SlyceCameraFragment`.
 * New: Full UI Mode - Use/Retake screen.

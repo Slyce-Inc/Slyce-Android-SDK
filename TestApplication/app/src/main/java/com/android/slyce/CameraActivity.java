@@ -125,6 +125,11 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
+    public void onCameraPreviewMode(boolean front) {
+
+    }
+
+    @Override
     public void onSnap(Bitmap bitmap) {
 
         Toast.makeText(this, "onSnap:" + "\n" + "Width: " + bitmap.getWidth() + "\n" + "Height:" + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
@@ -136,6 +141,10 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         Toast.makeText(this, "onCameraFinished", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onCameraBarcodeInfoReceived(JSONObject products) {
+        Toast.makeText(this, "onCameraBarcodeInfoReceived: " + "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onClick(View v) {

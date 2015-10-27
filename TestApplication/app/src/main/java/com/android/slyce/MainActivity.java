@@ -10,10 +10,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,15 +25,21 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.slyce.communication.ComManager;
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class MainActivity extends Activity implements OnSlyceRequestListener, OnSlyceCameraFragmentListener,TextView.OnEditorActionListener {
 
@@ -156,6 +165,12 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
         Toast.makeText(MainActivity.this, "onFinished", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onBarcodeInfoReceived(JSONObject products){
+
+        Toast.makeText(MainActivity.this, "onBarcodeInfoReceived: " + "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
+    }
     // OnSlyceRequestListener callbacks END
 
     // OnSlyceCameraFragmentListener callbacks (Full UI Mode)
@@ -199,6 +214,11 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
     @Override
     public void onCameraFragmentFinished() {
         Toast.makeText(MainActivity.this, "onCameraFragmentFinished", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCameraFragmentBarcodeInfoReceived(JSONObject products){
+        Toast.makeText(MainActivity.this, "onCameraFragmentBarcodeInfoReceived", Toast.LENGTH_SHORT).show();
     }
     // OnSlyceCameraFragmentListener callbacks END
 
@@ -392,7 +412,7 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
                 slyce = Slyce.getInstance(this);
 
-                slyce.open(clientId, new OnSlyceOpenListener() {
+                slyce.open(clientId, new OnSlyceOpenListener(){
 
                     @Override
                     public void onOpenSuccess() {

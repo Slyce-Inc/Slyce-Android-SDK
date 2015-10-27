@@ -15,3 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#-keep class com.android.slyce.** {*;}
+
+#-keep class com.moodstocks.android.** {*;}
+
+#-keep class com.google.zxing.** {*;}
+
+#-keep class com.android.volley.** {*;}

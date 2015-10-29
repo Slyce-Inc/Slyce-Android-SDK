@@ -2,7 +2,7 @@ Slyce Android SDK release notes
 ===============================
 
 2.1 - 2015/07/13
-------------------
+----------------
 * Add: landscape support.
 * Add: `SlyceCamera`: Scanning products/barcodesQR codes. Managing the camera and displaying its preview.
 * Add: `SlyceCameraFragment`: Full UI Mode, Full UI implementation of SlyceCamera.
@@ -20,7 +20,7 @@ Slyce Android SDK release notes
 
 
 2.2 - 2015/10/27
---------------------------
+----------------
 * New: Full UI Mode - Total NEW design for `SlyceCameraFragment`.
 * New: Full UI Mode - Use/Retake screen.
 * New: Full UI Mode - Image crop functionality.  
@@ -36,3 +36,9 @@ Slyce Android SDK release notes
 * Fixed: Disable flash on front camera mode.
 * Fixed: Crash on getProducts() with image url in public flow.
 * Add: Bug fixing and impeovements.
+
+
+2.2 - 2015/10/29
+----------------
+* Fixed: `SlyceCamera.resume()` did not resume automatic barcode detection when `SlyceCamera.shouldPausedScan = true`
+* Fixed: `Slyce.setVibrate(false)` did not disabled vibration.

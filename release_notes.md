@@ -38,7 +38,7 @@ Slyce Android SDK release notes
 * Add: Bug fixing and impeovements.
 
 
-2.2 - 2015/10/29
+2.2.1 - 2015/10/29
 ----------------
 * Fixed: `SlyceCamera.resume()` did not resume automatic barcode detection when `SlyceCamera.shouldPausedScan = true`
 * Fixed: `Slyce.setVibrate(false)` did not disabled vibration.

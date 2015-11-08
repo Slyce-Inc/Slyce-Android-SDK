@@ -47,6 +47,6 @@ Slyce Android SDK release notes
 -----------------
 * Fixed: During initial cache sync, the camera wasn't able to detect barcodes.
 
-2.2.3 - 2015/11/4
+2.2.3 - 2015/11/8
 -----------------
 * Fixed: bugs related to 2D detection.

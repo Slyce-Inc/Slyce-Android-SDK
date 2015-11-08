@@ -44,6 +44,9 @@ Slyce Android SDK release notes
 * Fixed: `Slyce.setVibrate(false)` did not disabled vibration.
 
 2.2.2 - 2015/11/4
-------------------
+-----------------
 * Fixed: During initial cache sync, the camera wasn't able to detect barcodes.
 
+2.2.3 - 2015/11/4
+-----------------
+* Fixed: bugs related to 2D detection.

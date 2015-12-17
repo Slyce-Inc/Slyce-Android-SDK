@@ -19,7 +19,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     private Button snap;
     private Button flash;
     private Button focuseAtPoint;
-//te
+//tes
     private SurfaceView preview;
 
     private ProgressBar snapProgress;

@@ -1,4 +1,4 @@
-Slyce Android SDK release notes
+Slyce Android SDK release notes//
 ===============================
 
 2.1 - 2015/07/13

@@ -18,7 +18,7 @@ The SDK enables 3 major modes of operation: **Headless**, **Headless/Camera**, *
 ### Headless
 
 SDK provides the methods required to submit images and receive results. 
-Ideal for cases where the app already handles the camera and has its own UI.
+Ideal for cases when the app already handles the camera and has its own UI.
 
 ### Headless/Camera
 
@@ -31,7 +31,7 @@ The SDK takes care of the entire flow from scanning to getting results. The SDK 
 
 ## Requirements
 * Android 4.0 (API Level 14) or higher
-* Android Studio developemt enviourment
+* Android Studio developemt environment
 * A Slyce client ID 
 
 ## Add the SDK to Your Project
@@ -46,9 +46,11 @@ repositories {
 }
 ```
 4. Add dependency to Slyce SDK. 
+5. Add dependency to play-services-vision library (in case your application doesn't already use the play-services library)
 ```ruby
 dependencies {
     compile(name:'slyce', ext:'aar')
+    compile 'com.google.android.gms:play-services-vision:8.3.0'
 }
 ```
 

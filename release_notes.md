@@ -35,7 +35,7 @@ Slyce Android SDK release notes//
 * Added: `SlyceCamera.turnFalsh()` will return a boolean indicating the falsh state (on/off).
 * Fixed: Disable flash on front camera mode.
 * Fixed: Crash on getProducts() with image url in public flow.
-* Add: Bug fixing and impeovements.
+* Add: Bug fixing and improvements.
 
 
 2.2.1 - 2015/10/29
@@ -50,3 +50,7 @@ Slyce Android SDK release notes//
 2.2.3 - 2015/11/8
 -----------------
 * Fixed: bugs related to 2D detection.
+
+2.3 - 2015/12/20
+-----------------
+* Added: Native Android barcode/qr detection

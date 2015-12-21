@@ -53,4 +53,12 @@ Slyce Android SDK release notes//
 
 2.3 - 2015/12/20
 -----------------
-* Added: Native Android barcode/qr detection
+* ADDED: new 1D barcodes supported (ITF, code 128, code 39, codebar and more)
+
+* FIXED: barcode detection in landscape orientation
+
+* FIXED: local image cache synchronization bug
+
+* IMPROVED: reduced SDK size
+
+* IMPROVED: analytics reporting

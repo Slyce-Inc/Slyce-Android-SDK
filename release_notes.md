@@ -62,3 +62,9 @@ Slyce Android SDK release notes//
 * IMPROVED: reduced SDK size
 
 * IMPROVED: analytics reporting
+
+2.3.1 - 2016/01/03
+-----------------
+* IMPROVED: UPC resolution reporting
+
+* FIXED: Analitycs reporting suppressed when app is in background

@@ -68,3 +68,11 @@ Slyce Android SDK release notes//
 * IMPROVED: UPC resolution reporting
 
 * FIXED: Analitycs reporting suppressed when app is in background
+
+2.4 - 2016/01/14
+-----------------
+* IMPROVED: SDK size and method count reduced significantly
+
+* ADDED: `setShouldPauseScannerDelayTime(int delayTimeInMilliseconds)` - custom delay after scanning pause
+
+* ADDED: `setContinuousRecognition2D(boolean value)`,`setContinuousRecognitionBarcodes(boolean value)` - enable and disable continuous recognition of barcodes/QR and Images separately

@@ -31,7 +31,7 @@ The SDK takes care of the entire flow from scanning to getting results. The SDK 
 
 ## Requirements
 * Android 4.0 (API Level 14) or higher
-* Android Studio developemt environment
+* Android Studio development environment
 * A Slyce client ID 
 
 ## Add the SDK to Your Project

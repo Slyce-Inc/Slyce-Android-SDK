@@ -53,6 +53,10 @@ dependencies {
     compile 'com.google.android.gms:play-services-vision:8.3.0'
 }
 ```
+4.	It's important to initialize the Slyce object and call the Slyce.open(---) method 
+in the extended Application class or in the main Activity of the application in order 
+to sync the data as early as possible.
+
 
 ## Credentials
 

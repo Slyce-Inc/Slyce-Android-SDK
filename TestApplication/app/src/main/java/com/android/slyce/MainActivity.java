@@ -10,13 +10,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
+import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -26,20 +23,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.slyce.communication.ComManager;
 import com.android.slyce.enums.SlyceRequestStage;
+import com.android.slyce.fragments.BaseDialogFragment;
 import com.android.slyce.listeners.OnSlyceCameraFragmentListener;
 import com.android.slyce.listeners.OnSlyceOpenListener;
 import com.android.slyce.listeners.OnSlyceRequestListener;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 public class MainActivity extends Activity implements OnSlyceRequestListener, OnSlyceCameraFragmentListener,TextView.OnEditorActionListener {
 
@@ -274,11 +269,42 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
         // Add SlyceCameraFragment
         SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(null, true, false);
+
+        // initialize SlyceCameraFragment object with custom barcode format set, if needed (the default is detection of all formats)
+        //int barcodeFormatSet = Barcode.EAN_8 + Barcode.CODE_39+ Barcode.CODE_93;// customize barcode detection, the default is detection of all formats.
+        //SlyceCameraFragment slyceFragment = SlyceCameraFragment.newInstance(null, true, false,true,true,3000, barcodeFormatSet);
+
+        //customize the color of the circular progress
+        //slyceFragment.setCircularProgressColor(Color.GREEN);
+
+
+        //all custom fragments should extend the BaseDialogFragment and implement the onDismiss method, see example of CustomHelpScreen class
+
+        //replace the default "Scanning Tips" screen
+        //slyceFragment.setCustomHelpScreen(getCustomDialogScreen(CustomHelpScreen.SCAN_TIPS_DIALOG));
+
+        //replace the default "not found" screen
+        //slyceFragment.setCustomNotFoundScreen(getCustomDialogScreen(CustomHelpScreen.NOT_FOUND_DIALOG));
+
+        //add custom buttons with custom fragments dialogs, the positioning is taken in percent of the screen when 100% is the width/height of the screen for x/y respectively
+        //slyceFragment.addCustomScreenWithButton(getCustomDialogScreen(CustomHelpScreen.GENERAL_DIALOG),50.9f,50f,R.drawable.slyce_flash,this);
+        //slyceFragment.addCustomScreenWithButton(getCustomDialogScreen(CustomHelpScreen.NOT_FOUND_DIALOG),15f,88f,R.drawable.slyce_flash,this);
+
+
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.slyce_camera_fragment_container, slyceFragment);
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
+    }
+
+
+    /**
+     * helper to create a BaseDialogFragment
+     * all custom fragments must extend the BaseDialogFragment and implement the onDismiss method as shown in the example
+     */
+    private BaseDialogFragment getCustomDialogScreen(String dialogType){
+        return CustomHelpScreen.newInstance(dialogType);
     }
 
     /**

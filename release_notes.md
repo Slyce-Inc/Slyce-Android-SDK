@@ -76,3 +76,17 @@ Slyce Android SDK release notes//
 * ADDED: `setShouldPauseScannerDelayTime(int delayTimeInMilliseconds)` - custom delay after scanning pause
 
 * ADDED: `setContinuousRecognition2D(boolean value)`,`setContinuousRecognitionBarcodes(boolean value)` - enable and disable continuous recognition of barcodes/QR and Images separately
+
+2.5 - 2016/02/03
+-----------------
+* ADDED: error callback during 2D scan when internet service is down.
+
+* ADDED: Customization (Full UI mode) - override the default 'help' dialog fragment with your custom fragment.
+
+* ADDED: Customization (Full UI mode) - override the default 'Not Found' dialog fragment with your custom fragment.
+
+* ADDED: Customization (Full UI mode) - add your own custom button with a custom fragment to SlyceCameraFragment.
+
+* ADDED: Customization (Full UI mode) - set your own circular progress color.
+
+* ADDED: Choose your own set of barcode format to detect.

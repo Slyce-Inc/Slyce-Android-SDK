@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.android.slyce.enums.SlyceRequestStage;
 import com.android.slyce.listeners.OnSlyceCameraListener;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,7 +33,18 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
 
         initViews();
 
+        // initialize SlyceCamera object
         slyceCamera = new SlyceCamera(this, Slyce.getInstance(this), preview, null, this);
+
+        //// initialize SlyceCamera object with custom barcode format set if needed (the default is detection of all formats)
+        //int barcodeFormatSet = Barcode.CODE_39+Barcode.EAN_8+ Barcode.CODE_93;// customize barcode detection, the default is detection of all formats.
+        //slyceCamera = new SlyceCamera(this, Slyce.getInstance(this), preview, null, this,barcodeFormatSet);
+
+        slyceCamera.shouldPauseScanner(false);                // the default is true
+        //slyceCamera.setShouldPauseScannerDelayTime(5000);     // the default is 3000
+        //slyceCamera.setContinuousRecognition(false);          // the default is true
+        //slyceCamera.setContinuousRecognition2D(false);        // the default is true
+        //slyceCamera.setContinuousRecognitionBarcodes(false);  // the default is true
     }
 
     @Override

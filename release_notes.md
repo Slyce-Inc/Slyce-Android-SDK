@@ -67,7 +67,7 @@ Slyce Android SDK release notes//
 -----------------
 * IMPROVED: UPC resolution reporting
 
-* FIXED: Analitycs reporting suppressed when app is in background
+* FIXED: Analytics reporting suppressed when app is in background
 
 2.4 - 2016/01/14
 -----------------
@@ -90,3 +90,9 @@ Slyce Android SDK release notes//
 * ADDED: Customization (Full UI mode) - set your own circular progress color.
 
 * ADDED: Choose your own set of barcode format to detect.
+
+2.1 - 2016/04/19
+-----------------
+* IMPROVED: Minor bugs fixes.
+* FIXED: Analytics reporting suppressed when app is in background, including the Application class layer
+

@@ -91,8 +91,17 @@ Slyce Android SDK release notes//
 
 * ADDED: Choose your own set of barcode format to detect.
 
-2.1 - 2016/04/19
+2.5.1 - 2016/04/19
 -----------------
 * IMPROVED: Minor bugs fixes.
 * FIXED: Analytics reporting suppressed when app is in background, including the Application class layer
+
+2.6 - 2016/05/18
+-----------------
+* FIXED: Reporting system updated. 
+* ADDED: Updated and targeted for Marshmallow API.
+* ADDED: Project updated to the newer Gradle Build Tools (2.0.0).
+* FIXED: Crash upon requests cancelling  in devices running the KitKat API fixed.
+* FIXED: Crash in Marshmallow API upon 3D search fixed.
+* IMPROVED: 2D detection updated and  improved.
 

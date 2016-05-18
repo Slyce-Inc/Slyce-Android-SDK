@@ -1,10 +1,12 @@
 package com.android.slyce;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -527,4 +530,74 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
                 break;
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case SlyceCamera.MY_PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, no need for action
+
+                } else {
+
+                    // permission denied
+                    Log.e(TAG,"Camera permission denied");
+
+                    showMessageOKCancel("You need to allow access to Camera",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(new String[] {Manifest.permission.CAMERA},
+                                            SlyceCamera.MY_PERMISSIONS_REQUEST_CAMERA);
+                                }
+                            });
+
+                }
+                return;
+            }
+
+            case SlyceCamera.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_DATA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, no need for action
+
+                } else {
+
+                    // permission denied
+                    Log.e(TAG,"Camera permission denied");
+
+                    showMessageOKCancel("You need to allow access to Storage",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                            SlyceCamera.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_DATA);
+                                }
+                            });
+
+                }
+                return;
+            }
+
+        }
+    }
+
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+
+
 }

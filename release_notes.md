@@ -105,3 +105,14 @@ Slyce Android SDK release notes//
 * FIXED: Crash in Marshmallow API upon 3D search fixed.
 * IMPROVED: 2D detection updated and  improved.
 
+2.7 - 2016/06/02
+-----------------
+* ADDED: Support for public users.
+* ADDED: in `SlyceRequest`,`SlyceCamera` and `SlyceCameraFragment` - `setSlycePublicResultsType(SlycePublicResultsType)` : Set the result type of the public request. 
+* ADDED: in `SlyceRequest` class- `getProducts(String)` and `getProducts(Bitmap)` are deprecated, use `getResults(String)` and `getResults(Bitmap)` instead.
+* ADDED: in`OnSlyceRequestListener` - `onResultsReceivedExt(String)` and `onProgressExt(String)` for extended info from the server.
+* ADDED: in`OnSlyceCameraListener` - `onResultsReceivedExt(String)` and `onProgressExt(String)` for extended info from the server.
+* ADDED: in`OnSlyceCameraFragmentListener` - `onResultsReceivedExt(String)` for extended info from the server.
+
+
+

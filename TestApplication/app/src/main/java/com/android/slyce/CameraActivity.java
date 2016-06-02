@@ -46,6 +46,12 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         //int barcodeFormatSet = Barcode.CODE_39+Barcode.EAN_8+ Barcode.CODE_93;// customize barcode detection, the default is detection of all formats.
         //slyceCamera = new SlyceCamera(this, Slyce.getInstance(this), preview, null, this,barcodeFormatSet);
 
+
+
+        // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
+        //slyceCamera.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
+
+
         slyceCamera.shouldPauseScanner(false);                // the default is true
         //slyceCamera.setShouldPauseScannerDelayTime(5000);     // the default is 3000
         //slyceCamera.setContinuousRecognition(false);          // the default is true
@@ -117,6 +123,11 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     }
 
     @Override
+    public void onProgressExt(String s) {
+        Toast.makeText(this, "onProgressExt:" + "\n" + "Message: " + s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onCameraSlyceRequestStage(SlyceRequestStage message) {
 
         Toast.makeText(this, "onCameraSlyceRequestStage:" + "\n" + "Message: " + message, Toast.LENGTH_SHORT).show();
@@ -126,6 +137,12 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
     public void onCameraResultsReceived(JSONObject products) {
 
         Toast.makeText(this, "onCameraResultsReceived:" +  "\n" + "Products: " + products, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResultsReceivedExt(String s) {
+        Toast.makeText(this, "onResultsReceivedExt:" +  "\n" + "Results: " + s, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

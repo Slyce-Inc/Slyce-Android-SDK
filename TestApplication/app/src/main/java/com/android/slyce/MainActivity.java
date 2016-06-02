@@ -99,6 +99,11 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
     }
 
     @Override
+    public void onProgressExt(String s) {
+        Toast.makeText(this, "onProgressExt:" + "\n" + "Message: " + s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onImageDetected(String productInfo) {
 
         Toast.makeText(this,
@@ -139,10 +144,10 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
     }
 
     @Override
-    public void onItemDescriptionReceived(JSONObject keywords) {
-
-        Toast.makeText(MainActivity.this, "onItemDescriptionReceived:" +  "\n" + "Keywords: " + keywords, Toast.LENGTH_SHORT).show();
+    public void onResultsReceivedExt(String s) {
+        Toast.makeText(this, "onResultsReceivedExt:" +  "\n" + "Results: " + s, Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onError(final String message) {
@@ -263,7 +268,11 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
                 progressBar.setVisibility(View.VISIBLE);
 
                 slyceRequestImage = new SlyceRequest(slyce, this, new JSONObject());
-                slyceRequestImage.getProducts(selectedBitmap);
+
+                // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
+                //slyceRequestImage.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
+
+                slyceRequestImage.getResults(selectedBitmap);
             }
         }
     }
@@ -292,6 +301,9 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
         //add custom buttons with custom fragments dialogs, the positioning is taken in percent of the screen when 100% is the width/height of the screen for x/y respectively
         //slyceFragment.addCustomScreenWithButton(getCustomDialogScreen(CustomHelpScreen.GENERAL_DIALOG),50.9f,50f,R.drawable.slyce_flash,this);
         //slyceFragment.addCustomScreenWithButton(getCustomDialogScreen(CustomHelpScreen.NOT_FOUND_DIALOG),15f,88f,R.drawable.slyce_flash,this);
+
+        // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
+        //slyceFragment.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
 
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -367,7 +379,12 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
                 }
 
                 slyceRequestImageUrl = new SlyceRequest(slyce, MainActivity.this, new JSONObject());
-                slyceRequestImageUrl.getProducts(imageUrl);
+
+                // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
+                //slyceRequestImageUrl.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
+
+
+                slyceRequestImageUrl.getResults(imageUrl);
 
                 progressBar.setVisibility(View.VISIBLE);
             }
@@ -469,6 +486,37 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
                     }
                 });
 
+
+                //opening Slyce SDK for Public users
+               /* slyce.open("YOUR_APP_KEY","YOUR_APP_ID", new OnSlyceOpenListener(){
+
+                    @Override
+                    public void onOpenSuccess() {
+
+                        Toast.makeText(MainActivity.this, "Slyce SDK opened", Toast.LENGTH_SHORT).show();
+
+                        // Hide progress
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        // Set boolean
+                        isSlyceSDKOpened = true;
+
+                        // Set Premium and 2D Enabled properties
+                        premium.setText(getString(R.string.premium, String.valueOf(slyce.isPremiumUser()).toUpperCase()));
+                        enabled2D.setText(getString(R.string.enabled_2d, String.valueOf(slyce.is2DSearchEnabled()).toUpperCase()));
+                    }
+
+                    @Override
+                    public void onOpenFail(String message) {
+
+                        // Hide progress
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        Toast.makeText(MainActivity.this, "Slyce SDK open failed: " + message, Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+
+
                 break;
 
             case R.id.enter_url:
@@ -525,7 +573,7 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
                 }
 
                 slycePublicKeywordsImageUrl = new SlyceRequest(slyce, this, new JSONObject());
-                slycePublicKeywordsImageUrl.getItemDescription("https://cdn.lulus.com/images/product/medium/127386.jpg");
+                slycePublicKeywordsImageUrl.getResults("https://cdn.lulus.com/images/product/medium/127386.jpg");
 
                 break;
         }

@@ -2,14 +2,10 @@
     "latest": "release_2.7",
     
     "history": [
+		"release_2.8",
 		"release_2.7",
         "release_2.6",
         "release_2.5.1",
-        "release_2.5",
-        "released_1.9_fix",
-        "release_1.8",
-        "release_1.7",
-        "release_1.5",
-        "release_1.4"
+        "release_2.5"
     ]
 }

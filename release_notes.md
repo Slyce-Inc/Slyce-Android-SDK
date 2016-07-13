@@ -114,5 +114,9 @@ Slyce Android SDK release notes//
 * ADDED: in`OnSlyceCameraListener` - `onResultsReceivedExt(String)` and `onProgressExt(String)` for extended info from the server.
 * ADDED: in`OnSlyceCameraFragmentListener` - `onResultsReceivedExt(String)` for extended info from the server.
 
+2.8 - 2016/07/13
+-----------------
+* FIXED: Minor bug fixes
+
 
 

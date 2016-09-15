@@ -104,10 +104,10 @@
             android:onClick="onButtonClick"/>
 
         <Button
-            android:id="@+id/public_keywords"
+            android:id="@+id/image_url_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Public Keywords (Image URL)"
+            android:text="Search by Image URL"
             android:textAllCaps="false"
             android:onClick="onButtonClick"/>
 

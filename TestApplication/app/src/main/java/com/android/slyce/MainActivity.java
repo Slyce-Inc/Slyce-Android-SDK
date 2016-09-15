@@ -56,7 +56,7 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
     private SlyceRequest slyceRequestImageUrl;
     private SlyceRequest slyceRequestImage;
-    private SlyceRequest slycePublicKeywordsImageUrl;
+    private SlyceRequest slyceImageUrlRequestNoUI;
 
     private ProgressBar progressBar;
 
@@ -269,9 +269,6 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
                 slyceRequestImage = new SlyceRequest(slyce, this, new JSONObject());
 
-                // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
-                //slyceRequestImage.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
-
                 slyceRequestImage.getResults(selectedBitmap);
             }
         }
@@ -301,9 +298,6 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
         //add custom buttons with custom fragments dialogs, the positioning is taken in percent of the screen when 100% is the width/height of the screen for x/y respectively
         //slyceFragment.addCustomScreenWithButton(getCustomDialogScreen(CustomHelpScreen.GENERAL_DIALOG),50.9f,50f,R.drawable.slyce_flash,this);
         //slyceFragment.addCustomScreenWithButton(getCustomDialogScreen(CustomHelpScreen.NOT_FOUND_DIALOG),15f,88f,R.drawable.slyce_flash,this);
-
-        // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
-        //slyceFragment.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
 
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -379,9 +373,6 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
                 }
 
                 slyceRequestImageUrl = new SlyceRequest(slyce, MainActivity.this, new JSONObject());
-
-                // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
-                //slyceRequestImageUrl.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
 
 
                 slyceRequestImageUrl.getResults(imageUrl);
@@ -488,7 +479,8 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
 
                 //opening Slyce SDK for Public users
-               /* slyce.open("YOUR_APP_KEY","YOUR_APP_ID", new OnSlyceOpenListener(){
+
+                /* slyce.open("YOUR_APP_KEY","YOUR_APP_SECRET", new OnSlyceOpenListener(){
 
                     @Override
                     public void onOpenSuccess() {
@@ -514,7 +506,10 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
                         Toast.makeText(MainActivity.this, "Slyce SDK open failed: " + message, Toast.LENGTH_SHORT).show();
                     }
-                });*/
+                });
+*/
+
+
 
 
                 break;
@@ -537,8 +532,8 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
                     slyceRequestImageUrl.cancel();
                 }
 
-                if(slycePublicKeywordsImageUrl != null){
-                    slycePublicKeywordsImageUrl.cancel();
+                if(slyceImageUrlRequestNoUI != null){
+                    slyceImageUrlRequestNoUI.cancel();
                 }
 
                 break;
@@ -565,15 +560,15 @@ public class MainActivity extends Activity implements OnSlyceRequestListener, On
 
                 break;
 
-            case R.id.public_keywords:
+            case R.id.image_url_search:
 
                 if(slyce == null){
                     showDialogError("Please init Slyce object");
                     return;
                 }
 
-                slycePublicKeywordsImageUrl = new SlyceRequest(slyce, this, new JSONObject());
-                slycePublicKeywordsImageUrl.getResults("https://cdn.lulus.com/images/product/medium/127386.jpg");
+                slyceImageUrlRequestNoUI = new SlyceRequest(slyce, this, new JSONObject());
+                slyceImageUrlRequestNoUI.getResults("https://cdn.lulus.com/images/product/medium/127386.jpg");
 
                 break;
         }

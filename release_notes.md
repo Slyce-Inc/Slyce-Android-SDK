@@ -118,5 +118,16 @@ Slyce Android SDK release notes//
 -----------------
 * FIXED: Minor bug fixes
 
+4.0 - 2016/09/15
+-----------------
+* ADDED: Added Find Similar search support.
+* FIXED: Full UI mode - workflow messages are excluded. Color, category, gender, keywords are the only ones to appear.
+* IMPROVED: Secure connections optimization.
+* ADDED: Full Public Users support, implemented with the new Portal system.
+
+
+
+
+
 
 

@@ -47,12 +47,7 @@ public class CameraActivity extends Activity implements OnSlyceCameraListener, V
         //slyceCamera = new SlyceCamera(this, Slyce.getInstance(this), preview, null, this,barcodeFormatSet);
 
 
-
-        // set the result type of the retrieved data for PUBLIC users only, the default is SLYCE_PUBLIC_DESCRIPTION
-        //slyceCamera.setSlycePublicResultsType(SlyceRequest.SlycePublicResultsType.SLYCE_PUBLIC_PRODUCTS);
-
-
-        slyceCamera.shouldPauseScanner(false);                // the default is true
+        //slyceCamera.shouldPauseScanner(false);                // the default is true
         //slyceCamera.setShouldPauseScannerDelayTime(5000);     // the default is 3000
         //slyceCamera.setContinuousRecognition(false);          // the default is true
         //slyceCamera.setContinuousRecognition2D(false);        // the default is true

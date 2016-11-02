@@ -8,12 +8,12 @@ Slyce Android SDK release notes//
 * Add: `SlyceCameraFragment`: Full UI Mode, Full UI implementation of SlyceCamera.
 * Add: Support Public Products/Keywords requests.
 * Update: `SlyceProductsRequest` changed to `SlyceRequest`.  
-* Update: `OnSlyceRequestListener`: 
+* Update: `OnSlyceRequestListener`:
     * `on2DRecognition` changed to `onImageDetected`   
     * `on2DExtendedRecognition` changed to `onImageInfoReceived`
     * `on3DRecognition` changed to `onResultsReceived`
     * `onStageLevelFinish` changed to `onSlyceRequestStage`
-* Add: `OnSlyceRequestListener`: 
+* Add: `OnSlyceRequestListener`:
     * `onBarcodeDetected` called when barcode is found.
     * `onItemDescriptionReceived` called when item description is found.
     * `onFinished` called when Slyce search proccess ended.
@@ -30,8 +30,8 @@ Slyce Android SDK release notes//
 * Added: `OnSlyceRequestListener.onBarcodeInfoReceived(...)` called when additional info for the previously recognized barcode is found.
 * Added: `OnSlyceCameraListener.onCameraBarcodeInfoReceived(...)` same as above.
 * Added: `OnSlyceCameraFragmentListener.onCameraFragmentBarcodeInfoReceived(...)` same as above.
-* Added: `OnSlyceCameraListener.onCameraPreviewMode(boolean front)` will be invoke after calling     `SlyceCamera.flipCamera()` indicating the camera preview mode. 
-* Added: `SlyceCamera.flipCamera()` changing cemara preview from back to front and vise versa. 
+* Added: `OnSlyceCameraListener.onCameraPreviewMode(boolean front)` will be invoke after calling     `SlyceCamera.flipCamera()` indicating the camera preview mode.
+* Added: `SlyceCamera.flipCamera()` changing cemara preview from back to front and vise versa.
 * Added: `SlyceCamera.turnFalsh()` will return a boolean indicating the falsh state (on/off).
 * Fixed: Disable flash on front camera mode.
 * Fixed: Crash on getProducts() with image url in public flow.
@@ -98,7 +98,7 @@ Slyce Android SDK release notes//
 
 2.6 - 2016/05/18
 -----------------
-* FIXED: Reporting system updated. 
+* FIXED: Reporting system updated.
 * ADDED: Updated and targeted for Marshmallow API.
 * ADDED: Project updated to the newer Gradle Build Tools (2.0.0).
 * FIXED: Crash upon requests cancelling  in devices running the KitKat API fixed.
@@ -108,7 +108,7 @@ Slyce Android SDK release notes//
 2.7 - 2016/06/02
 -----------------
 * ADDED: Support for public users.
-* ADDED: in `SlyceRequest`,`SlyceCamera` and `SlyceCameraFragment` - `setSlycePublicResultsType(SlycePublicResultsType)` : Set the result type of the public request. 
+* ADDED: in `SlyceRequest`,`SlyceCamera` and `SlyceCameraFragment` - `setSlycePublicResultsType(SlycePublicResultsType)` : Set the result type of the public request.
 * ADDED: in `SlyceRequest` class- `getProducts(String)` and `getProducts(Bitmap)` are deprecated, use `getResults(String)` and `getResults(Bitmap)` instead.
 * ADDED: in`OnSlyceRequestListener` - `onResultsReceivedExt(String)` and `onProgressExt(String)` for extended info from the server.
 * ADDED: in`OnSlyceCameraListener` - `onResultsReceivedExt(String)` and `onProgressExt(String)` for extended info from the server.
@@ -125,9 +125,6 @@ Slyce Android SDK release notes//
 * IMPROVED: Secure connections optimization.
 * ADDED: Full Public Users support, implemented with the new Portal system.
 
-
-
-
-
-
-
+4.2 - 2016/10/02
+-----------------
+* ADDED: Real-time modification of image upload resizing parameters.

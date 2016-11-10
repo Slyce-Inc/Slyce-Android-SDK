@@ -125,6 +125,11 @@ Slyce Android SDK release notes//
 * IMPROVED: Secure connections optimization.
 * ADDED: Full Public Users support, implemented with the new Portal system.
 
-4.2 - 2016/10/02
+4.2 - 2016/11/02
 -----------------
 * ADDED: Real-time modification of image upload resizing parameters.
+
+4.3 - 2016/11/10
+-----------------
+* ADDED: in `SlyceCamera` - `setDetectionDelay2D`: Sets the 2D detection delay
+* ADDED: in `SlyceCamera` - `setDetectionDelay2DSameImage` Sets the 2D same image detection delay

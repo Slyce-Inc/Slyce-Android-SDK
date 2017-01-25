@@ -133,3 +133,9 @@ Slyce Android SDK release notes//
 -----------------
 * ADDED: in `SlyceCamera` - `setDetectionDelay2D`: Sets the 2D detection delay
 * ADDED: in `SlyceCamera` - `setDetectionDelay2DSameImage` Sets the 2D same image detection delay
+
+
+4.3.1 - 2017/01/25
+-----------------
+* IMPROVED: socket connection to Foundation
+* ADDED: public setter method for workflow options in SlyceRequest and SlyceCamera classes

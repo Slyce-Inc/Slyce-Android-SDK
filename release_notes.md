@@ -139,3 +139,15 @@ Slyce Android SDK release notes//
 -----------------
 * IMPROVED: socket connection to Foundation
 * ADDED: public setter method for workflow options in SlyceRequest and SlyceCamera classes
+
+
+4.4 - 2017/03/28
+-----------------
+backward compatibility for old retailer IDs - preserved
+
+* CHANGED: 2D recognition framework replaced with a new one - on-device as well as server-side
+* FIXED: 2D and 3D simultaneous recognition
+* FIXED: wrong id on find similar request
+* FIXED: CameraManager's null pointer exception crash
+* FIXED: image rotation on pick from gallery (Full UI)
+* CHANGED: sending image request on snap is performed by “Use Photo” only

@@ -151,3 +151,11 @@ backward compatibility for old retailer IDs - preserved
 * FIXED: CameraManager's null pointer exception crash
 * FIXED: image rotation on pick from gallery (Full UI)
 * CHANGED: sending image request on snap is performed by “Use Photo” only
+
+
+4.5 - 2017/04/11
+-----------------
+*IMPROVED: 2D scanning optimisations for better on-device recognition
+*IMPROVED: 2D scanning improvements for server-side processing
+*ADDED: x86_64 architecture
+*IMPROVED: 2D Syncing layer

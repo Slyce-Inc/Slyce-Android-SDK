@@ -159,3 +159,7 @@ backward compatibility for old retailer IDs - preserved
 *IMPROVED: 2D scanning improvements for server-side processing
 *ADDED: x86_64 architecture
 *IMPROVED: 2D Syncing layer
+
+4.5.1 - 2017/05/01
+-----------------
+*ADDED custom event reporting

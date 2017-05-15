@@ -163,3 +163,7 @@ backward compatibility for old retailer IDs - preserved
 4.5.1 - 2017/05/01
 -----------------
 *ADDED custom event reporting
+
+4.5.2 - 2017/05/15
+-----------------
+*IMPROVED 2D sync and processing

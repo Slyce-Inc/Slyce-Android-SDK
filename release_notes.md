@@ -167,3 +167,10 @@ backward compatibility for old retailer IDs - preserved
 4.5.2 - 2017/05/15
 -----------------
 *IMPROVED 2D sync and processing
+
+4.5.3 - 2017/06/15
+-----------------
+*IMPROVED 2D catalog sync (relocated to camera init)
+*IMPROVED 2D scanning performance
+*ADDED find similar by product ID
+*IMPROVED camera stability

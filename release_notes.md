@@ -174,3 +174,9 @@ backward compatibility for old retailer IDs - preserved
 *IMPROVED 2D scanning performance
 *ADDED find similar by product ID
 *IMPROVED camera stability
+
+4.5.4 - 2017/07/25
+-----------------
+*FIXED wrong barcode type reporting
+*ADDED find similar by product ID and image URL
+*DEPRECATED getImageUrl method in SlyceBaseRequest

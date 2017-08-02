@@ -180,3 +180,7 @@ backward compatibility for old retailer IDs - preserved
 *FIXED wrong barcode type reporting
 *ADDED find similar by product ID and image URL
 *DEPRECATED getImageUrl method in SlyceBaseRequest
+
+4.5.5 - 2017/08/02
+-----------------
+*REMOVED android_id usage

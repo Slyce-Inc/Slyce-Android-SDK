@@ -184,3 +184,7 @@ backward compatibility for old retailer IDs - preserved
 4.5.5 - 2017/08/02
 -----------------
 *REMOVED android_id usage
+
+4.5.6 - 2017/08/25
+-----------------
+*ADDED Find similar statistics tracking

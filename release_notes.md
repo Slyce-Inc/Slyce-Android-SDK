@@ -194,3 +194,10 @@ backward compatibility for old retailer IDs - preserved
 -----------------
 *ADDED exact match threshold parameter
 *CHANGED Exact Match scanning improvements in speed and quality
+
+
+4.5.8 - 2017/10/13
+-----------------
+*ADDED pinch to zoom in SlyceCamera
+*ADDED automatic rotation fix on camera snap
+*IMPROVED security while submitting pictures

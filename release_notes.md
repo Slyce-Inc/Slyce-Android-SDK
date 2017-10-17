@@ -201,3 +201,9 @@ backward compatibility for old retailer IDs - preserved
 *ADDED pinch to zoom in SlyceCamera
 *ADDED automatic rotation fix on camera snap
 *IMPROVED security while submitting pictures
+
+
+4.5.9 - 2017/10/17
+-----------------
+*FIXED pinch to zoom crash
+*IMPROVED pinch to zoom smoothness

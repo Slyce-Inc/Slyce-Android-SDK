@@ -207,3 +207,10 @@ backward compatibility for old retailer IDs - preserved
 -----------------
 *FIXED pinch to zoom crash
 *IMPROVED pinch to zoom smoothness
+
+
+4.5.10 - 2018/01/09
+-----------------
+*FIXED rare crash on SlyceRequest.cancel()
+*UPDATED dependencies
+*CHANGED find similar request flow

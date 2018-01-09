@@ -50,7 +50,7 @@ repositories {
 ```ruby
 dependencies {
     compile(name:'slyce', ext:'aar')
-    compile 'com.google.android.gms:play-services-vision:8.3.0'
+    compile 'com.google.android.gms:play-services-vision:11.6.2'
 }
 ```
 4.	It's important to initialize the Slyce object and call the Slyce.open(---) method 

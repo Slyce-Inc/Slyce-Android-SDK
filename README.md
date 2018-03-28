@@ -3,6 +3,8 @@ Slyce Android SDK
 
 The Slyce Android SDK makes it easy to add visual search capabilities to mobile apps.
 
+[*If you're looking for SDK 5.0, click here.*](https://github.com/Slyce-Inc/Slyce-Android-SDK/tree/release_5.0)
+
 ## Contents
 
 - [Use Cases](#use-cases)

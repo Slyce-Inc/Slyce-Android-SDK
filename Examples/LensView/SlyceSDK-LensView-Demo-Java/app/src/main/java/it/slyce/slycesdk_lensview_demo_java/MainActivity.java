@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
         if (Slyce.getInstance(this).isOpen() && isCameraPermissionGranted()) {
 
             // If Slyce is open and camera permission has been granted, start the LensView camera.
-            slyceLensView.getCameraControls().start();
+            initSlyceSession();
+            initSlyceLensView();
 
         } else if (!Slyce.getInstance(this).isOpen()) {
 

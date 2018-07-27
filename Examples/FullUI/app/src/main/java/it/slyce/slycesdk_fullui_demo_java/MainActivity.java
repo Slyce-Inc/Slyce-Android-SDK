@@ -10,10 +10,14 @@ import java.util.List;
 
 import it.slyce.sdk.Slyce;
 import it.slyce.sdk.SlyceCompletionHandler;
+import it.slyce.sdk.SlyceHeaderTypeCenter;
+import it.slyce.sdk.SlyceHeaderTypeLeft;
+import it.slyce.sdk.SlyceHeaderTypeRight;
 import it.slyce.sdk.SlyceSearchParameters;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceUI;
 import it.slyce.sdk.exception.SlyceError;
+import it.slyce.sdk.exception.SlyceNotOpenedException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Slyce should be opened once, generally at application startup. We're doing
+        // it here for demo purposes.
+
         Slyce.getInstance(this).open(SLYCE_ACCOUNT_ID, SLYCE_API_KEY, SLYCE_SPACE_ID, new SlyceCompletionHandler() {
 
             @Override
@@ -39,6 +46,25 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Error opening Slyce: " + slyceError.getDetails(), Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                // Uncomment the following lines to customize the Full UI experience using SlyceTheme
+                /*
+                try {
+
+                    // - Header
+                    Slyce.getInstance(MainActivity.this).getTheme().setHeaderTypeLeft(SlyceHeaderTypeLeft.BACK_BUTTON);
+                    Slyce.getInstance(MainActivity.this).getTheme().setHeaderTypeCenter(SlyceHeaderTypeCenter.TITLE);
+                    Slyce.getInstance(MainActivity.this).getTheme().setHeaderTypeRight(SlyceHeaderTypeRight.EMPTY);
+
+                    // - Coaching Tips
+                    Slyce.getInstance(MainActivity.this).getTheme().setVisualSearchCoachingTipHeadline("Your custom headline here");
+                    Slyce.getInstance(MainActivity.this).getTheme().setVisualSearchCoachingTipSubhead("Your custom subhead here");
+                    Slyce.getInstance(MainActivity.this).getTheme().setVisualSearchCoachingTipImage(R.drawable.your_drawable_here);
+
+                } catch (SlyceNotOpenedException e) {
+                    // This exception is thrown if theme is set before Slyce is opened
+                }
+                */
 
                 SlyceSession session = Slyce.getInstance(MainActivity.this).getDefaultSession();
                 if (session != null) {

@@ -71,15 +71,17 @@ public class MainActivity extends AppCompatActivity {
 
                     // NOTE: If you wish to override the default item detail page with your
                     // own item detail page, you can provide a custom override of
-                    // `SlyceCustomCameraActivity`, as shown below. Please see
-                    // `CustomCameraActivity` as an example of how to re-direct to your
-                    // desired detail page.
+                    // `SlyceCustomCameraActivity` to `SlyceUI`, as shown below. Please see
+                    // `CustomCameraActivity` (in this package) as an example of how to
+                    // re-direct to your desired detail page.
                     /*
+
                     try {
                         SlyceUI.startCustomCameraActivity(MainActivity.this, CustomCameraActivity.class.getName(), Slyce.getInstance(MainActivity.this), lensIds);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    
                     */
                 }
             }

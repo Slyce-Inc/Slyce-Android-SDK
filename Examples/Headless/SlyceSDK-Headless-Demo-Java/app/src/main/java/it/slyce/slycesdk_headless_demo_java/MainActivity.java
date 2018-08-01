@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import it.slyce.sdk.Slyce;
+import it.slyce.sdk.SlycePrivacyPolicy;
 import it.slyce.sdk.SlyceSearchRequest;
 import it.slyce.sdk.SlyceSearchResponse;
 import it.slyce.sdk.SlyceSearchResponseUpdate;
@@ -21,6 +22,7 @@ import it.slyce.sdk.SlyceSearchTaskListenerAdapter;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.exception.SlyceError;
 import it.slyce.sdk.exception.SlyceException;
+import it.slyce.sdk.exception.SlyceNotOpenedException;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements CameraResultDispl
     private static final String SLYCE_LENS_ID_BARCODE = "slyce.1D";
     private static final String SLYCE_LENS_ID_IMAGE_MATCH = "slyce.2D";
 
+    private boolean requireGDPR;
     private CameraResultFragment fragment;
     private ProgressBar openProgressBar;
     private ViewGroup barcodeButton;
@@ -105,11 +108,34 @@ public class MainActivity extends AppCompatActivity implements CameraResultDispl
         openButton = findViewById(R.id.open_button);
         openButton.setOnClickListener(v -> {
             openProgressBar.setVisibility(VISIBLE);
+
+            // GDPR Compliance support (optional)
+            if (requireGDPR) {
+                Slyce.getInstance(this).getGDPRComplianceManager().setUserRequiresGDPRCompliance(true);
+            }
+
             Slyce.getInstance(this).open(SLYCE_ACCOUNT_ID, SLYCE_API_KEY, SLYCE_SPACE_ID, slyceError -> {
                 openProgressBar.setVisibility(GONE);
                 toggleOptions();
                 if (slyceError != null) {
                     Toast.makeText(MainActivity.this, "Error opening Slyce.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (requireGDPR) {
+                    try {
+
+                        SlycePrivacyPolicy privacyPolicy = Slyce.getInstance(this).getGDPRComplianceManager().getPrivacyPolicy();
+
+                        // Here you are required to display the information in the Privacy Policy and capture
+                        // the user's consesnt. See documentation for `SlycePrivacyPolicy`.
+
+                        // If user consensents...
+                        Slyce.getInstance(this).getGDPRComplianceManager().setUserDidConsent(privacyPolicy);
+
+                    } catch (SlyceNotOpenedException e) {
+                        // failed to retrieve privacy policy
+                    }
                 }
             });
         });

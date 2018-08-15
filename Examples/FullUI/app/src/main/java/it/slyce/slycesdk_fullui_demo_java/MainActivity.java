@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.slyce.sdk.Slyce;
+import it.slyce.sdk.SlyceActivityMode;
 import it.slyce.sdk.SlyceCompletionHandler;
 import it.slyce.sdk.SlyceHeaderStyleCenter;
 import it.slyce.sdk.SlyceHeaderStyleLeft;
@@ -86,14 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     // SearchRequests in the session.
                     session.setDefaultSearchParameters(searchParams);
 
-                    // Lens IDs can be passed to full UI mode as a list, or as a single string
-                    List<String> lensIds = new ArrayList<>();
-                    lensIds.add(LENS_ID_BARCODE);
-                    lensIds.add(LENS_ID_IMAGE_MATCH);
-                    lensIds.add(LENS_ID_VISUAL_SEARCH);
-
-                    SlyceUI.startSlyceActivity(MainActivity.this, Slyce.getInstance(MainActivity.this), lensIds);
-                    //SlyceUI.startSlyceActivity(MainActivity.this, Slyce.getInstance(MainActivity.this), LENS_ID_UNIVERSAL);
+                    SlyceUI.startSlyceActivity(MainActivity.this, Slyce.getInstance(MainActivity.this), SlyceActivityMode.PICKER);
+                    // SlyceUI.startSlyceActivity(MainActivity.this, Slyce.getInstance(MainActivity.this), SlyceActivityMode.UNIVERSAL);
 
                     // NOTE: If you wish to override the default item detail page with your
                     // own item detail page, you can provide a custom override of
@@ -103,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     /*
 
                     try {
-                        SlyceUI.startSlyceCustomActivity(MainActivity.this, CustomCameraActivity.class.getName(), Slyce.getInstance(MainActivity.this), lensIds);
+                        SlyceUI.startSlyceCustomActivity(MainActivity.this, CustomCameraActivity.class.getName(), Slyce.getInstance(MainActivity.this), SlyceActivityMode.PICKER);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

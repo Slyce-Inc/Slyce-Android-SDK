@@ -5,9 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.slyce.sdk.Slyce;
 import it.slyce.sdk.SlyceActivityMode;
 import it.slyce.sdk.SlyceCompletionHandler;

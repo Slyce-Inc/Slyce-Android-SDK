@@ -1,6 +1,8 @@
 Slyce Android SDK
 =================
 
+[![GitHub release](https://img.shields.io/github/release/Slyce-Inc/Slyce-Android-SDK.svg?style=flat-square)](https://github.com/Slyce-Inc/Slyce-Android-SDK/releases)
+
 The Slyce Android SDK makes it easy to add visual search capabilities to mobile apps.
 
 ### [About the SlyceSDK](https://docs.slyce.it)

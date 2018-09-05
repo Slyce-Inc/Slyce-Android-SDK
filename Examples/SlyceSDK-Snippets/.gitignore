@@ -1,0 +1,24 @@
+# Builds
+/build
+
+# Gradle generated files
+/.gradle
+
+# Local configuration file (sdk path, etc)
+/local.properties
+
+# Javadocs
+/javadoc
+
+# OS-specific files
+.DS_Store
+
+# User-specific configurations
+*.iml
+/.idea
+misc.xml
+
+# Project specific
+/dist
+
+

@@ -5,15 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.slyce.sdk.Slyce;
 import it.slyce.sdk.SlyceSearchParameters;
 import it.slyce.sdk.SlyceSearchRequest;
 import it.slyce.sdk.SlyceSession;
-import it.slyce.sdk.exception.SlyceException;
-import it.slyce.sdk.exception.SlyceNotOpenedException;
 
 public class SlyceSDK_Snippets {
 
@@ -24,10 +21,9 @@ public class SlyceSDK_Snippets {
      * the Slyce instance has been configured and opened.
      *
      * @param context
-     * @throws {@link JSONException}
-     * @throws {@link SlyceException}
+     * @throws {@link Exception}
      */
-    public void addWorkflowOptionsForSingleTask(@NonNull Context context) throws JSONException, SlyceException {
+    public void addWorkflowOptionsForSingleTask(@NonNull Context context) throws Exception {
 
         // set up some example data
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sample_img);
@@ -57,10 +53,9 @@ public class SlyceSDK_Snippets {
      * instance has been configured and opened.
      *
      * @param context
-     * @throws {@link JSONException}
-     * @throws {@link SlyceException}
+     * @throws {@link Exception}
      */
-    public void addDefaultWorkflowOptions(@NonNull Context context) throws JSONException, SlyceException {
+    public void addDefaultWorkflowOptions(@NonNull Context context) throws Exception {
 
         // create a `SlyceSearchParameters` object and set the workflow options using a JSONObject.
         SlyceSearchParameters searchParams = new SlyceSearchParameters();
@@ -89,9 +84,9 @@ public class SlyceSDK_Snippets {
      * Slyce instance has been configured and opened.
      *
      * @param context
-     * @throws {@link SlyceNotOpenedException}
+     * @throws {@link Exception}
      */
-    public void reportManualAnalytics(Context context) throws SlyceNotOpenedException {
+    public void reportManualAnalytics(Context context) throws Exception {
 
         // set up some simple example variables
         String jobId = "abc";

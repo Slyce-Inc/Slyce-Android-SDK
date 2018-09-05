@@ -13,9 +13,7 @@ import it.slyce.sdk.SlyceSearchParameters;
 import it.slyce.sdk.SlyceSearchRequest;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.exception.SlyceException;
-import it.slyce.sdk.exception.SlyceInvalidSessionException;
 import it.slyce.sdk.exception.SlyceNotOpenedException;
-import it.slyce.sdk.exception.SlyceSearchTaskBuilderException;
 
 public class SlyceSDK_Snippets {
 
@@ -24,13 +22,17 @@ public class SlyceSDK_Snippets {
     /**
      * Demonstrates how to add custom workflow options for a single search task. This assumes that
      * the Slyce instance has been configured and opened.
+     *
+     * @param context
+     * @throws {@link JSONException}
+     * @throws {@link SlyceException}
      */
-    void addWorkflowOptionsForSingleTask(@NonNull Context context) throws JSONException, SlyceInvalidSessionException, SlyceSearchTaskBuilderException {
+    void addWorkflowOptionsForSingleTask(@NonNull Context context) throws JSONException, SlyceException {
 
-        // Set up some example data
+        // set up some example data
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sample_img);
 
-        // Create a `SlyceSearchParameters` object and set the workflow options using a JSONObject.
+        // create a `SlyceSearchParameters` object and set the workflow options using a JSONObject.
         SlyceSearchParameters searchParams = new SlyceSearchParameters();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("key1", "value1");
@@ -43,29 +45,41 @@ public class SlyceSDK_Snippets {
                 .build();
 
         SlyceSession defaultSession = Slyce.getInstance(context).getDefaultSession();
-        if (defaultSession != null) defaultSession.startSearchTask(request, "your workflow id", null);
+        if (defaultSession == null) {
+            // handle error
+        } else {
+            defaultSession.startSearchTask(request, "your workflow id", null);
+        }
     }
 
     /**
      * Demonstrates how to add default workflow options to a session. This assumes that the Slyce
      * instance has been configured and opened.
+     *
+     * @param context
+     * @throws {@link JSONException}
+     * @throws {@link SlyceException}
      */
     void addDefaultWorkflowOptions(@NonNull Context context) throws JSONException, SlyceException {
 
-        // Create a `SlyceSearchParameters` object and set the workflow options using a JSONObject.
+        // create a `SlyceSearchParameters` object and set the workflow options using a JSONObject.
         SlyceSearchParameters searchParams = new SlyceSearchParameters();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("key1", "value1");
         jsonObject.put("key2", "value2");
         searchParams.setWorkflowOptions(jsonObject);
 
-        // Add to a custom session
+        // add to a custom session
         SlyceSession session = Slyce.getInstance(context).createSession();
         session.setDefaultSearchParameters(searchParams);
 
-        // Or alternatively, add to the default session
+        // or alternatively, add to the default session
         SlyceSession defaultSession = Slyce.getInstance(context).getDefaultSession();
-        if (defaultSession != null) defaultSession.setDefaultSearchParameters(searchParams);
+        if (defaultSession == null) {
+            // handle error
+        } else {
+            defaultSession.setDefaultSearchParameters(searchParams);
+        }
     }
 
     // Analytics

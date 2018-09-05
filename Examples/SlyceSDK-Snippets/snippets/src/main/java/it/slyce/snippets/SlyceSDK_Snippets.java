@@ -27,7 +27,7 @@ public class SlyceSDK_Snippets {
      * @throws {@link JSONException}
      * @throws {@link SlyceException}
      */
-    void addWorkflowOptionsForSingleTask(@NonNull Context context) throws JSONException, SlyceException {
+    public void addWorkflowOptionsForSingleTask(@NonNull Context context) throws JSONException, SlyceException {
 
         // set up some example data
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sample_img);
@@ -60,7 +60,7 @@ public class SlyceSDK_Snippets {
      * @throws {@link JSONException}
      * @throws {@link SlyceException}
      */
-    void addDefaultWorkflowOptions(@NonNull Context context) throws JSONException, SlyceException {
+    public void addDefaultWorkflowOptions(@NonNull Context context) throws JSONException, SlyceException {
 
         // create a `SlyceSearchParameters` object and set the workflow options using a JSONObject.
         SlyceSearchParameters searchParams = new SlyceSearchParameters();
@@ -91,7 +91,7 @@ public class SlyceSDK_Snippets {
      * @param context
      * @throws {@link SlyceNotOpenedException}
      */
-    void reportManualAnalytics(Context context) throws SlyceNotOpenedException {
+    public void reportManualAnalytics(Context context) throws SlyceNotOpenedException {
 
         // set up some simple example variables
         String jobId = "abc";

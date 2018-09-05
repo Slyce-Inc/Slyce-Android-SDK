@@ -1,4 +1,4 @@
-package it.slyce.slycesdk_snippets;
+package it.slyce.snippets;
 
 import android.content.Context;
 

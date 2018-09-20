@@ -45,26 +45,28 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                Slyce slyce = Slyce.getInstance(MainActivity.this);
+
                 // Uncomment the following lines to customize the Full UI experience using SlyceTheme
                 /*
                 try {
 
                     // - Header
-                    Slyce.getInstance(MainActivity.this).getTheme().setAppearanceStyle("appearance_headerStyle_left", SlyceHeaderStyleLeft.BACK_BUTTON);
-                    Slyce.getInstance(MainActivity.this).getTheme().setAppearanceStyle("appearance_headerStyle_center", SlyceHeaderStyleCenter.TITLE);
-                    Slyce.getInstance(MainActivity.this).getTheme().setAppearanceStyle("appearance_headerStyle_right", SlyceHeaderStyleRight.HIDDEN);
+                    slyce.getTheme().setAppearanceStyle("appearance_headerStyle_left", SlyceHeaderStyleLeft.BACK_BUTTON);
+                    slyce.getTheme().setAppearanceStyle("appearance_headerStyle_center", SlyceHeaderStyleCenter.TITLE);
+                    slyce.getTheme().setAppearanceStyle("appearance_headerStyle_right", SlyceHeaderStyleRight.HIDDEN);
 
                     // - Coaching Tips
-                    Slyce.getInstance(MainActivity.this).getTheme().setString("string_coachingTip_headline_visualSearch", "Your custom headline here");
-                    Slyce.getInstance(MainActivity.this).getTheme().setString("string_coachingTip_body_visualSearch", "Your custom subhead here");
-                    Slyce.getInstance(MainActivity.this).getTheme().setResourceId("bg_coachingTip_visualSearch", R.drawable.your_drawable_here);
+                    slyce.getTheme().setString("string_coachingTip_headline_visualSearch", "Your custom headline here");
+                    slyce.getTheme().setString("string_coachingTip_body_visualSearch", "Your custom subhead here");
+                    slyce.getTheme().setResourceId("bg_coachingTip_visualSearch", R.drawable.your_drawable_here);
 
                 } catch (SlyceNotOpenedException e) {
                     // This exception is thrown if theme is set before Slyce is opened
                 }
                 */
 
-                SlyceSession session = Slyce.getInstance(MainActivity.this).getDefaultSession();
+                SlyceSession session = slyce.getDefaultSession();
                 if (session != null) {
 
                     SlyceSearchParameters searchParams = new SlyceSearchParameters();
@@ -84,8 +86,19 @@ public class MainActivity extends AppCompatActivity {
                     // SearchRequests in the session.
                     session.setDefaultSearchParameters(searchParams);
 
-                    SlyceUI.startSlyceActivity(MainActivity.this, Slyce.getInstance(MainActivity.this), SlyceActivityMode.PICKER);
-                    // SlyceUI.startSlyceActivity(MainActivity.this, Slyce.getInstance(MainActivity.this), SlyceActivityMode.UNIVERSAL);
+                    /*
+                    try {
+
+                         new SlyceUI.ActivityLauncher(slyce, SlyceActivityMode.PICKER)
+                                .launch(MainActivity.this);
+
+                        // new SlyceUI.ActivityLauncher(slyce, SlyceActivityMode.UNIVERSAL)
+                        //         .launch(MainActivity.this);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    */
 
                     // NOTE: If you wish to override the default item detail page with your
                     // own item detail page, you can provide a custom override of
@@ -95,12 +108,20 @@ public class MainActivity extends AppCompatActivity {
                     /*
 
                     try {
-                        SlyceUI.startSlyceCustomActivity(MainActivity.this, CustomCameraActivity.class.getName(), Slyce.getInstance(MainActivity.this), SlyceActivityMode.PICKER);
+                        new SlyceUI.ActivityLauncher(slyce, SlyceActivityMode.PICKER)
+                                .customClassName(CustomCameraActivity.class.getName())
+                                .launch(MainActivity.this);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     
                     */
+
+                    // NOTE: If you wish to provide a custom header or footer around the SlyceUI,
+                    // please see the `NestedUiExampleActivity`, which is launched by the line
+                    // below.
+                    //
+                    // NestedUiExampleActivity.startActivity(MainActivity.this);
                 }
             }
         });

@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import it.slyce.sdk.Slyce;
 import it.slyce.sdk.SlyceActivityMode;
+import it.slyce.sdk.SlyceFragmentCloseDelegate;
 import it.slyce.sdk.SlyceUI;
 
 public class NestedUiExampleActivity extends AppCompatActivity {
+
+    private final SlyceFragmentCloseDelegate fragmentCloseDelegate = new FragmentCloseDelegate();
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, NestedUiExampleActivity.class);
@@ -24,10 +27,18 @@ public class NestedUiExampleActivity extends AppCompatActivity {
 
         try {
             new SlyceUI.FragmentLauncher(Slyce.getInstance(this), SlyceActivityMode.PICKER, R.id.fragment_container)
+                    .fragmentCloseDelegate(fragmentCloseDelegate)
                     .launch(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private class FragmentCloseDelegate implements SlyceFragmentCloseDelegate {
+
+        @Override
+        public void closeSlyceFragment() {
+            finish();
+        }
     }
 }

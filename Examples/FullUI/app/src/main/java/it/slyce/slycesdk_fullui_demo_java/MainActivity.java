@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     // SearchRequests in the session.
                     session.setDefaultSearchParameters(searchParams);
 
-                    /*
                     try {
 
                          new SlyceUI.ActivityLauncher(slyce, SlyceActivityMode.PICKER)
@@ -98,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    */
 
                     // NOTE: If you wish to override the default item detail page with your
                     // own item detail page, you can provide a custom override of

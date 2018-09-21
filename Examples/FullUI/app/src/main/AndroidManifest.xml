@@ -30,6 +30,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ItemsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".NestedUiExampleActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>

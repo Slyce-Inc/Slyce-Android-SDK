@@ -27,10 +27,12 @@
 
         <activity
             android:name=".ItemDetailActivity"
+            android:label="Custom Item Detail Page"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ItemsActivity"
+            android:label="Custom Items Page"
             android:screenOrientation="portrait" />
 
         <activity

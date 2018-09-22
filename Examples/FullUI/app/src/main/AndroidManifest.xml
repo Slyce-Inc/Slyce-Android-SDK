@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name=".CustomCameraActivity"
+            android:name=".CustomSearchDetailActivity"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -36,7 +36,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".NestedUiExampleActivity"
+            android:name=".CustomHeaderFooterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>

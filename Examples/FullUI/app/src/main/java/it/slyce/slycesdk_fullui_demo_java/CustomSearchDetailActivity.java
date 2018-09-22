@@ -7,7 +7,7 @@ import java.util.List;
 import it.slyce.sdk.SlyceCustomActivity;
 import it.slyce.sdk.SlyceItemDescriptor;
 
-public class CustomCameraActivity extends SlyceCustomActivity {
+public class CustomSearchDetailActivity extends SlyceCustomActivity {
 
     @Override
     public boolean shouldDisplayDefaultItemDetailLayerForItem(SlyceItemDescriptor itemDescriptor) {

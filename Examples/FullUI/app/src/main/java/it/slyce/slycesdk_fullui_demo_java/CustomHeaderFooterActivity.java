@@ -11,19 +11,19 @@ import it.slyce.sdk.SlyceActivityMode;
 import it.slyce.sdk.SlyceFragmentCloseDelegate;
 import it.slyce.sdk.SlyceUI;
 
-public class NestedUiExampleActivity extends AppCompatActivity {
+public class CustomHeaderFooterActivity extends AppCompatActivity {
 
     private final SlyceFragmentCloseDelegate fragmentCloseDelegate = new FragmentCloseDelegate();
 
     public static void startActivity(Context context) {
-        Intent intent = new Intent(context, NestedUiExampleActivity.class);
+        Intent intent = new Intent(context, CustomHeaderFooterActivity.class);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nested_ui_example);
+        setContentView(R.layout.activity_custom_header_footer);
 
         try {
             new SlyceUI.FragmentLauncher(Slyce.getInstance(this), SlyceActivityMode.PICKER, R.id.fragment_container)

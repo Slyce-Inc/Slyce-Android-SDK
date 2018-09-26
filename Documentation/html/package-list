@@ -1,4 +1,6 @@
 it.slyce.sdk
 it.slyce.sdk.exception
 it.slyce.sdk.helpers
+it.slyce.sdk.labs
+it.slyce.sdk.ui
 it.slyce.sdk.util

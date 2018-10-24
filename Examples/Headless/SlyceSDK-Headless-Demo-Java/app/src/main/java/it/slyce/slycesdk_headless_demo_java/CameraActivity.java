@@ -48,17 +48,7 @@ public class CameraActivity extends AppCompatActivity implements CameraResultDis
 
             // If camera permission has not been granted, request it.
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSION_REQUEST_CODE);
-        } else {
-
-            // If camera permission has been granted, start the camera preview.
-            cameraSurfaceView.startCameraPreview();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        cameraSurfaceView.stopCameraPreview();
     }
 
     @Override

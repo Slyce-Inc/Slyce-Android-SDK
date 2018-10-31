@@ -12,7 +12,7 @@ The Slyce Android SDK makes it easy to add visual search capabilities to mobile 
 
 ### [About the SlyceSDK](https://docs.slyce.it)
 
-### [API Documentation](http://htmlpreview.github.io/?https://github.com/Slyce-Inc/Slyce-Android-SDK/blob/5.3.1/Documentation/html/index.html)
+### [API Documentation](http://htmlpreview.github.io/?https://github.com/Slyce-Inc/Slyce-Android-SDK/blob/5.4.0/Documentation/html/index.html)
 
 ---
 

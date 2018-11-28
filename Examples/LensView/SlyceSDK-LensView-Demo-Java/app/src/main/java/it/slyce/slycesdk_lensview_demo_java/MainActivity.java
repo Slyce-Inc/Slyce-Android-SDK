@@ -21,7 +21,7 @@ import it.slyce.sdk.SlyceSearchResponseUpdate;
 import it.slyce.sdk.SlyceSearchTask;
 import it.slyce.sdk.SlyceSearchTaskListenerAdapter;
 import it.slyce.sdk.SlyceSession;
-import it.slyce.sdk.SlyceSessionListener;
+import it.slyce.sdk.SlyceSessionListenerAdapter;
 import it.slyce.sdk.exception.SlyceError;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         slyceSession = Slyce.getInstance(this).getDefaultSession();
 
         // In order to receive results, we must add ourselves as a listener on the session.
-        slyceSession.addListener(new SlyceSessionListener() {
+        slyceSession.addListener(new SlyceSessionListenerAdapter() {
             @Override
             public void onSessionWillStartSearchTask(@NonNull SlyceSession slyceSession, @NonNull SlyceSearchTask slyceSearchTask) {
 

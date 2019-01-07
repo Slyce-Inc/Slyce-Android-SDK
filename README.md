@@ -16,4 +16,4 @@ The Slyce Android SDK makes it easy to add visual search capabilities to mobile 
 
 ---
 
-Copyright Slyce, Inc 2014-2018
+Copyright Slyce, Inc 2014-2019

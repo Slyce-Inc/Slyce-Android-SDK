@@ -2,6 +2,7 @@ package it.slyce.slycesdk_headless_demo_java;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import it.slyce.sdk.Slyce;
+import it.slyce.sdk.SlyceCompletionHandler;
 import it.slyce.sdk.SlycePrivacyPolicy;
 import it.slyce.sdk.SlyceSearchRequest;
 import it.slyce.sdk.SlyceSearchResponse;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements CameraResultDispl
     private static final String SLYCE_LENS_ID_BARCODE = "slyce.1D";
     private static final String SLYCE_LENS_ID_IMAGE_MATCH = "slyce.2D";
 
+    private boolean optOutAndRemoveData;
     private boolean requireGDPR;
     private CameraResultFragment fragment;
     private ProgressBar openProgressBar;
@@ -122,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements CameraResultDispl
                     return;
                 }
 
+                if (optOutAndRemoveData) {
+                    optOutAndRemoveData();
+                }
+
                 if (requireGDPR) {
                     try {
 
@@ -202,5 +209,20 @@ public class MainActivity extends AppCompatActivity implements CameraResultDispl
         barcodeButton.setVisibility(slyceIsOpen ? VISIBLE : GONE);
         imageMatchButton.setVisibility(slyceIsOpen ? VISIBLE : GONE);
         visualSearchButton.setVisibility(slyceIsOpen ? VISIBLE : GONE);
+    }
+
+    private void optOutAndRemoveData() {
+        try {
+            Slyce.getInstance(this).getGDPRComplianceManager().optOutAndForgetUser(new SlyceCompletionHandler() {
+                @Override
+                public void onCompletion(@Nullable SlyceError slyceError) {
+                    if (slyceError == null) {
+                        // The user was successfully opted out
+                    }
+                }
+            });
+        } catch (SlyceNotOpenedException e) {
+            e.printStackTrace();
+        }
     }
 }

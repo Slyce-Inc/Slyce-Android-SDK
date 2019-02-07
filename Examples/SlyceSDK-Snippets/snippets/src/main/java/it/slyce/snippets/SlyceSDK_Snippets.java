@@ -121,27 +121,9 @@ public class SlyceSDK_Snippets {
      *
      */
     public HashMap<String, Object> getAdditionalOptions() {
-        String LENS_ID_1D = "slyce.1D";
-        String LENS_ID_2D = "slyce.2D";
-        String LENS_ID_3D = "slyce.3D";
         String LENS_ID_UNIVERSAL = "slyce.universal";
 
         HashMap<String, Object> lensOptions = new HashMap<>();
-
-        // Set 1D lens to batch capture
-        HashMap<String, Object> lensOptions1d = new HashMap<>();
-        lensOptions1d.put(KEY_CAPTURE_MODE, LENS_ID_1D);
-        lensOptions.put(LENS_ID_1D, lensOptions1d);
-
-        // Set 2D lens to batch capture
-        HashMap<String, Object> lensOptions2d = new HashMap<>();
-        lensOptions2d.put(KEY_CAPTURE_MODE, LENS_ID_2D);
-        lensOptions.put(LENS_ID_2D, lensOptions2d);
-
-        // Set 3D lens to batch capture
-        HashMap<String, Object> lensOptions3d = new HashMap<>();
-        lensOptions3d.put(KEY_CAPTURE_MODE, LENS_ID_3D);
-        lensOptions.put(LENS_ID_3D, lensOptions3d);
 
         // Set universal to legacy multi search
         HashMap<String, Object> lensOptionsUniversal = new HashMap<>();
@@ -151,12 +133,6 @@ public class SlyceSDK_Snippets {
         // Add lens options to parent options map
         HashMap<String, Object> options = new HashMap<>();
         options.put(KEY_LENSES, lensOptions);
-
-        // Add universal lens local detection mode to options map
-        options.put(KEY_UNIVERSAL_LENS_LOCAL_DETECTION_MODE, DEFAULT);
-
-        // Add search results list type to options map
-        options.put(KEY_SEARCH_RESULTS_LIST_TYPE, LIST);
 
         return options;
     }

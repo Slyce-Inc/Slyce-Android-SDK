@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import it.slyce.sdk.Slyce;
 import it.slyce.sdk.SlyceSearchParameters;
 import it.slyce.sdk.SlyceSearchRequest;
@@ -17,6 +19,10 @@ import it.slyce.sdk.exception.SlyceInvalidSessionException;
 import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
 import it.slyce.sdk.exception.SlyceNotOpenedException;
 import it.slyce.sdk.exception.SlyceSearchTaskBuilderException;
+
+import static it.slyce.sdk.SlyceOptions.KEY_CAPTURE_MODE;
+import static it.slyce.sdk.SlyceOptions.KEY_LENSES;
+import static it.slyce.sdk.SlyceOptions.LensCaptureMode.LEGACY_MULTI;
 
 public class SlyceSDK_Snippets {
 
@@ -111,6 +117,27 @@ public class SlyceSDK_Snippets {
         Slyce.getInstance(context).getEventTracker().trackCheckoutTap(jobId, itemId, itemRevenue, itemURL,itemQuantity);
     }
 
+    /**
+     * Demonstrates how to use legacy multi search in universal mode. Add it as an option in
+     * the lens.
+     *
+     */
+    public HashMap<String, Object> getAdditionalOptions() {
+        String LENS_ID_UNIVERSAL = "slyce.universal";
+
+        HashMap<String, Object> lensOptions = new HashMap<>();
+
+        // Set universal to legacy multi search
+        HashMap<String, Object> lensOptionsUniversal = new HashMap<>();
+        lensOptionsUniversal.put(KEY_CAPTURE_MODE, LEGACY_MULTI);
+        lensOptions.put(LENS_ID_UNIVERSAL, lensOptionsUniversal);
+
+        // Add lens options to parent options map
+        HashMap<String, Object> options = new HashMap<>();
+        options.put(KEY_LENSES, lensOptions);
+
+        return options;
+    }
     /**
      * Demonstrates how to use the find similar feature. This can be used with an item_id or
      * an url to am image of a product

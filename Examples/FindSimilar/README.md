@@ -1,3 +1,3 @@
-# SlyceSDK-FullUI-Demo-Swift
+# SlyceSDK-Find-Similar
 
-This is a very simple project that demonstrates how to initiate Full UI mode in the SlyceSDK.
+This is a very simple project that demonstrates how to initiate Find Similar in the SlyceSDK.

@@ -16,11 +16,7 @@ import it.slyce.sdk.SlyceSession;
 
 import static it.slyce.sdk.SlyceOptions.KEY_CAPTURE_MODE;
 import static it.slyce.sdk.SlyceOptions.KEY_LENSES;
-import static it.slyce.sdk.SlyceOptions.KEY_SEARCH_RESULTS_LIST_TYPE;
-import static it.slyce.sdk.SlyceOptions.KEY_UNIVERSAL_LENS_LOCAL_DETECTION_MODE;
 import static it.slyce.sdk.SlyceOptions.LensCaptureMode.LEGACY_MULTI;
-import static it.slyce.sdk.SlyceOptions.LensLocalDetectionMode.DEFAULT;
-import static it.slyce.sdk.SlyceOptions.SearchResultsListType.LIST;
 
 public class SlyceSDK_Snippets {
 

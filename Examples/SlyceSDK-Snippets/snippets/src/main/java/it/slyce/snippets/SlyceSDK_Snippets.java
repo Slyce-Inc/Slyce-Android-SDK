@@ -11,10 +11,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import it.slyce.sdk.Slyce;
+import it.slyce.sdk.SlyceActivityMode;
 import it.slyce.sdk.SlyceSearchParameters;
 import it.slyce.sdk.SlyceSearchRequest;
 import it.slyce.sdk.SlyceSession;
+import it.slyce.sdk.SlyceUI;
 import it.slyce.sdk.SlyceWorkflowNames;
+import it.slyce.sdk.exception.SlyceException;
 import it.slyce.sdk.exception.SlyceInvalidSessionException;
 import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
 import it.slyce.sdk.exception.SlyceNotOpenedException;
@@ -122,8 +125,9 @@ public class SlyceSDK_Snippets {
      * the lens.
      *
      */
-    public HashMap<String, Object> getAdditionalOptions() {
+    public void startLegacyMultiSearch(Context context) {
         String LENS_ID_UNIVERSAL = "slyce.universal";
+        Slyce slyce = Slyce.getInstance(context); 
 
         HashMap<String, Object> lensOptions = new HashMap<>();
 
@@ -136,7 +140,15 @@ public class SlyceSDK_Snippets {
         HashMap<String, Object> options = new HashMap<>();
         options.put(KEY_LENSES, lensOptions);
 
-        return options;
+        // Launch a new activity using the new lens options
+        try {
+            new SlyceUI.ActivityLauncher(slyce, SlyceActivityMode.UNIVERSAL)
+                    .customClassName(SlyceSDK_Snippets.class.getName())
+                    .options(options)
+                    .launch(context);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
     /**
      * Demonstrates how to use the find similar feature. This can be used with an item_id or

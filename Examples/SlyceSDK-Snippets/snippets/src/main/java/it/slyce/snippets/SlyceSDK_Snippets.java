@@ -17,7 +17,6 @@ import it.slyce.sdk.SlyceSearchRequest;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceUI;
 import it.slyce.sdk.SlyceWorkflowNames;
-import it.slyce.sdk.exception.SlyceException;
 import it.slyce.sdk.exception.SlyceInvalidSessionException;
 import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
 import it.slyce.sdk.exception.SlyceNotOpenedException;
@@ -55,7 +54,7 @@ public class SlyceSDK_Snippets {
                 .searchParameters(searchParams)
                 .build();
 
-        SlyceSession defaultSession = Slyce.getInstance(context).getDefaultSession();
+        SlyceSession defaultSession = Slyce.getInstance(context).createSession();
         if (defaultSession == null) {
             // handle error
         } else {
@@ -82,14 +81,6 @@ public class SlyceSDK_Snippets {
         // add to a custom session
         SlyceSession session = Slyce.getInstance(context).createSession();
         session.setDefaultSearchParameters(searchParams);
-
-        // or alternatively, add to the default session
-        SlyceSession defaultSession = Slyce.getInstance(context).getDefaultSession();
-        if (defaultSession == null) {
-            // handle error
-        } else {
-            defaultSession.setDefaultSearchParameters(searchParams);
-        }
     }
 
     // Analytics

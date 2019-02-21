@@ -24,7 +24,8 @@ import it.slyce.sdk.SlyceSearchTaskListenerAdapter;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceSessionListenerAdapter;
 import it.slyce.sdk.exception.SlyceError;
-import it.slyce.sdk.internal.SlyceDebug;
+import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
+import it.slyce.sdk.exception.SlyceNotOpenedException;
 
 import static android.content.Context.WINDOW_SERVICE;
 import static android.content.pm.PackageManager.FEATURE_CAMERA_AUTOFOCUS;
@@ -161,7 +162,13 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         // session at any point after getting a valid session to receive notifications of any
         // SlyceSearchTasks that are created.
 
-        slyceSession = Slyce.getInstance(getContext()).getDefaultSession();
+        try {
+            slyceSession = Slyce.getInstance(getContext()).createSession();
+        } catch (SlyceMissingGDPRComplianceException e) {
+            e.printStackTrace();
+        } catch (SlyceNotOpenedException e) {
+            e.printStackTrace();
+        }
         slyceSession.addListener(new SlyceSessionListenerAdapter() {
 
             @Override

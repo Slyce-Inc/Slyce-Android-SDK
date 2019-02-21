@@ -23,6 +23,8 @@ import it.slyce.sdk.SlyceSearchTaskListenerAdapter;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceSessionListenerAdapter;
 import it.slyce.sdk.exception.SlyceError;
+import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
+import it.slyce.sdk.exception.SlyceNotOpenedException;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -133,7 +135,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSlyceSession() {
 
-        slyceSession = Slyce.getInstance(this).getDefaultSession();
+        try {
+            slyceSession = Slyce.getInstance(this).createSession();
+        } catch (SlyceMissingGDPRComplianceException e) {
+            e.printStackTrace();
+        } catch (SlyceNotOpenedException e) {
+            e.printStackTrace();
+        }
 
         // In order to receive results, we must add ourselves as a listener on the session.
         slyceSession.addListener(new SlyceSessionListenerAdapter() {

@@ -17,10 +17,10 @@ import it.slyce.sdk.SlyceSearchRequest;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceUI;
 import it.slyce.sdk.SlyceWorkflowNames;
-import it.slyce.sdk.exception.SlyceInvalidSessionException;
-import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
-import it.slyce.sdk.exception.SlyceNotOpenedException;
-import it.slyce.sdk.exception.SlyceSearchTaskBuilderException;
+import it.slyce.sdk.exception.session.SlyceInvalidSessionException;
+import it.slyce.sdk.exception.initialization.SlyceMissingGDPRComplianceException;
+import it.slyce.sdk.exception.initialization.SlyceNotOpenedException;
+import it.slyce.sdk.exception.searchtask.SlyceSearchTaskBuilderException;
 
 import static it.slyce.sdk.SlyceOptions.KEY_CAPTURE_MODE;
 import static it.slyce.sdk.SlyceOptions.KEY_LENSES;

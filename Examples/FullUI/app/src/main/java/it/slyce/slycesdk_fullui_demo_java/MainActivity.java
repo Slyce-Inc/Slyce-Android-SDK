@@ -15,6 +15,7 @@ import it.slyce.sdk.SlyceSearchParameters;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceUI;
 import it.slyce.sdk.exception.SlyceError;
+import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
 import it.slyce.sdk.exception.SlyceNotOpenedException;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         slyce = Slyce.getInstance(this);
 
         // Slyce should be opened once, generally at application startup. We're doing
@@ -57,7 +57,14 @@ public class MainActivity extends AppCompatActivity {
                     applySlyceTheme();
                 }
 
-                SlyceSession session = slyce.getDefaultSession();
+                SlyceSession session = null;
+                try {
+                    session = Slyce.getInstance(getBaseContext()).createSession();
+                } catch (SlyceMissingGDPRComplianceException e) {
+                    e.printStackTrace();
+                } catch (SlyceNotOpenedException e) {
+                    e.printStackTrace();
+                }
                 if (session != null) {
 
                     SlyceSearchParameters searchParams = new SlyceSearchParameters();

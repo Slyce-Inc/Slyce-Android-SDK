@@ -23,6 +23,7 @@ import it.slyce.sdk.SlyceSearchTaskListenerAdapter;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceSessionListenerAdapter;
 import it.slyce.sdk.exception.SlyceError;
+import it.slyce.sdk.exception.lens.SlyceInvalidLensException;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -125,7 +126,11 @@ public class MainActivity extends AppCompatActivity {
         //
         // In this case, we are creating a LensView which can
         // be used to detect and receive Visual Search results.
-        slyceLensView.init(slyceSession, SLYCE_LENS_ID);
+        try {
+            slyceLensView.init(slyceSession, SLYCE_LENS_ID);
+        } catch (SlyceInvalidLensException e) {
+            e.printStackTrace();
+        }
 
         // Starts the lens view.
         slyceLensView.getCameraControls().start();

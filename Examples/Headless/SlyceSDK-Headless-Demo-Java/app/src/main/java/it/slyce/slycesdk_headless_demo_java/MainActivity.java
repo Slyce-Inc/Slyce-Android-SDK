@@ -24,7 +24,7 @@ import it.slyce.sdk.SlyceSearchTaskListenerAdapter;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.exception.SlyceError;
 import it.slyce.sdk.exception.SlyceException;
-import it.slyce.sdk.exception.SlyceNotOpenedException;
+import it.slyce.sdk.exception.initialization.SlyceNotOpenedException;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;

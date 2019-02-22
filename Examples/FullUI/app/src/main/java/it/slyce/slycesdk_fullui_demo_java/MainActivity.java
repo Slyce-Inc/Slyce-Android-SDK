@@ -15,7 +15,7 @@ import it.slyce.sdk.SlyceSearchParameters;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceUI;
 import it.slyce.sdk.exception.SlyceError;
-import it.slyce.sdk.exception.SlyceNotOpenedException;
+import it.slyce.sdk.exception.initialization.SlyceNotOpenedException;
 
 public class MainActivity extends AppCompatActivity {
 

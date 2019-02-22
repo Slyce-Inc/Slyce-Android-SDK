@@ -1,5 +1,10 @@
 it.slyce.sdk
 it.slyce.sdk.exception
+it.slyce.sdk.exception.initialization
+it.slyce.sdk.exception.lens
+it.slyce.sdk.exception.searchtask
+it.slyce.sdk.exception.session
+it.slyce.sdk.exception.storage
 it.slyce.sdk.experimental
 it.slyce.sdk.helpers
 it.slyce.sdk.labs

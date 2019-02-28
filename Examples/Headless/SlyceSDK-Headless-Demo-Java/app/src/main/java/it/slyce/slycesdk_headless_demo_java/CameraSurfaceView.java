@@ -24,8 +24,8 @@ import it.slyce.sdk.SlyceSearchTaskListenerAdapter;
 import it.slyce.sdk.SlyceSession;
 import it.slyce.sdk.SlyceSessionListenerAdapter;
 import it.slyce.sdk.exception.SlyceError;
-import it.slyce.sdk.exception.SlyceMissingGDPRComplianceException;
-import it.slyce.sdk.exception.SlyceNotOpenedException;
+import it.slyce.sdk.exception.initialization.SlyceMissingGDPRComplianceException;
+import it.slyce.sdk.exception.initialization.SlyceNotOpenedException;
 
 import static android.content.Context.WINDOW_SERVICE;
 import static android.content.pm.PackageManager.FEATURE_CAMERA_AUTOFOCUS;

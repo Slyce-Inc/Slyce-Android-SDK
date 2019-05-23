@@ -24,14 +24,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String SLYCE_API_KEY = "";
     private static final String SLYCE_SPACE_ID = "";
 
+
     private enum SlyceUIExampleType {
         DEFAULT,
         CUSTOM_HEADER_FOOTER, // use this for custom header / footer example
-        CUSTOM_SEARCH_DETAIL // use this for custom search detail example
+        CUSTOM_SEARCH_DETAIL, // use this for custom search detail example
+        FRAGMENT // use this for slyce fragment container example
     }
 
     private boolean applyCustomTheme = false; // set to true to use custom theme values
-    private SlyceUIExampleType exampleType = SlyceUIExampleType.DEFAULT;
+    private SlyceUIExampleType exampleType = SlyceUIExampleType.FRAGMENT;
 
     private Slyce slyce;
 
@@ -97,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                         case CUSTOM_SEARCH_DETAIL:
                             launchWithCustomSearchDetail();
                             break;
+
+                        case FRAGMENT:
+                            SlyceFragmentContainerActivity.startActivity(MainActivity.this, SlyceActivityMode.UNIVERSAL);
                     }
                 }
             }

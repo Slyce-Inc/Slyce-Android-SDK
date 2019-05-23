@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean applyCustomTheme = false; // set to true to use custom theme values
-    private SlyceUIExampleType exampleType = SlyceUIExampleType.FRAGMENT;
+    private SlyceUIExampleType exampleType = SlyceUIExampleType.DEFAULT;
 
     private Slyce slyce;
 

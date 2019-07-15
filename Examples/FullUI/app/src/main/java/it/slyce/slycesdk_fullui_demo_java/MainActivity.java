@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
         slyce = Slyce.getInstance(this);
 
+        // Identify a User as Covered by GDPR
+        //slyce.getGDPRComplianceManager().setCountryCode("GB");
+        //slyce.getGDPRComplianceManager().setLanguageCode("en");
+        //slyce.getGDPRComplianceManager().setUserRequiresGDPRCompliance(true);
+
         // Slyce should be opened once, generally at application startup. We're doing
         // it here for demo purposes.
         slyce.open(SLYCE_ACCOUNT_ID, SLYCE_API_KEY, SLYCE_SPACE_ID, new SlyceCompletionHandler() {
@@ -72,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
                     SlyceSearchParameters searchParams = new SlyceSearchParameters();
 
                     // All search parameters are optional and independent
+                    // Note: If using a SlyceCustomActivity, these parameters should instead
+                    // be set there, within the didOpenSession method.
 
                     // Country Code
                     //searchParams.setCountryCode("BE");

@@ -1,0 +1,96 @@
+<resources>
+    <string name="app_name">LocalizationExample</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Slyce: Override Example-->
+    <string name="slyce_layer_list_analyzing">En cours d\'analyse</string>
+    <string name="slyce_tooltip_universal">Appuyez sur pour rechercher</string>
+    <string name="slyce_tooltip_visual_search">Appuyez sur pour rechercher</string>
+
+    <!-- Slyce: Complete of overridable strings with defaults -->
+    <!--
+    <plurals name="slyce_batch_capture_list_header_matches">
+        <item quantity="zero">No matches found</item>
+        <item quantity="one">%d match</item>
+        <item quantity="other">%d matches</item>
+    </plurals>
+    <plurals name="slyce_general_foundResults">
+        <item quantity="zero">No results found</item>
+        <item quantity="one">Found %d Result</item>
+        <item quantity="other">%d Results</item>
+    </plurals>
+    <plurals name="slyce_general_results">
+        <item quantity="one">%d result</item>
+        <item quantity="other">%d results</item>
+    </plurals>
+    <string name="slyce_action_cancel">Cancel</string>
+    <string name="slyce_action_close">Close</string>
+    <string name="slyce_action_delete">Delete</string>
+    <string name="slyce_action_dismiss">Dismiss</string>
+    <string name="slyce_action_ok">OK</string>
+    <string name="slyce_action_submit">Submit</string>
+    <string name="slyce_batch_capture_list_button_bottom">Add To List</string>
+    <string name="slyce_batch_capture_list_header_delete">Delete</string>
+    <string name="slyce_batch_capture_list_header_error">We couldn\'t find any results for this image</string>
+    <string name="slyce_batch_capture_list_title">Selected Items</string>
+    <string name="slyce_batch_capture_loading_button_title">View Selection</string>
+    <string name="slyce_batch_capture_loading_delete">Delete All</string>
+    <string name="slyce_batch_capture_loading_headline">Current Selections</string>
+    <string name="slyce_camera_permission_denied_body">In order to utilize the visual search camera, you must enable camera permissions in your phone\'s settings.</string>
+    <string name="slyce_camera_permission_denied_title">Enable Camera Permissions</string>
+    <string name="slyce_confirmation_clear_history_content">Clearing your search history will remove any previous visual searches you performed. Are you sure you want to clear your history?</string>
+    <string name="slyce_confirmation_clear_history_title">Clear History?</string>
+    <string name="slyce_debug_layer_error_errorCode">Error #%d</string>
+    <string name="slyce_general_foundNoResults">Found No Results</string>
+    <string name="slyce_general_headline_new">NEW</string>
+    <string name="slyce_imagePicker_error_detail">We were unable to use this picture to perform Slyce visual search. Try again, please!</string>
+    <string name="slyce_imagePicker_error_title">Uh-oh!</string>
+    <string name="slyce_layer_error_title">Error</string>
+    <string name="slyce_layer_list_analyzing">Analyzing</string>
+    <string name="slyce_layer_list_searching">Searching</string>
+    <string name="slyce_layer_list_uploading">Uploading</string>
+    <string name="slyce_layer_webView_title_loading">Loading</string>
+    <string name="slyce_not_open_headline">There was a problem loading the visual search camera.</string>
+    <string name="slyce_not_open_subhead">Please close the camera and try loading again.</string>
+    <string name="slyce_permissionDenied">We need access to your camera to scan for products.</string>
+    <string name="slyce_photoGalleryChooser_title">Select Photo</string>
+    <string name="slyce_searchHistory_clear_button_title">Clear History</string>
+    <string name="slyce_searchHistory_error_detail">Please try your search again.</string>
+    <string name="slyce_searchHistory_error_title">Oh no! Something went wrong.</string>
+    <string name="slyce_tapAnchor_done">DONE</string>
+    <string name="slyce_theme_error_string_type_image_headline">We couldn’t find any\nresults for this image.</string>
+    <string name="slyce_theme_error_string_type_image_subtitle">Tip: Make sure your object is well lit and in focus, then tap again to start a new search.</string>
+    <string name="slyce_theme_error_string_type_system_headline">How embarrassing!\nWe ran into an issue.</string>
+    <string name="slyce_theme_error_string_type_system_subtitle">Please close the app and try again.</string>
+    <string name="slyce_theme_string_coachingTip_body_barcode">Tap on the barcode to focus the camera and keep your device steady until the scanning finishes.</string>
+    <string name="slyce_theme_string_coachingTip_body_imageMatch">Tap on the image to focus the camera and keep your device steady.</string>
+    <string name="slyce_theme_string_coachingTip_body_universal">Tap anywhere on the screen to scan for products, barcodes, or image matches.</string>
+    <string name="slyce_theme_string_coachingTip_body_visualSearch">Go ahead and start using visual search. All of your searches and results will be saved in your history.</string>
+    <string name="slyce_theme_string_coachingTip_headline_barcode">Point at a barcode to search</string>
+    <string name="slyce_theme_string_coachingTip_headline_imageMatch">Point at a tagged image to search</string>
+    <string name="slyce_theme_string_coachingTip_headline_universal">Point at any item and tap to search</string>
+    <string name="slyce_theme_string_coachingTip_headline_visualSearch">Point at any item and tap to search</string>
+    <string name="slyce_theme_string_emptyBatchContent_body">Go ahead and start using batch capture. All of your searches and results will appear here.</string>
+    <string name="slyce_theme_string_emptyBatchContent_headline">You haven\'t searched for\nanything!</string>
+    <string name="slyce_theme_string_emptyContent_body">Go ahead and start using visual search. All of your searches and results will be saved here.</string>
+    <string name="slyce_theme_string_emptyContent_headline">You haven\'t searched for\nanything!</string>
+    <string name="slyce_theme_string_lens_barcode">Scan Barcode</string>
+    <string name="slyce_theme_string_lens_imageMatch">Scan Print</string>
+    <string name="slyce_theme_string_lens_visualSearch">Visual Search</string>
+    <string name="slyce_theme_string_searchHistoryTitle">Search History</string>
+    <string name="slyce_theme_string_searchResultsTitle">Search Results</string>
+    <string name="slyce_theme_string_settingsTitle">Settings</string>
+    <string name="slyce_tooltip_barcode">Scan Barcode to Search</string>
+    <string name="slyce_tooltip_detecting">Detecting...</string>
+    <string name="slyce_tooltip_gallery_image_search">Tap to Search</string>
+    <string name="slyce_tooltip_image_match">Scan Catalog to Search</string>
+    <string name="slyce_tooltip_no_matches">No Matches Found</string>
+    <string name="slyce_tooltip_tap_and_hold">Tap to focus. Hold to Search.</string>
+    <string name="slyce_tooltip_universal">Tap to Search</string>
+    <string name="slyce_tooltip_visual_search">Tap to Search</string>
+    <string name="slyce_user_feedback_body">Rate the quality of our search experience</string>
+    <string name="slyce_user_feedback_header">Was this what you searched for?</string>
+    <string name="slyce_user_feedback_retry">RETRY</string>
+    <string name="slyce_user_feedback_submission_error">Can\'t send feedback.</string>
+    -->
+</resources>

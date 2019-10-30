@@ -9,4 +9,4 @@ Simply provide a new value for the string in a resource file like this:
  
 ```
 
-Some example overides and a full list of strings are available in [strings.xml](app/res/values/strings.xml).
+Some example overides and a full list of strings are available in [strings.xml](app/src/main/res/values/strings.xml).

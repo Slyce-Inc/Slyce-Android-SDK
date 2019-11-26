@@ -17,3 +17,5 @@
 *.iml
 /.idea
 misc.xml
+
+/gradle.properties

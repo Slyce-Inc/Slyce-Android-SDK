@@ -22,6 +22,14 @@ allprojects {
         flatDir {
             dirs 'libs'
         }
+        maven {
+            // Add Slyce-Android-SDK maven repo from Github Package Registry.
+            url 'https://maven.pkg.github.com/Slyce-Inc/Slyce-Android-SDK'
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+                password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+            }
+        }
     }
 }
 

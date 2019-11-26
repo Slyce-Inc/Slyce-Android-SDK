@@ -44,10 +44,10 @@ Once the maven repo is set up you may add the Slyce SDK as a normal dependency i
 
 ```
 // Standard Slyce SDK
-implementation 'it.slyce:slycesdk:5.13.1'
+implementation 'it.slyce:slycesdk:5.13.2'
 
 // Lite Version
-implementation 'it.slyce:slycesdk-lite:5.13.1'
+implementation 'it.slyce:slycesdk-lite:5.13.2'
 ```
 
 ---

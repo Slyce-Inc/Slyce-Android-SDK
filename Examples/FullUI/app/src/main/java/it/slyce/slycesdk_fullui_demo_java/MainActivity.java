@@ -20,9 +20,9 @@ import it.slyce.sdk.exception.initialization.SlyceNotOpenedException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String SLYCE_ACCOUNT_ID = "";
-    private static final String SLYCE_API_KEY = "";
-    private static final String SLYCE_SPACE_ID = "";
+    private static final String SLYCE_ACCOUNT_ID = "macys";
+    private static final String SLYCE_API_KEY = "yz7hM5yCMxdkknL0arJr_zTCdvo1siRPhvCiWmk4N30";
+    private static final String SLYCE_SPACE_ID = "zg47XHHcnbFSnH2KREi6Pi";
 
 
     private enum SlyceUIExampleType {
